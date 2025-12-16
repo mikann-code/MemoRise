@@ -1,0 +1,31 @@
+.dairyWordContainer{
+  position: relative;
+  border:2px solid var(--color-border);
+  border-radius:12px;
+  padding:30px 20px;
+  margin-top:20px;
+}
+
+.dairyWord{
+  font-size:30px;
+  text-align: center;
+}
+
+.dairyPronunciation{
+  position:absolute;
+  display:flex;
+  align-items: center;
+  gap:8px;
+  bottom:4px;
+  right:4px;
+}
+
+.dairyPronunciationIcon{
+  width:28px;
+  height:28px;
+}
+
+.dairyPronunciationIcon:hover{
+  color:var(--color-primary);
+}
+

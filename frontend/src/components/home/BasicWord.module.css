@@ -1,0 +1,41 @@
+.basicSelect{
+  margin-top:8px;
+  border:1px solid #cccccc;
+  display: inline-block;
+  padding:4px 6px;
+}
+
+.basicSelect option{
+  background-color: var(--color-secondary);
+}
+
+.basicWordsBoxContainer{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top:12px;
+}
+
+.basicWordsBox{
+  display: inline-block;
+  width:150px;
+  height:150px;
+}
+
+.basicWordsBox:hover{
+  transform: scale(1.08);
+  transition:.3s all ease;
+}
+
+.basicWordsBoxLink{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap:4px;
+}
+
+.basicWordsBoxLable{
+
+}
+

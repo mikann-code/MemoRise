@@ -1,0 +1,22 @@
+.button {
+  all:unset;
+  display: block;
+  color:var(--color-font-primary);
+  width: 100%;
+  text-align: center;
+  padding: 4px 0;
+  background-color: var(--color-primary);
+  border-radius: 4px;
+  margin-top: 12px;
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--color-primary) 60%, black);
+}
+
+.button:hover {
+  background-color: var(--color-secondary);
+  transition: all 0.3s ease;
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-primary) 60%, black);
+  animation: buttonFloatBack 0.4s ease-out forwards;
+}
+
+

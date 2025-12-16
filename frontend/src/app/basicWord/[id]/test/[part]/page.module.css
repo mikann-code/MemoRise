@@ -1,0 +1,17 @@
+.testDescription{
+  margin-top:20px;
+  font-family:var(--font-secondary);
+}
+
+.testButtons{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap:10px;
+}
+
+.testCard{
+  width:100%;
+  border-radius:12px;
+  border:2px solid var(--color-border);
+}

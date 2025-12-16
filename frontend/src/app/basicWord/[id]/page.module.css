@@ -1,0 +1,58 @@
+.viewDescription {
+  font-size: 18px;
+  font-family: var(--font-primary);
+  margin-top: 12px;
+}
+
+.viewLevelSelection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.viewOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.viewOptionLink{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap:10px;
+}
+
+.viewOption + .viewOption::after {
+  content: "";
+  position: absolute;
+  top: -11px;
+  left: 20px;
+  transform: translateX(-50%);
+  height: 12px;
+  width: 2px;
+  background-color: var(--color-border);
+}
+
+.viewOptionNum {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--color-border);
+  border-radius: 50%;
+  color: #aaa;
+}
+
+.viewOptionTitle {
+  color: #aaa;
+  font-size: 20px;
+}
+
+.viewListIcon{
+  margin-left:auto;
+  color:var(--color-primary);
+}

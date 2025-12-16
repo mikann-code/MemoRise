@@ -1,0 +1,38 @@
+.craftWordItems {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    border-radius: 12px;
+  }
+}
+
+.craftWordItem {
+  width: 100%;
+  font-family: var(--font-primary);
+  height: 200px;
+  border: 2px solid var(--color-border);
+  display: flex;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  @media (max-width: 940px) {
+    height:160px;
+  }
+}
+
+.craftWordItem:hover .craftWordImage {
+  transform: scale(1.08);
+  transition: 0.3s all ease;
+}
+
+.craftWordImage {
+  @media (max-width: 940px) {
+    width: 140px;
+  }
+}
