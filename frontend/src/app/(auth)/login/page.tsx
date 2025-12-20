@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { Button } from "@/src/components/common/ui/Button";
@@ -7,13 +7,23 @@ import { FloatingInput } from "@/src/components/common/form/FloatingInput";
 import { FaRightToBracket } from "react-icons/fa6";
 import styles from "./page.module.css";
 
+import { useAuth } from "@/src/context/useAuth";
+
 export default function LoginPage() {
+  const router = useRouter();
+  const { user, setUser, loading } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
+
+  // すでにログインしていたら my-page へ
+  useEffect(() => {
+    if (!loading && user) {
+      router.push("/my-page");
+    }
+  }, [loading, user, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,7 +31,6 @@ export default function LoginPage() {
     setIsSubmitting(true);
 
     try {
-      // ① ログイン
       const res = await fetch("http://localhost:3001/api/v1/login", {
         method: "POST",
         headers: {
@@ -33,27 +42,20 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        const msg =
+        setErrorMessage(
           data?.error ||
-          "ログインに失敗しました。メールアドレスとパスワードを確認してください。";
-        setErrorMessage(msg);
+            "ログインに失敗しました。メールアドレスとパスワードを確認してください。"
+        );
         return;
       }
 
-      // ② JWTを保存（★最重要）
+      // ✅ token を保存（login の責務）
       localStorage.setItem("token", data.token);
 
-      // ③ JWT付きで me を確認
-      const meRes = await fetch("http://localhost:3001/api/v1/me", {
-        headers: {
-          Authorization: `Bearer ${data.token}`,
-        },
-      });
+      // ✅ Context に user を反映（超重要）
+      setUser(data.user);
 
-      const meData = await meRes.json();
-      console.log("ログイン中ユーザー:", meData.user);
-
-      // ④ 遷移
+      // ✅ 遷移
       router.push("/my-page");
     } catch (err) {
       console.error(err);
@@ -64,6 +66,10 @@ export default function LoginPage() {
       setIsSubmitting(false);
     }
   };
+
+  if (loading) {
+    return <p>読み込み中...</p>;
+  }
 
   return (
     <>
