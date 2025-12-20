@@ -21,37 +21,40 @@ export default function LoginPage() {
     setIsSubmitting(true);
 
     try {
+      // ① ログイン
       const res = await fetch("http://localhost:3001/api/v1/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
-        credentials: "include",
-        // Cookie を送る
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const data = await res.json().catch(() => null);
         const msg =
-          data?.message ||
           data?.error ||
           "ログインに失敗しました。メールアドレスとパスワードを確認してください。";
         setErrorMessage(msg);
         return;
       }
 
-      // ★ ログイン確認
+      // ② JWTを保存（★最重要）
+      localStorage.setItem("token", data.token);
+
+      // ③ JWT付きで me を確認
       const meRes = await fetch("http://localhost:3001/api/v1/me", {
-        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+        },
       });
+
       const meData = await meRes.json();
       console.log("ログイン中ユーザー:", meData.user);
 
-      // ★ 遷移
-      router.push("/mypage");
-      return;
-      
+      // ④ 遷移
+      router.push("/my-page");
     } catch (err) {
       console.error(err);
       setErrorMessage(
@@ -98,7 +101,7 @@ export default function LoginPage() {
         <div className={styles.submitWrapper}>
           <Button>
             <button type="submit" disabled={isSubmitting}>
-               {isSubmitting ? "ログイン中..." : "ログイン"}
+              {isSubmitting ? "ログイン中..." : "ログイン"}
             </button>
           </Button>
         </div>

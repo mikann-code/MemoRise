@@ -1,4 +1,10 @@
 class Api::V1::UsersController < ApplicationController
+  # ログイン中ユーザー取得（JWT）
+  def me
+    render json: { user: @current_user }
+  end
+
+  # ユーザー登録
   def create
     user = User.new(user_params)
     if user.save
