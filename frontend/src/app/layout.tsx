@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Header } from "@/src/components/layout/Header";
 import { Footer } from "@/src/components/layout/Footer";
+import { AuthProvider } from "@/src/context/AuthContext";
+import { ReactQueryProvider } from "@/src/providers/ReactQueryProvider";
 
 import {
   Geist,
@@ -35,23 +37,27 @@ const zenMaru = Zen_Maru_Gothic({
 export const metadata = {
   title: "MemoRise",
   description:
-    "MemoRise（メモライズ）は、毎日の学習で“覚える力”を育てる単語学習アプリです。記憶の定着に特化したシンプルなUIで、あなたの英語力を確実に成長させます。",
+    "MemoRise（メモライズ）は、毎日の学習で“覚える力”を育てる単語学習アプリです。",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} ${notoSansJP.variable} ${zenMaru.variable}`}
     >
       <body className="antialiased">
-        <Header />
-        <main id="mainContainer">{children}</main>
-        <Footer />
+        <ReactQueryProvider>
+          <AuthProvider>
+            <Header />
+            <main id="mainContainer">{children}</main>
+            <Footer />
+          </AuthProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

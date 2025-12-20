@@ -5,4 +5,7 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :password, length: { minimum: 6 }, confirmation: true, if: :password_digest_changed?
   validates :password_confirmation, presence: true, if: :password_digest_changed?
+
+  # wordbooks association
+  has_many :wordbooks, dependent: :destroy
 end

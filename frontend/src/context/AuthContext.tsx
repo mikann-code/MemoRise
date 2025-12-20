@@ -1,10 +1,5 @@
 "use client";
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { User } from "@/src/types/user";
 
 type AuthContextType = {
@@ -14,19 +9,20 @@ type AuthContextType = {
   logout: () => void;
 };
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext =
+  createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const token =
-    typeof window !== "undefined"
-      ? localStorage.getItem("token")
-      : null;
-
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(!!token);
+  const [loading, setLoading] = useState(true); // ← 常に true で開始
 
   useEffect(() => {
-    if (!token) return;
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
     fetch("http://localhost:3001/api/v1/me", {
       headers: {
@@ -47,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       .finally(() => {
         setLoading(false);
       });
-  }, [token]);
+  }, []);
 
   const logout = () => {
     localStorage.removeItem("token");

@@ -27,6 +27,13 @@ export type LevelsInfo = {
 // 単語集の型定義
 export type WordbookDetail = {
   title: string;
-  description: string;
+  description: string | null;
   levels: LevelsInfo[];
+};
+
+// 自作用単語集型定義
+export type Wordbook = {
+  uuid: string;
+  title: string;
+  description: string | null;
 };
