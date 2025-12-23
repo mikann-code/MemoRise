@@ -1,8 +1,8 @@
 require Rails.root.join("app/lib/json_web_token")
 
 class Api::V1::AuthController < ApplicationController
-  before_action :authenticate_user!, only: [:me]
-  skip_before_action :authenticate_user!, only: [:login]
+  before_action :authenticate_user!, only: [ :me ]
+  skip_before_action :authenticate_user!, only: [ :login ]
 
   def me
     render json: {
