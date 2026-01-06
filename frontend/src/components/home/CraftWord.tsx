@@ -15,7 +15,7 @@ export const CraftWord = () => {
       />
 
       <div className={styles.craftWordItems}>
-        <Link className={styles.craftWordItem} href="">
+        <Link className={styles.craftWordItem} href="/wordbooks">
           <p className={styles.craftWordLabel}>自作単語帳を作成</p>
           <Image
             src="/images/icon-creative.svg"
@@ -25,7 +25,7 @@ export const CraftWord = () => {
             className={styles.craftWordImage}
           />
         </Link>
-        <Link className={styles.craftWordItem} href="">
+        <Link className={styles.craftWordItem} href="/wordbooks">
           自作単語帳をテスト
           <Image
             src="/images/icon-practice.svg"

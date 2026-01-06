@@ -6,6 +6,9 @@ import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { FloatingInput } from "@/src/components/common/form/FloatingInput";
 import { Button } from "@/src/components/common/ui/Button";
 import styles from "./page.module.css";
+import { MdLockOutline } from "react-icons/md";
+import { MdMailOutline } from "react-icons/md";
+import { IoPerson } from "react-icons/io5";
 
 const attributeLabels: Record<string, string> = {
   name: "名前",
@@ -113,6 +116,7 @@ export default function SignupPage() {
             onChange={(e) => setName(e.target.value)}
             disabled={loading}
             error={errors.name}
+            icon={<IoPerson />}
           />
 
           <FloatingInput
@@ -123,6 +127,7 @@ export default function SignupPage() {
             onChange={(e) => setEmail(e.target.value)}
             disabled={loading}
             error={errors.email}
+            icon={<MdMailOutline />}
           />
 
           <FloatingInput
@@ -133,6 +138,7 @@ export default function SignupPage() {
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
             error={errors.password}
+            icon={<MdLockOutline />}
           />
 
           <FloatingInput
@@ -143,6 +149,7 @@ export default function SignupPage() {
             onChange={(e) => setPasswordConfirm(e.target.value)}
             disabled={loading}
             error={errors.passwordConfirm}
+            icon={<MdLockOutline />}
           />
 
           <Button>

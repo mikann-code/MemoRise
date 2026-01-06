@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { basicWordInfo } from "@/src/constants/basicWordInfo";
-import { SectionTitle } from "../../../components/common/ui/SectionTitle";
+import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import styles from "./page.module.css";
 import { HiOutlineClipboardCheck } from "react-icons/hi";
 import { FaListUl } from "react-icons/fa6";

@@ -1,43 +1,38 @@
+// src/app/my-page/page.tsx
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FaUserPlus } from "react-icons/fa";
 
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { UserCard } from "@/src/components/common/card/UserCard";
-import { useAuth } from "@/src/context/useAuth";
+import { useMe } from "@/src/hooks/useMe";
+import { useLogout } from "@/src/hooks/useLogout";
 
 export default function MyPage() {
-  const router = useRouter();
-  const { user, loading, logout } = useAuth();
+  const { data: user, isLoading, isError } = useMe();
+  const logout = useLogout();
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login");
-    }
-  }, [loading, user, router]);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  if (loading) {
+  if (isLoading || isLoggingOut) {
     return <p>読み込み中...</p>;
   }
 
-  if (!user) {
-    return null;
+  if (isError || !user) {
+    return <p>ログインしてください</p>;
   }
 
   return (
     <>
       <SectionTitle icon={FaUserPlus} subTitle="mypage" title="マイページ" />
-
       <UserCard user={user} />
 
-      {/* 🔽 ログアウトボタン */}
-      <div style={{ marginTop: "24px", textAlign: "center" }}>
+      <div>
         <button
           onClick={() => {
+            setIsLoggingOut(true);
             logout();
-            router.push("/login");
           }}
         >
           ログアウト

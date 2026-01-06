@@ -4,7 +4,6 @@ class CreateWords < ActiveRecord::Migration[8.1]
       t.string :uuid, null: false
       t.string :question, null: false
       t.string :answer, null: false
-      t.json :pos, null: false
       t.boolean :review, null: false, default: false
       t.references :wordbook, null: false, foreign_key: true
 

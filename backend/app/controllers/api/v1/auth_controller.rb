@@ -2,19 +2,8 @@ require Rails.root.join("app/lib/json_web_token")
 
 class Api::V1::AuthController < ApplicationController
   before_action :authenticate_user!, only: [ :me ]
-  skip_before_action :authenticate_user!, only: [ :login ]
 
-  def me
-    render json: {
-      user: {
-        id: current_user.id,
-        name: current_user.name,
-        email: current_user.email
-      }
-    }
-  end
-
-  # ログイン（JWT）
+  # ログイン
   def login
     user = User.find_by(email: params[:email])
 
@@ -33,5 +22,16 @@ class Api::V1::AuthController < ApplicationController
       render json: { error: "メールアドレスまたはパスワードが違います" },
              status: :unauthorized
     end
+  end
+
+  # ログイン中ユーザー取得
+  def me
+    render json: {
+      user: {
+        id: current_user.id,
+        name: current_user.name,
+        email: current_user.email
+      }
+    }
   end
 end

@@ -17,6 +17,13 @@ export type WordItem = {
   review: boolean;
 };
 
+// ユーザーの単語の型定義
+export type UserWord = {
+  uuid: string;
+  question: string;
+  answer: string;
+};
+
 // 単語集のレベルごとの型定義
 export type LevelsInfo = {
   id: number;

@@ -8,4 +8,15 @@ class User < ApplicationRecord
 
   # wordbooks association
   has_many :wordbooks, dependent: :destroy
+
+  # wordbooksの初期状態を作成
+  after_create :create_default_wordbook
+
+  private
+
+  def create_default_wordbook
+    wordbooks.create!(
+      title: "はじめての単語帳"
+    )
+  end
 end

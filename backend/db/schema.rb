@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_20_073853) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_05_131446) do
+  create_table "study_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "memo"
+    t.integer "study_count", default: 0, null: false
+    t.date "study_date", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id", "study_date"], name: "index_study_records_on_user_id_and_study_date", unique: true
+    t.index ["user_id"], name: "index_study_records_on_user_id"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
@@ -22,10 +33,12 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_20_073853) do
   create_table "wordbooks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
+    t.datetime "last_studied"
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.string "uuid", null: false
+    t.integer "words_count", default: 0, null: false
     t.index ["user_id"], name: "index_wordbooks_on_user_id"
     t.index ["uuid"], name: "index_wordbooks_on_uuid", unique: true
   end
@@ -33,7 +46,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_20_073853) do
   create_table "words", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "answer", null: false
     t.datetime "created_at", null: false
-    t.json "pos", null: false
     t.string "question", null: false
     t.boolean "review", default: false, null: false
     t.datetime "updated_at", null: false
@@ -43,6 +55,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_20_073853) do
     t.index ["wordbook_id"], name: "index_words_on_wordbook_id"
   end
 
+  add_foreign_key "study_records", "users"
   add_foreign_key "wordbooks", "users"
   add_foreign_key "words", "wordbooks"
 end
