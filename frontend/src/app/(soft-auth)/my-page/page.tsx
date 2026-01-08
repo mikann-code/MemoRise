@@ -1,9 +1,7 @@
-// src/app/my-page/page.tsx
 "use client";
 
 import { useState } from "react";
-import { FaUserPlus } from "react-icons/fa";
-
+import { RiInfoCardLine } from "react-icons/ri";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { UserCard } from "@/src/components/common/card/UserCard";
 import { useMe } from "@/src/hooks/useMe";
@@ -25,7 +23,8 @@ export default function MyPage() {
 
   return (
     <>
-      <SectionTitle icon={FaUserPlus} subTitle="mypage" title="マイページ" />
+      <SectionTitle icon={RiInfoCardLine} subTitle="mypage" title="マイページ" />
+      
       <UserCard user={user} />
 
       <div>

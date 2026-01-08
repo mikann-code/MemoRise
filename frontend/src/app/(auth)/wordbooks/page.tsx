@@ -18,7 +18,7 @@ export default function WordbooksPage() {
     <>
       <SectionTitle
         icon={LuBookMarked}
-        subTitle="My Wordbook Collection"
+        subTitle="My Wordbooks Collection"
         title="単語帳一覧"
       />
 

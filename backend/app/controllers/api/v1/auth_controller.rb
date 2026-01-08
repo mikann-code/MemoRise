@@ -30,7 +30,8 @@ class Api::V1::AuthController < ApplicationController
       user: {
         id: current_user.id,
         name: current_user.name,
-        email: current_user.email
+        email: current_user.email,
+        streak: current_user.streak
       }
     }
   end

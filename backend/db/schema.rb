@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_05_131446) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_06_024141) do
   create_table "study_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "memo"
@@ -25,8 +25,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_05_131446) do
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
+    t.date "last_study_date"
     t.string "name"
     t.string "password_digest"
+    t.integer "streak", default: 0, null: false
     t.datetime "updated_at", null: false
   end
 

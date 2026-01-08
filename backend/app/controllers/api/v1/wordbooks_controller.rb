@@ -19,11 +19,27 @@ class Api::V1::WordbooksController < ApplicationController
 
   def show
     wordbook = current_user.wordbooks.find_by!(uuid: params[:id])
+    render json: serialize_wordbook(wordbook)
+  end
 
-    # 単語帳詳細を開いたら「学習した」とみなす
+  # 学習イベント
+  def study
+    wordbook = current_user.wordbooks.find_by!(uuid: params[:uuid])
+
+    # 単語帳単位
     wordbook.touch(:last_studied)
 
-    render json: serialize_wordbook(wordbook)
+    # ユーザー単位（streak）
+    current_user.update_streak!
+
+    # カレンダー用
+    StudyRecord.record!(current_user)
+
+    render json: {
+      ok: true,
+      streak: current_user.streak,
+      last_study_date: current_user.last_study_date
+    }
   end
 
   private

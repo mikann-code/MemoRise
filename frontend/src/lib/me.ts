@@ -1,8 +1,13 @@
 import { authFetch } from "@/src/lib/auth";
-import { User } from "@/src/types/user";
 
-export type MeResponse = {
-  user: User;
+type MeResponse = {
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    streak: number;
+    // totalWords: number;
+  };
 };
 
 export const fetchMe = async (): Promise<MeResponse> => {

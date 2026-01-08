@@ -5,7 +5,10 @@ export type User = {
   email: string;
   
   // 連続ログイン日数
-  streakCount: number;
+  streak: number;
+  
+  // 登録単語合計数
+  // totalWords:number;
 };
 
 // ログイン用パラメータとレスポンス

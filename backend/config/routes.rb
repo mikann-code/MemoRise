@@ -14,7 +14,14 @@ Rails.application.routes.draw do
       # 単語帳
       resources :wordbooks, param: :uuid, only: [ :index, :create ] do
         resources :words, only: [ :index, :create ]
+
+        # 学習イベント
+        post :study, on: :member
       end
+
+      # 学習記録API
+      resources :study_records, only: [:index, :create]
+
     end
   end
 end

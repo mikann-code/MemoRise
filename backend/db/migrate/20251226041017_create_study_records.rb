@@ -1,4 +1,5 @@
 class CreateStudyRecords < ActiveRecord::Migration[8.1]
+  # 学習記録を保存するカレンダーを作成する
   def change
     create_table :study_records do |t|
       t.references :user, null: false, foreign_key: true

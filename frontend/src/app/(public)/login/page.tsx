@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { Button } from "@/src/components/common/ui/Button";
-import { FloatingInput } from "@/src/components/common/form/FloatingInput";
+import { FloatingInput } from "@/src/components/common/ui/FloatingInput";
 import { FaRightToBracket } from "react-icons/fa6";
 import styles from "./page.module.css";
 import { useLogin } from "@/src/hooks/useLogin";

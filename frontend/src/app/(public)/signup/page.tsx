@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { FaUserPlus } from "react-icons/fa";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
-import { FloatingInput } from "@/src/components/common/form/FloatingInput";
+import { FloatingInput } from "@/src/components/common/ui/FloatingInput";
 import { Button } from "@/src/components/common/ui/Button";
 import styles from "./page.module.css";
 import { MdLockOutline } from "react-icons/md";
