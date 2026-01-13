@@ -1,18 +1,24 @@
 class ApplicationController < ActionController::API
-  before_action :authenticate_user!
+  include ActionController::HttpAuthentication::Token::ControllerMethods
 
-  private
-
+  # userの認証を行う関数
+  # 「！」は、強い処理を意味する
   def authenticate_user!
     header = request.headers["Authorization"]
-    return render json: { error: "トークンがありません" }, status: :unauthorized unless header
+    token = header&.split(" ")&.last
 
-    token = header.split(" ").last
-    decoded = JsonWebToken.decode(token)
+    unless token
+      render json: { error: "認証エラー" }, status: :unauthorized
+      return
+    end
 
-    @current_user = User.find(decoded[:user_id])
-  rescue StandardError
-    render json: { error: "認証エラー" }, status: :unauthorized
+    begin
+      decoded = JsonWebToken.decode(token)
+      @current_user = User.find(decoded[:user_id])
+    rescue StandardError
+      render json: { error: "認証エラー" }, status: :unauthorized
+      return
+    end
   end
 
   def current_user

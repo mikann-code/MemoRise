@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Header } from "@/src/components/layout/Header";
 import { Footer } from "@/src/components/layout/Footer";
-import { AuthProvider } from "@/src/context/AuthContext";
 import { ReactQueryProvider } from "@/src/providers/ReactQueryProvider";
 
 import {
@@ -52,11 +51,9 @@ export default function RootLayout({
     >
       <body className="antialiased">
         <ReactQueryProvider>
-          <AuthProvider>
-            <Header />
-            <main id="mainContainer">{children}</main>
-            <Footer />
-          </AuthProvider>
+          <Header />
+          <main id="mainContainer">{children}</main>
+          <Footer />
         </ReactQueryProvider>
       </body>
     </html>

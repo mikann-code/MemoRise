@@ -3,9 +3,9 @@
   --color-secondary: #ff8c00;
   --color-bg-primary: #222222;
   --color-bg-secondary: #555555;
+  --color-bg-tertiary: #333333;
   --color-error: #ff7a7a;
-  --color-success:#A3E635;
-  
+  --color-success: #a3e635;
 
   --color-font-primary: #ffffff;
   --color-font-secondary: #aaaaaa;
@@ -28,7 +28,6 @@ html {
 
   font-family: var(--font-primary);
 }
-
 
 body {
   background: var(--color-bg-primary);
@@ -64,7 +63,7 @@ option:hover {
   background-color: var(--color-bg-secondary);
 }
 
-input{
+input {
   border: none;
   outline: none;
   box-shadow: none;
@@ -85,3 +84,6 @@ select:-webkit-autofill:focus {
   transition: background-color 9999s ease-out 0s;
 }
 
+ul {
+  list-style: none;
+}

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  study_date: 2025-12-26
+  study_count: 1
+  memo: MyText
+
+two:
+  user: two
+  study_date: 2025-12-26
+  study_count: 1
+  memo: MyText
