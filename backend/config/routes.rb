@@ -15,7 +15,8 @@ Rails.application.routes.draw do
       resources :wordbooks, param: :uuid, only: [ :index, :create ] do
         resources :words, only: [ :index, :create ]
 
-        # 学習イベント
+        # 学習イベント 
+        # workdbooks/:uuid/study
         post :study, on: :member
       end
 

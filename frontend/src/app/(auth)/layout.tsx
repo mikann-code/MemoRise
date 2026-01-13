@@ -15,9 +15,14 @@ export default function AuthLayout({ children }: Props) {
     return <p>読み込み中...</p>;
   }
 
-  if (isError || !user) {
+  if (isError) {
     redirect("/login");
   }
+
+  if (!user) {
+    redirect("/login");
+  }
+
 
   return <>{children}</>;
 }

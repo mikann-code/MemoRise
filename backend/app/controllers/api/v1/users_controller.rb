@@ -1,5 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   def create
+    # ユーザー登録（クラスからインスタンス生成）
     user = User.new(user_params)
 
     if user.save
@@ -16,6 +17,8 @@ class Api::V1::UsersController < ApplicationController
 
   private
 
+  # Strong Parameters
+  # paramsを直接使用するのは、危険なので、許可するパラメータを制限する
   def user_params
     params.require(:user).permit(
       :name,

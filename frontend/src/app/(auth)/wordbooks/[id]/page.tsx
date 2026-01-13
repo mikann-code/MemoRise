@@ -36,6 +36,7 @@ export default function WordbookDetailPage({ params }: Props) {
     studyMutation.mutate(undefined, {
       onSuccess: () => {
         // 単語帳一覧を最新にする
+        // studyAPIの呼び出し
         queryClient.invalidateQueries({ queryKey: ["wordbooks"] });
       },
     });

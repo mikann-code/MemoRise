@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
+  # userの認証を行う関数
+  # 「！」は、強い処理を意味する
   def authenticate_user!
     header = request.headers["Authorization"]
     token = header&.split(" ")&.last

@@ -32,12 +32,20 @@ class Api::V1::WordbooksController < ApplicationController
     # ユーザー単位（streak）
     current_user.update_streak!
 
+    # 連続学習日数更新
+    streak_updated = current_user.update_streak!
+
     # カレンダー用
-    StudyRecord.record!(current_user)
+    StudyRecord.create!(
+     user: current_user,
+     wordbook: wordbook,
+     study_date: Date.current
+    )
 
     render json: {
       ok: true,
       streak: current_user.streak,
+      streak_updated: streak_updated,
       last_study_date: current_user.last_study_date
     }
   end
