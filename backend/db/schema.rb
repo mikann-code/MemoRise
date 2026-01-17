@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_06_024141) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_16_135910) do
+  create_table "admin_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.string "password_digest"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "study_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "memo"
@@ -28,6 +35,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_06_024141) do
     t.date "last_study_date"
     t.string "name"
     t.string "password_digest"
+    t.string "role", default: "user", null: false
     t.integer "streak", default: 0, null: false
     t.datetime "updated_at", null: false
   end
@@ -35,6 +43,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_06_024141) do
   create_table "wordbooks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
+    t.boolean "is_official", default: false, null: false
     t.datetime "last_studied"
     t.string "title", null: false
     t.datetime "updated_at", null: false

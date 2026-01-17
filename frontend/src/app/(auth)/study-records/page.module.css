@@ -1,0 +1,28 @@
+.selectWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.selectItem {
+  width: 100%;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+  border: 2px solid var(--color-border);
+  padding: 8px 0;
+  cursor: pointer;
+}
+
+.selectItem.isActive{
+  border: 2px solid var(--color-primary);
+}
+
+.recordListDescription {
+  margin-top:10px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-align: left;
+}

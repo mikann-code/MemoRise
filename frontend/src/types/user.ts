@@ -20,3 +20,17 @@ export type LoginParams = {
 export type LoginResponse = {
   token: string;
 };
+
+export type AdminLoginParams = {
+  email: string;
+  password: string;
+};
+
+export type AdminLoginResponse = {
+  token: string;
+  admin: {
+    id: number;
+    email: string;
+    role: string;
+  };
+};

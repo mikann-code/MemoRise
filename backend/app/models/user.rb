@@ -8,8 +8,9 @@ class User < ApplicationRecord
   validates :password_confirmation, presence: true, if: :password_digest_changed?
 
   # ユーザーの単語帳と学習記録
-  # wordsは、各wordbooksに紐ずくためユーザーに紐ずくわけではない
+  # wordsは、各wordbooksに紐ずくためユーザーに紐ずくわけではないが、集計のために定義を追加
   has_many :wordbooks, dependent: :destroy
+  has_many :words, through: :wordbooks
   has_many :study_records, dependent: :destroy
 
   # wordbooksの初期状態を作成

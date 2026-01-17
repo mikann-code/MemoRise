@@ -11,18 +11,34 @@ Rails.application.routes.draw do
       post "login", to: "auth#login"
       get  "me",    to: "auth#me"
 
-      # 単語帳
-      resources :wordbooks, param: :uuid, only: [ :index, :create ] do
-        resources :words, only: [ :index, :create ]
+      # ユーザー情報
+      get "stats/total_words", to: "stats#total_words"
 
-        # 学習イベント 
-        # workdbooks/:uuid/study
+      # 単語帳
+      resources :wordbooks, param: :uuid, only: [ :index, :create , :destroy] do
+        resources :words, only: [ :index, :create , :destroy]
+
+        # 単語中ごとの学習イベント 
         post :study, on: :member
       end
 
       # 学習記録API
-      resources :study_records, only: [:index, :create]
-
+      resources :study_records, only: [ :index, :create ] do
+        collection do
+          get :recent       
+          get :week         
+        end
+      end
     end
+
+    # admin
+    namespace :admin do
+      post "login", to: "auth#login"
+
+      resources :wordbooks, param: :uuid do
+        resources :words
+      end
+    end
+
   end
 end

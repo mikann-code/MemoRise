@@ -1,10 +1,12 @@
+import Cookies from "js-cookie";
+
 // ログイン済みであることを証明するトークンを添えて、安全にAPI通信をするための共通関数
 // 一度、JWTで取得したトークンを身分証として提示している
 export const authFetch = async (
   input: RequestInfo,
   init: RequestInit = {}
 ) => {
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
 
   if (!token) {
     throw new Error("NO_TOKEN");
