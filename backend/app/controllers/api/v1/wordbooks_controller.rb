@@ -29,18 +29,8 @@ class Api::V1::WordbooksController < ApplicationController
     # 単語帳単位
     wordbook.touch(:last_studied)
 
-    # ユーザー単位（streak）
-    current_user.update_streak!
-
     # 連続学習日数更新
     streak_updated = current_user.update_streak!
-
-    # カレンダー用
-    StudyRecord.create!(
-     user: current_user,
-     wordbook: wordbook,
-     study_date: Date.current
-    )
 
     render json: {
       ok: true,

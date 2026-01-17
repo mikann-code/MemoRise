@@ -4,11 +4,11 @@ import { use, useState, useEffect } from "react";
 import { useWords } from "@/src/hooks/useWords";
 import { useStudyWordbooks } from "@/src/hooks/useStudyWordbooks";
 import { useQueryClient } from "@tanstack/react-query";
+import { createStudyRecord } from "@/src/lib/studyRecords"; 
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { FaListUl } from "react-icons/fa6";
 import styles from "./page.module.css";
 import { FloatingInput } from "@/src/components/common/ui/FloatingInput";
-import { FaLightbulb } from "react-icons/fa6";
 import { TbCircleLetterQFilled } from "react-icons/tb";
 import { TbCircleLetterAFilled } from "react-icons/tb";
 import { Button } from "@/src/components/common/ui/Button";
@@ -33,12 +33,25 @@ export default function WordbookDetailPage({ params }: Props) {
   const [answer, setAnswer] = useState("");
 
   useEffect(() => {
+    console.log("📚 Wordbook opened:", wordbookUuid);
+
     studyMutation.mutate(undefined, {
-      onSuccess: () => {
-        // 単語帳一覧を最新にする
-        // studyAPIの呼び出し
+      onSuccess: async () => {
+        console.log("✨ study API success!");
+
         queryClient.invalidateQueries({ queryKey: ["wordbooks"] });
+
+        const today = new Date().toISOString().slice(0, 10);
+        console.log("📝 createStudyRecord for:", today);
+
+        await createStudyRecord(today);
+
+        console.log("✅ studyRecord created!");
+        queryClient.invalidateQueries({ queryKey: ["studyRecords"] });
       },
+      onError: (err) => {
+        console.error("❌ study API error:", err);
+      }
     });
   }, [wordbookUuid]);
 

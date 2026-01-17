@@ -17,7 +17,7 @@ class Api::V1::UsersController < ApplicationController
 
   private
 
-  # Strong Parameters
+  # Strong Parameters (ユーザー作成時のパラメータ制御)
   # paramsを直接使用するのは、危険なので、許可するパラメータを制限する
   def user_params
     params.require(:user).permit(

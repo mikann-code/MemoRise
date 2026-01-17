@@ -1,0 +1,24 @@
+.hasRecord {
+  position: relative;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.countBadge{
+  position:absolute;
+  border-radius:50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  width:40px;
+  height:40px;
+  line-height:40px;
+  background-color: #1976d2;
+  color: white;
+  pointer-events: none;
+}

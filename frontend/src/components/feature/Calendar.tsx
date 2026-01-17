@@ -1,55 +1,99 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useStudyRecords } from "@/src/hooks/useStudyRecords";
+import styles from "./Calendar.module.css";
 
-export default function StudyCalendar() {
+export const StudyCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth() + 1;
 
   const { data: records, isLoading } = useStudyRecords(year, month);
 
-  // ⭐ Hooksは return の前に必ず書く
   const events = useMemo(() => {
     if (!records) return [];
 
-    return records.map((r) => {
-      // 💡 色分けロジック（自由に変えてOK）
-      // 大きいほど濃い緑で目立つ
-      const count = r.study_count;
-      let color = "#A5D6A7"; // 薄い緑
+    return records.map((record) => ({
+      title: "",
+      date: record.study_date,
+    }));
+  }, [records]);
 
-      if (count >= 20) color = "#66BB6A"; // 濃い緑
-      if (count >= 50) color = "#388E3C"; // さらに濃い緑
-
-      return {
-        title: `${r.study_count} words`, // ← study_countを表示
-        date: r.study_date,
-        backgroundColor: color,
-        borderColor: color,
-        textColor: "white",
-      };
-    });
+  useEffect(() => {
+    console.log("Study Records:", records);
   }, [records]);
 
   if (isLoading) return <p>読み込み中...</p>;
 
   return (
     <FullCalendar
+      key={`${year}-${month}`}
       plugins={[dayGridPlugin, interactionPlugin]}
       initialView="dayGridMonth"
       events={events}
-      dateClick={(info) => {
-        alert(`クリック日: ${info.dateStr}`);
+      displayEventTime={false}
+      eventDisplay="block"
+      eventBackgroundColor="transparent"
+      eventBorderColor="transparent"
+      dayCellDidMount={(arg) => {
+        const existing = arg.el.querySelector(`.${styles.countBadge}`);
+        if (existing) existing.remove();
+        // ISO 使わず、ローカル日付で取得する
+        const y = arg.date.getFullYear();
+        const m = String(arg.date.getMonth() + 1).padStart(2, "0");
+        const d = String(arg.date.getDate()).padStart(2, "0");
+        const dateStr = `${y}-${m}-${d}`;
+        const record = records?.find(
+          (r) => r.study_date.slice(0, 10) === dateStr
+        );
+        if (!record) return;
+
+        // hasRecord > countBadge
+        arg.el.classList.add(styles.hasRecord);
+        const badge = document.createElement("div");
+        badge.className = styles.countBadge;
+        badge.textContent = String(record.study_count);
+        arg.el.appendChild(badge);
       }}
+      /** 日付クリック処理 */
+      dateClick={(info) => {
+        const clickedDate = info.dateStr;
+
+        const record = records?.find(
+          (r) => r.study_date.slice(0, 10) === clickedDate
+        );
+
+        if (record) {
+          alert(
+            `📘 ${clickedDate} の記録\n\n` +
+              `ログイン状態：ログインしています✅ \n` +
+              `学習数：${record.study_count}\n`
+          );
+        } else {
+          alert(
+            `📘 ${clickedDate} の記録はありません\n\n` +
+              `ログイン状態：ログインしていません❌`
+          );
+        }
+      }}
+      /** 月が切り替わったとき */
       datesSet={(info) => {
-        setCurrentDate(info.start);
+        const start = info.view.currentStart;
+
+        // カレンダーの中央(約15日後)を取る
+        const middleDate = new Date(
+          start.getFullYear(),
+          start.getMonth(),
+          start.getDate() + 15
+        );
+
+        setCurrentDate(middleDate);
       }}
       height="auto"
     />
   );
-}
+};

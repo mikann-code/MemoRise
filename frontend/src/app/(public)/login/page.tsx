@@ -23,7 +23,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <SectionTitle icon={FaRightToBracket} subTitle="Login" title="ログイン" />
+      <SectionTitle icon={FaRightToBracket} subTitle="User Login" title="ログイン" />
 
       <p className={styles.description}>
         登録済みのアカウントでログインします。

@@ -1,6 +1,6 @@
 # JWTの生成・検証
 # JsonWebTokenクラスを使用するために読み込む
-require Rails.root.join("app/lib/json_web_token")
+# require Rails.root.join("app/lib/json_web_token")
 
 class Api::V1::AuthController < ApplicationController
   before_action :authenticate_user!, only: [ :me ]
@@ -8,16 +8,22 @@ class Api::V1::AuthController < ApplicationController
   # ログイン
   def login
     user = User.find_by(email: params[:email])
-
+    
     if user&.authenticate(params[:password])
-      token = JsonWebToken.encode(user_id: user.id)
+
+      # ユーザーが admin か user かを含んだ状態で JWT が作られる
+      token = JsonWebToken.encode({
+        user_id: user.id,
+        role: "user"
+      })
 
       render json: {
         token: token,
         user: {
           id: user.id,
           name: user.name,
-          email: user.email
+          email: user.email,
+          role: "user"
         }
       }, status: :ok
     else

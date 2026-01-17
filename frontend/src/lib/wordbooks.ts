@@ -2,7 +2,6 @@
 import { authFetch } from "@/src/lib/auth";
 
 export type Wordbook = {
-  // id: number;
   uuid: string;
   title: string;
   description: string | null;

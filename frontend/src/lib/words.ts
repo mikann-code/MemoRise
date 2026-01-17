@@ -11,7 +11,7 @@ type CreateWordParams = {
   answer: string;
 };
 
-// 🔽 単語一覧取得
+// 単語一覧取得
 export const fetchWords = async (
   wordbookUuid: string
 ): Promise<Word[]> => {
@@ -28,7 +28,7 @@ export const fetchWords = async (
   return Array.isArray(data) ? data : [];
 };
 
-// 🔽 単語作成（authFetch に統一）
+// 単語作成
 export const createWord = async (
   wordbookUuid: string,
   params: CreateWordParams
