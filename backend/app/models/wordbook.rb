@@ -3,6 +3,17 @@ class Wordbook < ApplicationRecord
   belongs_to :user, optional: true
   has_many :words, dependent: :destroy
 
+  # 階層構造対応
+  # parent_idを持つことで、親単語帳・子単語帳の関係を表現
+  has_many :children,
+    class_name: "Wordbook",
+    foreign_key: :parent_id,
+    dependent: :destroy
+
+  belongs_to :parent,
+    class_name: "Wordbook",
+    optional: true
+
   before_validation :set_uuid, on: :create
 
   validates :uuid, presence: true, uniqueness: true

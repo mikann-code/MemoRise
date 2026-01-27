@@ -11,7 +11,7 @@ class Api::V1::AuthController < ApplicationController
     
     if user&.authenticate(params[:password])
 
-      # ユーザーが admin か user かを含んだ状態で JWT が作られる
+      # userのJWTの作成
       token = JsonWebToken.encode({
         user_id: user.id,
         role: "user"

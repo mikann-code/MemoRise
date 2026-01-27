@@ -12,7 +12,7 @@ export const useLogin = () => {
   return useMutation<LoginResponse, Error, LoginParams>({
     mutationFn: login,
     onSuccess: async (data) => {
-      Cookies.set("token", data.token, {
+      Cookies.set("user_token", data.token, {
         expires: 7, // 7日間保持
         sameSite: "strict",
         secure: process.env.NODE_ENV === "production", // 環境ごとに値を分ける
