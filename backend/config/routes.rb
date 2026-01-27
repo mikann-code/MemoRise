@@ -36,6 +36,8 @@ Rails.application.routes.draw do
       post "login", to: "auth#login"
 
       resources :wordbooks, param: :uuid do
+        get :children, on: :member
+
         resources :words
       end
     end

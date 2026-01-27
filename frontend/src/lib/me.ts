@@ -6,7 +6,6 @@ type MeResponse = {
     name: string;
     email: string;
     streak: number;
-    // totalWords: number;
   };
 };
 

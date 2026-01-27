@@ -1,0 +1,54 @@
+.description {
+  margin: 8px 0 24px;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* ======================
+   フィルタ
+====================== */
+
+.filterBox {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filterItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filterItem label {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.filterItem select {
+  padding: 10px 12px;
+  min-width: 180px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  font-size: 0.9rem;
+}
+
+.filterItem select:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+}
+
+.filterItem select:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+/* ======================
+   補足表示
+====================== */
+
+.notice {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}

@@ -12,7 +12,7 @@ export default function AdminLayout({
   const router = useRouter();
 
   useEffect(() => {
-    const token = Cookies.get("token");
+    const token = Cookies.get("admin_token");
 
     if (!token) {
       router.replace("/admin/login");

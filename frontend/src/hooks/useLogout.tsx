@@ -8,7 +8,7 @@ export const useLogout = () => {
   const queryClient = useQueryClient();
 
   const logout = () => {
-    Cookies.remove("token");
+    Cookies.remove("user_token");
     queryClient.removeQueries({ queryKey: ["me"] });
     router.push("/login");
   };

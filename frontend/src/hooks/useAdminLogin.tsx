@@ -12,7 +12,7 @@ export const useAdminLogin = () => {
   return useMutation<AdminLoginResponse, Error, AdminLoginParams>({
     mutationFn: adminLogin,
     onSuccess: (data) => {
-      Cookies.set("token", data.token, {
+      Cookies.set("admin_token", data.token, {
         expires: 7, // 7日間保持
         sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
