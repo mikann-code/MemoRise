@@ -127,16 +127,6 @@ export default function AdminWordbooksPage() {
           ))}
         </select>
 
-        {/* part */}
-        <select value={part} onChange={(e) => setPart(e.target.value)}>
-          <option value="">Part なし</option>
-          {WORDBOOK_PARTS.map((p) => (
-            <option key={p.value} value={p.value}>
-              {p.label}
-            </option>
-          ))}
-        </select>
-
         <button onClick={handleCreate} disabled={creating}>
           {creating ? "作成中..." : "作成"}
         </button>

@@ -5,12 +5,13 @@ import { useParams } from "next/navigation";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { LuBookMarked } from "react-icons/lu";
 import styles from "./page.module.css";
+import Link from "next/link";
 
 import { useAdminWordbooks } from "@/src/hooks/useAdminWordbooks";
 import { useAdminWordbookChildren } from "@/src/hooks/useAdminWordbookChildren";
 
 export default function AdminWordbookDetailPage() {
-  const { id } = useParams<{ id: string }>();
+  const { parentId } = useParams<{ parentId: string }>();
 
   // 親一覧（index）
   const { wordbooks, loading, error } = useAdminWordbooks();
@@ -20,12 +21,12 @@ export default function AdminWordbookDetailPage() {
     children,
     loading: childrenLoading,
     error: childrenError,
-  } = useAdminWordbookChildren(id);
+  } = useAdminWordbookChildren(parentId);
 
   // id(uuid) に基づいて親単語帳取得
   const wordbook = useMemo(() => {
-    return wordbooks.find((wb) => wb.uuid === id);
-  }, [wordbooks, id]);
+    return wordbooks.find((wb) => wb.uuid === parentId);
+  }, [wordbooks, parentId]);
 
   if (loading) return <p>読み込み中...</p>;
   if (error || !wordbook) return <p>単語帳が見つかりません</p>;
@@ -63,7 +64,9 @@ export default function AdminWordbookDetailPage() {
           <ul className={styles.partList}>
             {children.map((child) => (
               <li key={child.uuid} className={styles.partItem}>
-                {child.part}
+                <Link href={`/admin/wordbooks/${parentId}/${child.uuid}`}>
+                  {child.part}
+                </Link>
               </li>
             ))}
           </ul>

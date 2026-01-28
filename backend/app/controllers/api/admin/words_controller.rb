@@ -37,7 +37,7 @@ class Api::Admin::WordsController < Api::Admin::BaseController
   private
 
   def set_wordbook
-    @wordbook = Wordbook.find(params[:wordbook_id])
+    @wordbook = Wordbook.find_by!(uuid: params[:wordbook_uuid])
   end
 
   def set_word
@@ -45,6 +45,6 @@ class Api::Admin::WordsController < Api::Admin::BaseController
   end
 
   def word_params
-    params.require(:word).permit(:word, :meaning, :example)
+    params.require(:word).permit(:question, :answer, :example)
   end
 end

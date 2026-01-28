@@ -16,18 +16,20 @@ export type AdminWordbook = {
 
 export type CreateAdminWordbookParams = {
   title: string;
-  description?: string;
+  description: string | null;
   level: string;
   label: string;
   part: string;          
 };
 
 export type AdminWordbookChild = {
+  uuid: string;
   title: string;
-  description?: string;
+  description: string | null;
   level: string;
   label: string;
-  part: string;  
+  part: string;          
+  published: boolean;
 };
 
 /* ======================
