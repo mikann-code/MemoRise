@@ -2,34 +2,31 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
-import { basicWordInfo } from "@/src/constants/basicWordInfo";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { PiNotePencilDuotone } from "react-icons/pi";
 import styles from "./page.module.css";
 import { Button } from "@/src/components/common/ui/Button";
 import { TestCard } from "@/src/components/common/card/TestCard";
+import { usePublicWords } from "@/src/hooks/usePublicWords";
 
 export default function BasicWordTestPage() {
-  const { id, part } = useParams() as { id: string; part: string };
+  const { parentId, childrenId } = useParams<{
+    parentId: string;
+    childrenId: string;
+  }>();
 
-  const book = basicWordInfo[id];
-  const levelId = Number(part);
+  // ✅ 単語を API から取得（ここだけ変更）
+  const { words: fetchedWords, loading, error } = usePublicWords(childrenId);
 
-  if (!book) return <h2>教材が見つかりません</h2>;
-
-  const level = book.levels.find((lv) => lv.id === levelId);
-  if (!level) return <h2>レベルが見つかりません</h2>;
-
-  const [words, setWords] = useState(level.words);
+  const [words, setWords] = useState<typeof fetchedWords>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [opened, setOpened] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
-  const [wrongQuestions, setWrongQuestions] = useState<typeof level.words>([]);
+  const [wrongQuestions, setWrongQuestions] = useState<typeof fetchedWords>([]);
 
   const total = words.length;
 
-  const shuffleArray = (arr: typeof level.words) => {
+  const shuffleArray = (arr: typeof fetchedWords) => {
     const copy = [...arr];
     for (let i = copy.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -39,13 +36,19 @@ export default function BasicWordTestPage() {
   };
 
   useEffect(() => {
-    const shuffled = shuffleArray(level.words);
+    if (!fetchedWords || fetchedWords.length === 0) return;
+
+    const shuffled = shuffleArray(fetchedWords);
     setWords(shuffled);
     setCurrentIndex(0);
     setOpened(false);
     setCorrectCount(0);
     setWrongQuestions([]);
-  }, [levelId]);
+  }, [fetchedWords]);
+
+  if (loading) return <div>読み込み中...</div>;
+  if (error) return <div>単語の取得に失敗しました</div>;
+  if (!words || words.length === 0) return <div>単語がありません</div>;
 
   const currentWord = words[currentIndex];
 
@@ -70,7 +73,9 @@ export default function BasicWordTestPage() {
 
   const handleTagToggle = () => {
     setWords((prev) =>
-      prev.map((w, i) => (i === currentIndex ? { ...w, review: !w.review } : w))
+      prev.map((w, i) =>
+        i === currentIndex ? { ...w, review: !w.review } : w
+      )
     );
   };
 
@@ -101,15 +106,15 @@ export default function BasicWordTestPage() {
               key={idx}
               question={w.question}
               answer={w.answer}
-              pos={w.pos}
+              pos={w.pos || []}
               review={w.review}
-              opened={true} 
-              onTagToggle={() => {}} 
+              opened={true}
+              onTagToggle={() => {}}
             />
           ))}
 
-          <Button href={`/basicWord/${id}`}>教材トップへ戻る</Button>
-          <Button href={`/basicWord/${id}/test/${part}`}>
+          <Button href={`/basicWord/${parentId}`}>教材トップへ戻る</Button>
+          <Button href={`/basicWord/${parentId}/${childrenId}/test`}>
             もう一度挑戦する
           </Button>
         </div>
@@ -122,12 +127,12 @@ export default function BasicWordTestPage() {
       <SectionTitle
         icon={PiNotePencilDuotone}
         subTitle="Words Test"
-        title={`${book.title} - ${level.title}`}
+        title="単語テスト"
       />
 
       <div className={styles.testButtons}>
-        <Button href={`/basicWord/${id}`}>教材トップへ戻る</Button>
-        <Button href={`/basicWord/${id}/list/${levelId}`}>
+        <Button href={`/basicWord/${parentId}`}>教材トップへ戻る</Button>
+        <Button href={`/basicWord/${parentId}/${childrenId}/list`}>
           単語一覧へ戻る
         </Button>
       </div>
@@ -149,7 +154,7 @@ export default function BasicWordTestPage() {
       <TestCard
         question={currentWord.question}
         answer={currentWord.answer}
-        pos={currentWord.pos}
+        pos={currentWord.pos || []}
         review={currentWord.review}
         opened={opened}
         onTagToggle={handleTagToggle}

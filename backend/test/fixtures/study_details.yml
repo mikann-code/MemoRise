@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  study_record: one
+  title: MyString
+  rate: 1
+  count: 1
+  children_id: MyString
+
+two:
+  study_record: two
+  title: MyString
+  rate: 1
+  count: 1
+  children_id: MyString
