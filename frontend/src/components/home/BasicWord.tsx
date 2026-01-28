@@ -1,24 +1,19 @@
 "use client";
+
 import React from "react";
 import styles from "./BasicWord.module.css";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { SectionTitle } from "../common/ui/SectionTitle";
 import { AiOutlineBook } from "react-icons/ai";
 import Link from "next/link";
-import { basicWordInfo } from "../../constants/basicWordInfo";
+import { usePublicWordbooks } from "@/src/hooks/usePublicWordbooks";
 
 export const BasicWord = () => {
-  const subjects = [
-    { key: "toeic", value: "TOEIC" },
-    { key: "highschool", value: "高校生向け" },
-    { key: "junior", value: "中学生向け" },
-  ];
+  const { wordbooks, loading, error } = usePublicWordbooks();
 
-  const basicWords = Object.entries(basicWordInfo).map(([id, data]) => ({
-    id,
-    label: data.title,
-    icon: AiOutlineBook,
-  }));
+  if (loading) return <p>読み込み中...</p>;
+  if (error) return <p>取得に失敗しました</p>;
+  if (wordbooks.length === 0) return <p>単語帳がありません</p>;
 
   return (
     <section className={styles.basicSection}>
@@ -28,23 +23,19 @@ export const BasicWord = () => {
         title="おすすめの単語・問題集"
       />
 
-      <select name="subject" className={styles.basicSelect}>
-        {subjects.map((s) => (
-          <option key={s.key} value={s.value}>
-            {s.value}
-          </option>
-        ))}
-      </select>
-
       <div className={styles.basicWordsBoxContainer}>
-        {basicWords.map((item) => (
+        {wordbooks.map((item) => (
           <Link
-            href={`/basicWord/${item.id}`}
+            key={item.uuid}
+            href={`/basicWord/${item.uuid}`}
             className={styles.basicWordsBoxLink}
-            key={item.id}
           >
-            <item.icon className={styles.basicWordsBox} />
-            <p className={styles.basicWordsBoxLabel}>{item.label}</p>
+            <AiOutlineBook className={styles.basicWordsBox} />
+
+            <p className={styles.basicWordsBoxLabel}>
+              {item.title}
+            </p>
+            
           </Link>
         ))}
       </div>

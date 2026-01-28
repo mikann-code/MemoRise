@@ -1,4 +1,5 @@
 class Api::V1::WordbooksController < ApplicationController
+  # ユーザーに紐づく単語帳一覧取得
   before_action :authenticate_user!
 
   def index

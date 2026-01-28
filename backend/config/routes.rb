@@ -22,6 +22,12 @@ Rails.application.routes.draw do
         post :study, on: :member
       end
 
+      # 公開単語帳一覧取得
+      resources :public_wordbooks, param: :uuid, only: [:index] do
+        get :children, on: :member
+        get :words, on: :member
+      end
+
       # 学習記録API
       resources :study_records, only: [ :index, :create ] do
         collection do
