@@ -41,10 +41,10 @@ Rails.application.routes.draw do
     namespace :admin do
       post "login", to: "auth#login"
 
-      resources :wordbooks, param: :uuid do
+      resources :wordbooks, param: :uuid, only: [:index, :show, :create, :update, :destroy] do
         get :children, on: :member
         post :import_csv, on: :member
-        resources :words, param: :uuid
+        resources :words, param: :uuid, only: [:index, :create, :update, :destroy]
       end
     end
 
