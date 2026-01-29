@@ -4,7 +4,7 @@ class Api::Admin::AuthController < ApplicationController
     admin = AdminUser.find_by(email: params[:email])
 
     if admin&.authenticate(params[:password])
-      
+
       token = JsonWebToken.encode({
         admin_id: admin.id,
         role: "admin"

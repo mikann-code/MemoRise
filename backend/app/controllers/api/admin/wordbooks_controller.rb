@@ -1,6 +1,6 @@
 require "csv"
 class Api::Admin::WordbooksController < Api::Admin::BaseController
-  before_action :set_wordbook, only: [:show, :update, :destroy]
+  before_action :set_wordbook, only: [ :show, :update, :destroy ]
 
   # 親 単語帳の表示
   def index
@@ -28,7 +28,7 @@ class Api::Admin::WordbooksController < Api::Admin::BaseController
   def create
     # admin 用 user = nil に固定
     wordbook = Wordbook.new(wordbook_params)
-    wordbook.user = nil 
+    wordbook.user = nil
 
     if wordbook.save
       render json: wordbook, status: :created

@@ -4,8 +4,22 @@ import { FiEdit3 } from "react-icons/fi";
 import styles from "./CraftWord.module.css";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export const CraftWord = () => {
+  const router = useRouter();
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault(); // Linkのデフォルト遷移を止める
+
+    const uuid = localStorage.getItem("lastWordbookUuid");
+
+    if (uuid) {
+      router.push(`/wordbooks/${uuid}/test`);
+    } else {
+      router.push("/wordbooks");
+    }
+  };
+
   return (
     <div className={styles.craftWordContainer}>
       <SectionTitle
@@ -25,7 +39,11 @@ export const CraftWord = () => {
             className={styles.craftWordImage}
           />
         </Link>
-        <Link className={styles.craftWordItem} href="/wordbooks">
+        <Link
+          className={styles.craftWordItem}
+          href="/wordbooks"
+          onClick={handleClick}
+        >
           自作単語帳をテスト
           <Image
             src="/images/icon-practice.svg"

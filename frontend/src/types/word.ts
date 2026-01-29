@@ -43,4 +43,5 @@ export type Wordbook = {
   uuid: string;
   title: string;
   description: string | null;
+  label?: string;
 };

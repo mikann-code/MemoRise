@@ -44,7 +44,7 @@ class Api::V1::StudyRecordsController < ApplicationController
   end
 
   # その日の学習記録
-  # 1日1回の作成 or 更新 
+  # 1日1回の作成 or 更新
   def create
     ActiveRecord::Base.transaction do
       # その日の study_record（合計用）

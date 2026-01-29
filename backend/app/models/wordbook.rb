@@ -19,6 +19,9 @@ class Wordbook < ApplicationRecord
   validates :uuid, presence: true, uniqueness: true
   validates :title, presence: true
 
+  # 論理削除済みを除外するスコープ
+  scope :active, -> { where(deleted_at: nil) }
+
   # admin用 wordbook のみ必須
   validates :level, :label, presence: true, if: :admin_wordbook?
 

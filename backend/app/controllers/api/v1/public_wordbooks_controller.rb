@@ -1,6 +1,6 @@
 class Api::V1::PublicWordbooksController < ApplicationController
   # 一覧表示はログイン不要
-  
+
   def index
     # 配布用（公式）単語帳：user_id が NULL のもの
     public_wordbooks = Wordbook
@@ -62,7 +62,7 @@ class Api::V1::PublicWordbooksController < ApplicationController
 
   def serialize_word(word)
   word.as_json(
-    only: [:uuid, :question, :answer, :pos]
+    only: [ :uuid, :question, :answer, :pos ]
   )
   end
 end
