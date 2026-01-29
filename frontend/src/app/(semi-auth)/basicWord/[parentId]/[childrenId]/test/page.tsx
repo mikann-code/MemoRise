@@ -6,7 +6,7 @@ import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { PiNotePencilDuotone } from "react-icons/pi";
 import styles from "./page.module.css";
 import { Button } from "@/src/components/common/ui/Button";
-import { TestCard } from "@/src/components/common/card/TestCard";
+import { WordCard } from "@/src/components/common/card/WordCard";
 import { usePublicWords } from "@/src/hooks/usePublicWords";
 import { usePostStudyRecord } from "@/src/hooks/usePostStudyRecord";
 
@@ -130,7 +130,7 @@ export default function BasicWordTestPage() {
           </p>
 
           {wrongQuestions.map((w, idx) => (
-            <TestCard
+            <WordCard
               key={idx}
               question={w.question}
               answer={w.answer}
@@ -180,7 +180,7 @@ export default function BasicWordTestPage() {
         </p>
       </div>
 
-      <TestCard
+      <WordCard
         question={currentWord.question}
         answer={currentWord.answer}
         pos={currentWord.pos || []}

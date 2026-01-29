@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { FaListUl } from "react-icons/fa6";
 import { Button } from "@/src/components/common/ui/Button";
-import { TestCard } from "@/src/components/common/card/TestCard";
+import { WordCard } from "@/src/components/common/card/WordCard";
 import styles from "./page.module.css";
 import { usePublicWords } from "@/src/hooks/usePublicWords";
 
@@ -40,7 +40,7 @@ export default function WordListPage() {
 
       <div className={styles.listContainer}>
         {words.map((word) => (
-          <TestCard
+          <WordCard
             key={word.uuid}
             question={word.question}
             answer={word.answer}

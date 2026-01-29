@@ -7,7 +7,7 @@ import { LuBookMarked } from "react-icons/lu";
 import { FloatingInput } from "@/src/components/common/ui/FloatingInput";
 import { TbCircleLetterQFilled, TbCircleLetterAFilled } from "react-icons/tb";
 import { Button } from "@/src/components/common/ui/Button";
-import { TestCard } from "@/src/components/common/card/TestCard";
+import { WordCard } from "@/src/components/common/card/WordCard";
 
 import { useAdminWordbookChildren } from "@/src/hooks/useAdminWordbookChildren";
 import { useAdminWords } from "@/src/hooks/useAdminWords";
@@ -120,7 +120,7 @@ export default function AdminWordbookChildPage() {
 
         {words.map((word) => (
           <li key={word.uuid}>
-            <TestCard
+            <WordCard
               question={word.question}
               answer={word.answer}
               opened={true}

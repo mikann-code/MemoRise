@@ -16,7 +16,7 @@ Rails.application.routes.draw do
 
       # 単語帳
       resources :wordbooks, param: :uuid, only: [ :index, :create , :destroy] do
-        resources :words, only: [ :index, :create , :destroy]
+        resources :words, param: :uuid, only: [:index, :create, :destroy]
 
         # 単語中ごとの学習イベント 
         post :study, on: :member
