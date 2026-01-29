@@ -56,3 +56,22 @@ export const createAdminWord = async (
 
   return res.json();
 };
+
+// 単語削除（admin用）
+export const deleteAdminWord = async (
+  wordbookUuid: string,
+  wordUuid: string
+): Promise<void> => {
+  const res = await adminAuthFetch(
+    `http://localhost:3001/api/admin/wordbooks/${wordbookUuid}/words/${wordUuid}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("DELETE admin word error:", res.status, text);
+    throw new Error("Failed to delete admin word");
+  }
+};

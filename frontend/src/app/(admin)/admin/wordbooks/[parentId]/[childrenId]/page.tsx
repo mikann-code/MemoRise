@@ -34,7 +34,8 @@ export default function AdminWordbookChildPage() {
   }, [children, childrenId]);
 
   // ⭐ admin 用 hook を使う
-  const { words, loading, error, addWord } = useAdminWords(childrenId);
+  const { words, loading, error, addWord, deleteWord } =
+    useAdminWords(childrenId);
 
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
@@ -46,25 +47,30 @@ export default function AdminWordbookChildPage() {
     setAnswer("");
   };
 
+  const handleDeleteWord = async (wordUuid: string) => {
+    if (!confirm("この単語を削除しますか？")) return;
+    await deleteWord(wordUuid);
+  };
+
   const handleCsvUpload = async (file: File | null) => {
-  if (!file) return;
+    if (!file) return;
 
-  const text = await file.text();
-  const lines = text.split("\n");
+    const text = await file.text();
+    const lines = text.split("\n");
 
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i].replace("\r", "").trim();
-    if (!line) continue;
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i].replace("\r", "").trim();
+      if (!line) continue;
 
-    const [question, answer] = line.split(",");
-    if (!question || !answer) continue;
+      const [question, answer] = line.split(",");
+      if (!question || !answer) continue;
 
-    await addWord({
-      question: question.trim(),
-      answer: answer.trim(),
-    });
-  }
-};
+      await addWord({
+        question: question.trim(),
+        answer: answer.trim(),
+      });
+    }
+  };
 
   if (childrenLoading) return <p>読み込み中...</p>;
   if (childrenError) return <p>Part の取得に失敗しました</p>;
@@ -116,7 +122,7 @@ export default function AdminWordbookChildPage() {
 
       {/* 単語一覧 */}
       <ul>
-        {words.length === 0 && <p>この Part にはまだ単語がありません</p>}
+        {words.length === 0 && <li>この Part にはまだ単語がありません</li>}
 
         {words.map((word) => (
           <li key={word.uuid}>
@@ -126,6 +132,8 @@ export default function AdminWordbookChildPage() {
               opened={true}
               onToggle={() => {}}
               onNext={() => {}}
+              onDelete={() => handleDeleteWord(word.uuid)} 
+              deletable={true}
             />
           </li>
         ))}

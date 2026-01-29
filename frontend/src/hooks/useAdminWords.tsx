@@ -5,6 +5,7 @@ import {
   fetchAdminWords,
   createAdminWord,
   AdminWord,
+  deleteAdminWord,
 } from "@/src/lib/adminWords";
 
 export const useAdminWords = (wordbookUuid: string) => {
@@ -35,10 +36,22 @@ export const useAdminWords = (wordbookUuid: string) => {
     },
   });
 
+  const deleteWordMutation = useMutation({
+    mutationFn: (wordUuid: string) =>
+      deleteAdminWord(wordbookUuid, wordUuid),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["adminWords", wordbookUuid],
+      });
+    },
+  });
+
   return {
     words,
     loading: isLoading,
     error: isError,
     addWord: createWordMutation.mutateAsync,
+    deleteWord: deleteWordMutation.mutateAsync,
   };
 };
