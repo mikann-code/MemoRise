@@ -1,3 +1,4 @@
+require "csv"
 class Api::Admin::WordbooksController < Api::Admin::BaseController
   before_action :set_wordbook, only: [:show, :update, :destroy]
 
@@ -47,6 +48,36 @@ class Api::Admin::WordbooksController < Api::Admin::BaseController
   def destroy
     @wordbook.destroy
     head :no_content
+  end
+
+  # CSVインポート
+  def import_csv
+    wordbook = Wordbook.find_by!(uuid: params[:uuid])
+    file = params[:file]
+
+    if file.nil?
+      return render json: { error: "CSVファイルがありません" }, status: 400
+    end
+
+    success_count = 0
+    errors = []
+
+    CSV.foreach(file.path, headers: true).with_index(2) do |row, line|
+      begin
+        wordbook.words.create!(
+          question: row["question"],
+          answer: row["answer"]
+        )
+        success_count += 1
+      rescue => e
+        errors << "行#{line}: #{e.message}"
+      end
+    end
+
+    render json: {
+      success_count: success_count,
+      errors: errors
+    }
   end
 
   private

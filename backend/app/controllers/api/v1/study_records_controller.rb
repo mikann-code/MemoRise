@@ -12,11 +12,11 @@ class Api::V1::StudyRecordsController < ApplicationController
     end_date   = start_date.end_of_month
 
     records = current_user.study_records
+               .includes(:study_details)
                .where(study_date: start_date..end_date)
                .order(:study_date)
-               .select(:id, :study_date, :study_count, :memo)
 
-    render json: records
+    render json: records.as_json(include: :study_details)
   end
 
   # 指定週(今週)の学習記録を取得
@@ -25,36 +25,55 @@ class Api::V1::StudyRecordsController < ApplicationController
     end_date   = start_date + 6
 
     records = current_user.study_records
+               .includes(:study_details)
                .where(study_date: start_date..end_date)
                .order(:study_date)
-               .select(:study_date, :study_count, :memo)
 
-    render json: records
+    render json: records.as_json(include: :study_details)
   end
 
   # 最近30の学習記録を取得
   # 新しい⇒古いの順
   def recent
     records = current_user.study_records
-                          .order(study_date: :desc)
-                          .limit(30)
+               .includes(:study_details)
+               .order(study_date: :desc)
+               .limit(30)
 
-    render json: records
+    render json: records.as_json(include: :study_details)
   end
 
-  # 1日1回の作成 or 更新
+  # その日の学習記録
+  # 1日1回の作成 or 更新 
   def create
-    record = current_user.study_records.find_or_initialize_by(
-      study_date: params[:study_date]
-    )
+    ActiveRecord::Base.transaction do
+      # その日の study_record（合計用）
+      record = current_user.study_records.find_or_initialize_by(
+        study_date: params[:study_date]
+      )
 
-    record.assign_attributes(study_record_params)
+      # 合計値を更新
+      record.study_count ||= 0
+      record.study_count += params[:count].to_i
+      record.save!
 
-    if record.save
+      child = Wordbook.find_by!(uuid: params[:children_id])
+      parent = child.parent
+
+      full_title = "#{parent.title} #{child.part}"
+
+      # 学習記録の追加
+      record.study_details.create!(
+        title: full_title,                # 例: "英検2級 part1"
+        rate: params[:rate],              # 例: 100
+        count: params[:count],            # 例: 20
+        children_id: params[:children_id]
+      )
+
       render json: { status: "ok", record: record }, status: :ok
-    else
-      render json: { status: "error", errors: record.errors }, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordInvalid => e
+    render json: { status: "error", message: e.message }, status: :unprocessable_entity
   end
 
   private
