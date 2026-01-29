@@ -54,3 +54,22 @@ export const createWord = async (
 
   return res.json();
 };
+
+// 単語削除
+export const deleteWord = async (
+  wordbookUuid: string,
+  wordUuid: string
+): Promise<void> => {
+  const res = await authFetch(
+    `http://localhost:3001/api/v1/wordbooks/${wordbookUuid}/words/${wordUuid}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("DELETE error response:", res.status, text);
+    throw new Error(text);
+  }
+};

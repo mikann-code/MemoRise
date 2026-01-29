@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { PiNotePencilDuotone } from "react-icons/pi";
@@ -8,6 +8,7 @@ import styles from "./page.module.css";
 import { Button } from "@/src/components/common/ui/Button";
 import { TestCard } from "@/src/components/common/card/TestCard";
 import { usePublicWords } from "@/src/hooks/usePublicWords";
+import { usePostStudyRecord } from "@/src/hooks/usePostStudyRecord";
 
 export default function BasicWordTestPage() {
   const { parentId, childrenId } = useParams<{
@@ -15,7 +16,7 @@ export default function BasicWordTestPage() {
     childrenId: string;
   }>();
 
-  // ✅ 単語を API から取得（ここだけ変更）
+  // 単語取得
   const { words: fetchedWords, loading, error } = usePublicWords(childrenId);
 
   const [words, setWords] = useState<typeof fetchedWords>([]);
@@ -23,6 +24,11 @@ export default function BasicWordTestPage() {
   const [opened, setOpened] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [wrongQuestions, setWrongQuestions] = useState<typeof fetchedWords>([]);
+
+  const { mutate: postStudyRecord } = usePostStudyRecord();
+
+  // ★ 二重POST防止フラグ
+  const hasPostedRef = useRef(false);
 
   const total = words.length;
 
@@ -35,6 +41,7 @@ export default function BasicWordTestPage() {
     return copy;
   };
 
+  // 単語ロード時に初期化
   useEffect(() => {
     if (!fetchedWords || fetchedWords.length === 0) return;
 
@@ -44,7 +51,27 @@ export default function BasicWordTestPage() {
     setOpened(false);
     setCorrectCount(0);
     setWrongQuestions([]);
+    hasPostedRef.current = false; // 再挑戦時にリセット
   }, [fetchedWords]);
+
+  // ★ テスト終了時に学習記録をPOST
+  useEffect(() => {
+    if (currentIndex >= total && total > 0 && !hasPostedRef.current) {
+      hasPostedRef.current = true; // 二重送信防止
+
+      const today = new Date().toISOString().slice(0, 10);
+      const rate = Math.round((correctCount / total) * 100);
+
+      postStudyRecord({
+        study_date: today,
+        total_count: total,
+        title: `basicWord ${childrenId}`,
+        rate: rate,
+        count: total,
+        children_id: childrenId,
+      });
+    }
+  }, [currentIndex, total, correctCount, childrenId, postStudyRecord]);
 
   if (loading) return <div>読み込み中...</div>;
   if (error) return <div>単語の取得に失敗しました</div>;
@@ -83,6 +110,7 @@ export default function BasicWordTestPage() {
     setOpened((prev) => !prev);
   };
 
+  // ===== 結果画面 =====
   if (currentIndex >= total) {
     return (
       <>
@@ -122,6 +150,7 @@ export default function BasicWordTestPage() {
     );
   }
 
+  // ===== 出題中画面 =====
   return (
     <>
       <SectionTitle

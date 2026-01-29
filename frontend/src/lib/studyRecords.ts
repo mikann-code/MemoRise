@@ -1,11 +1,30 @@
 import { authFetch } from "@/src/lib/auth";
 
+export type StudyDetail = {
+  id: number;
+  title: string;
+  rate: number;
+  count: number;
+  children_id: string;
+};
+
 export type StudyRecord = {
   id: number;
   study_date: string;
   study_count: number;
-  memo: string;
+  memo: string | null;
+  study_details: StudyDetail[];
 };
+
+export type PostStudyRecordParams = {
+  study_date: string;
+  total_count: number;
+  title: string;
+  rate: number;
+  count: number;
+  children_id: string;
+};
+
 
 // index action
 export async function fetchStudyRecords(
@@ -63,21 +82,52 @@ export async function fetchStudyRecentRecords(): Promise<StudyRecord[]> {
 }
 
 // create action
-export async function createStudyRecord(study_date: string) {
+// export async function createStudyRecord(study_date: string,
+//   wordbookUuid: string
+// ) {
+//   const res = await authFetch("http://localhost:3001/api/v1/study_records", {
+//     method: "POST",
+//     body: JSON.stringify({
+//       study_date,
+//       study_count: 0,
+//       wordbook_uuid: wordbookUuid,
+//     }),
+//   });
+
+//   const data = await res.json();
+
+//   if (!res.ok) {
+//     throw new Error("Failed to create study record");
+//   }
+
+//   return data;
+// }
+
+// post action
+export async function postStudyRecord(params: PostStudyRecordParams) {
   const res = await authFetch("http://localhost:3001/api/v1/study_records", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({
-      study_date,
-      study_count: 0
+      study_date: params.study_date,
+      total_count: params.total_count,
+      title: params.title,
+      rate: params.rate,
+      count: params.count,
+      children_id: params.children_id,
     }),
   });
 
   const data = await res.json();
 
   if (!res.ok) {
-    throw new Error("Failed to create study record");
+    throw new Error("Failed to post study record");
   }
 
   return data;
 }
+
+
 

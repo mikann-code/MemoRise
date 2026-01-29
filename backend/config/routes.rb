@@ -43,8 +43,8 @@ Rails.application.routes.draw do
 
       resources :wordbooks, param: :uuid do
         get :children, on: :member
-
-        resources :words
+        post :import_csv, on: :member
+        resources :words, param: :uuid
       end
     end
 

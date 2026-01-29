@@ -19,7 +19,7 @@ class Api::V1::WordbooksController < ApplicationController
   end
 
   def show
-    wordbook = current_user.wordbooks.find_by!(uuid: params[:id])
+    wordbook = current_user.wordbooks.find_by!(uuid: params[:uuid])
     render json: serialize_wordbook(wordbook)
   end
 

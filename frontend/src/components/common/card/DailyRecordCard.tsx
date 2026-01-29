@@ -19,10 +19,20 @@ export const DailyRecordCard = ({ record }: { record: StudyRecord }) => {
       <div className={styles.body}>
         <p className={styles.count}>学習単語数：{record.study_count}</p>
 
-        {record.memo && (
-          <p className={styles.memo}>{record.memo}</p>
+        {/* ★ detail 表示 */}
+        {record.study_details && record.study_details.length > 0 && (
+          <div className={styles.details}>
+            {record.study_details.map((detail) => (
+              <div key={detail.id} className={styles.detailLine}>
+                <p>{detail.title} </p>
+                <p>{detail.rate}%</p>
+              </div>
+            ))}
+          </div>
         )}
+
+        {record.memo && <p className={styles.memo}>{record.memo}</p>}
       </div>
     </div>
   );
-}
+};

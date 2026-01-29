@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchWords, createWord, Word } from "@/src/lib/words";
+import { fetchWords, createWord, deleteWord ,Word } from "@/src/lib/words";
 
 export const useWords = (wordbookUuid: string) => {
   const queryClient = useQueryClient();
@@ -32,10 +32,21 @@ export const useWords = (wordbookUuid: string) => {
     },
   });
 
+  const deleteWordMutation = useMutation({
+    mutationFn: (wordUuid: string) =>
+      deleteWord(wordbookUuid, wordUuid),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["words", wordbookUuid],
+      });
+    },
+  });
+
   return {
     words,
     loading: isLoading,
     error: isError,
     addWord: createWordMutation.mutateAsync,
+    deleteWord: deleteWordMutation.mutateAsync,
   };
 };

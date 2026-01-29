@@ -10,12 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_27_032204) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_28_051614) do
   create_table "admin_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
     t.string "password_digest"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "study_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "children_id"
+    t.integer "count"
+    t.datetime "created_at", null: false
+    t.integer "rate"
+    t.bigint "study_record_id", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.index ["study_record_id"], name: "index_study_details_on_study_record_id"
   end
 
   create_table "study_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -72,6 +83,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_27_032204) do
     t.index ["wordbook_id"], name: "index_words_on_wordbook_id"
   end
 
+  add_foreign_key "study_details", "study_records"
   add_foreign_key "study_records", "users"
   add_foreign_key "wordbooks", "users"
   add_foreign_key "words", "wordbooks"
