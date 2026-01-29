@@ -8,6 +8,7 @@ export type Wordbook = {
   words_count: number;
   last_studied: string | null;
   studied_today: boolean;
+  label?: string;
 };
 
 // 単語帳一覧を取得
@@ -22,6 +23,35 @@ export const fetchWordbooks = async (): Promise<Wordbook[]> => {
   if (!res.ok) {
     throw new Error(
       data?.error || "単語帳の取得に失敗しました"
+    );
+  }
+
+  return data;
+};
+
+// 単語帳を作成
+export const createWordbook = async (
+  params: { title: string; description?: string | null , label?: string }
+): Promise<Wordbook> => {
+  const res = await authFetch(
+    "http://localhost:3001/api/v1/wordbooks",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        wordbook: {
+          title: params.title,
+          description: params.description ?? null,
+          label: params.label, 
+        },
+      }),
+    }
+  );
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(
+      data?.error || "単語帳の作成に失敗しました"
     );
   }
 

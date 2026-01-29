@@ -17,7 +17,7 @@ class ApplicationController < ActionController::API
       @current_user = User.find(decoded[:user_id])
     rescue StandardError
       render json: { error: "認証エラー" }, status: :unauthorized
-      return
+      nil
     end
   end
 

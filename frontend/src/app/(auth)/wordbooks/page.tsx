@@ -2,17 +2,17 @@
 import Link from "next/link";
 import { useWordbooks } from "@/src/hooks/useWordbooks";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
-import { LuBookMarked } from "react-icons/lu";
+import { LuBookMarked, LuChevronRight } from "react-icons/lu";
+import { FaRegStickyNote, FaClock } from "react-icons/fa";
 import styles from "./page.module.css";
-import { LuChevronRight } from "react-icons/lu";
 import dayjs from "@/src/lib/dayjs";
+import { FiMoreVertical } from "react-icons/fi";
 
 export default function WordbooksPage() {
-  const { data: wordbooks, isLoading, error } = useWordbooks();
+  const { wordbooks, loading, error } = useWordbooks();
 
-  if (isLoading) return <p>読み込み中...</p>;
+  if (loading) return <p>読み込み中...</p>;
   if (error) return <p>エラーが発生しました</p>;
-  if (!wordbooks) return null;
 
   return (
     <>
@@ -22,23 +22,43 @@ export default function WordbooksPage() {
         title="単語帳一覧"
       />
 
+      <div className={styles.createButtonWrapper}>
+        <Link href="/wordbooks/new" className={styles.createButton}>
+          ＋ 新しい単語帳
+        </Link>
+      </div>
+
       <ul className={styles.wordbooksList}>
         {wordbooks.map((wb) => (
           <li key={wb.uuid} className={styles.wordbooksItem}>
             <Link
-              href={`/wordbooks/${wb.uuid}`}
+              href={`/wordbooks/${wb.uuid}/list`}
               className={styles.wordbooksLink}
             >
-              <div>{wb.title}</div>
-              <p>{wb.description}</p>
-              <div className={styles.wordbooksMeta}>
-                <p>{wb.words_count} words</p>
-                <p>
-                  {wb.last_studied
-                    ? dayjs(wb.last_studied).fromNow()
-                    : "未学習"}
-                </p>
+              {/* 左アクセント */}
+              <span className={styles.accent} />
+      
+              <div className={styles.wordbookMain}>
+                <h3 className={styles.wordbookTitle}>{wb.title}</h3>
+                <p className={styles.wordbookDescription}>{wb.description}</p>
+
+                <div className={styles.wordbooksMeta}>
+                  <p>
+                    <FaRegStickyNote /> {wb.words_count} words
+                  </p>
+                  <p>
+                    <FaClock />
+                    {wb.last_studied
+                      ? dayjs(wb.last_studied).fromNow()
+                      : " 未学習"}
+                  </p>
+                </div>
               </div>
+
+              {wb.label && (
+                <span className={styles.wordbookLabel}>{wb.label}</span>
+              )}
+
               <LuChevronRight className={styles.wordbooksArrow} />
             </Link>
           </li>

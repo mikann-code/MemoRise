@@ -15,15 +15,15 @@ Rails.application.routes.draw do
       get "stats/total_words", to: "stats#total_words"
 
       # 単語帳
-      resources :wordbooks, param: :uuid, only: [ :index, :create , :destroy] do
-        resources :words, param: :uuid, only: [:index, :create, :destroy]
+      resources :wordbooks, param: :uuid, only: [ :index, :create, :destroy ] do
+        resources :words, param: :uuid, only: [ :index, :create, :destroy ]
 
-        # 単語中ごとの学習イベント 
+        # 単語中ごとの学習イベント
         post :study, on: :member
       end
 
       # 公開単語帳一覧取得
-      resources :public_wordbooks, param: :uuid, only: [:index] do
+      resources :public_wordbooks, param: :uuid, only: [ :index ] do
         get :children, on: :member
         get :words, on: :member
       end
@@ -31,8 +31,8 @@ Rails.application.routes.draw do
       # 学習記録API
       resources :study_records, only: [ :index, :create ] do
         collection do
-          get :recent       
-          get :week         
+          get :recent
+          get :week
         end
       end
     end
@@ -41,12 +41,11 @@ Rails.application.routes.draw do
     namespace :admin do
       post "login", to: "auth#login"
 
-      resources :wordbooks, param: :uuid, only: [:index, :show, :create, :update, :destroy] do
+      resources :wordbooks, param: :uuid, only: [ :index, :show, :create, :update, :destroy ] do
         get :children, on: :member
         post :import_csv, on: :member
-        resources :words, param: :uuid, only: [:index, :create, :update, :destroy]
+        resources :words, param: :uuid, only: [ :index, :create, :update, :destroy ]
       end
     end
-
   end
 end

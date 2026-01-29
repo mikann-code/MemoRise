@@ -33,7 +33,7 @@ export default function AdminWordbookChildPage() {
     return children.find((child) => child.uuid === childrenId);
   }, [children, childrenId]);
 
-  // ⭐ admin 用 hook を使う
+  // admin 用 hook を使う
   const { words, loading, error, addWord, deleteWord } =
     useAdminWords(childrenId);
 

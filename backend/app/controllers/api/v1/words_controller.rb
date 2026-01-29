@@ -1,7 +1,7 @@
 class Api::V1::WordsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_wordbook
-  before_action :set_word, only: [:destroy]
+  before_action :set_word, only: [ :destroy ]
 
   def index
     words = @wordbook.words.order(created_at: :desc)

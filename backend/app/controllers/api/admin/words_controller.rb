@@ -1,6 +1,6 @@
 class Api::Admin::WordsController < Api::Admin::BaseController
   before_action :set_wordbook
-  before_action :set_word, only: [:show, :update, :destroy]
+  before_action :set_word, only: [ :show, :update, :destroy ]
 
   def index
     @words = @wordbook.words.order(created_at: :desc)

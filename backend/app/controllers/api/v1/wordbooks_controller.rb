@@ -3,34 +3,38 @@ class Api::V1::WordbooksController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    wordbooks = current_user.wordbooks
-      .order(last_studied: :desc, created_at: :desc)
+    wordbooks = current_user.wordbooks.active
+  .order(last_studied: :desc, created_at: :desc)
 
     render json: wordbooks.map { |wb| serialize_wordbook(wb) }
   end
 
   def create
-    if current_user.wordbooks.count >= 5
+    # ユーザーに紐づく単語帳は5個まで（初期）
+    if current_user.wordbooks.active.count >= 5
     render json: { error: "単語帳は5個まで作成できます" }, status: :unprocessable_entity
     return
     end
-    
-    wordbook = current_user.wordbooks.create!(
-      title: params[:title],
-      description: params[:description]
-    )
+
+    wordbook = current_user.wordbooks.create!(wordbook_params)
 
     render json: serialize_wordbook(wordbook), status: :created
   end
 
+  def destroy
+    wordbook = current_user.wordbooks.active.find_by!(uuid: params[:uuid])
+    wordbook.update!(deleted_at: Time.current)
+    head :no_content
+  end
+
   def show
-    wordbook = current_user.wordbooks.find_by!(uuid: params[:uuid])
+    wordbook = current_user.wordbooks.active.find_by!(uuid: params[:uuid])
     render json: serialize_wordbook(wordbook)
   end
 
   # 学習イベント
   def study
-    wordbook = current_user.wordbooks.find_by!(uuid: params[:uuid])
+    wordbook = current_user.wordbooks.active.find_by!(uuid: params[:uuid])
 
     # 単語帳単位
     wordbook.touch(:last_studied)
@@ -48,9 +52,13 @@ class Api::V1::WordbooksController < ApplicationController
 
   private
 
+  def wordbook_params
+    params.require(:wordbook).permit(:title, :description, :label)
+  end
+
   def serialize_wordbook(wordbook)
     wordbook.as_json(
-      only: [:uuid, :title, :description, :words_count, :last_studied]
+      only: [ :uuid, :title, :description, :words_count, :last_studied, :label ]
     ).merge(
       studied_today: wordbook.studied_today?
     )
