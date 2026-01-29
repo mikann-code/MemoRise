@@ -4,15 +4,13 @@ import { use, useState, useEffect } from "react";
 import { useWords } from "@/src/hooks/useWords";
 import { useStudyWordbooks } from "@/src/hooks/useStudyWordbooks";
 import { useQueryClient } from "@tanstack/react-query";
-import { createStudyRecord } from "@/src/lib/studyRecords";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { FaListUl } from "react-icons/fa6";
 import styles from "./page.module.css";
 import { FloatingInput } from "@/src/components/common/ui/FloatingInput";
-import { TbCircleLetterQFilled } from "react-icons/tb";
-import { TbCircleLetterAFilled } from "react-icons/tb";
+import { TbCircleLetterQFilled, TbCircleLetterAFilled } from "react-icons/tb";
 import { Button } from "@/src/components/common/ui/Button";
-import { TestCard } from "@/src/components/common/card/TestCard";
+import { WordCard } from "@/src/components/common/card/WordCard";
 
 type Props = {
   params: Promise<{
@@ -23,9 +21,8 @@ type Props = {
 export default function WordbookDetailPage({ params }: Props) {
   const { id: wordbookUuid } = use(params);
 
-  const { words, loading, error, addWord } = useWords(wordbookUuid);
+  const { words, loading, error, addWord, deleteWord } = useWords(wordbookUuid);
 
-  // 学習データの更新
   const studyMutation = useStudyWordbooks(wordbookUuid);
   const queryClient = useQueryClient();
 
@@ -33,29 +30,16 @@ export default function WordbookDetailPage({ params }: Props) {
   const [answer, setAnswer] = useState("");
 
   useEffect(() => {
-  console.log("📚 Wordbook opened:", wordbookUuid);
-
-  studyMutation.mutate(undefined, {
-    onSuccess: async () => {
-      console.log("✨ study API success!");
-      queryClient.invalidateQueries({ queryKey: ["wordbooks"] });
-    },
-    onError: (err) => {
-      console.error("❌ study API error:", err);
-    }
-  });
-}, [wordbookUuid]);
-
-  // localstorageに保存して最も最近開いていた単語帳を開けるようにできる
-  useEffect(() => {
-    localStorage.setItem("lastWordbookUuid", wordbookUuid);
+    studyMutation.mutate(undefined, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["wordbooks"] });
+      },
+    });
   }, [wordbookUuid]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     await addWord({ question, answer });
-
     setQuestion("");
     setAnswer("");
   };
@@ -100,13 +84,14 @@ export default function WordbookDetailPage({ params }: Props) {
       <ul>
         {words.map((word) => (
           <li key={word.uuid}>
-            <TestCard
-              key={word.uuid}
+            <WordCard
               question={word.question}
               answer={word.answer}
+              review={false}
               opened={true}
-              onToggle={() => {}}
-              onNext={() => {}}
+              deletable={true}
+              onTagToggle={() => {}}
+              onDelete={() => deleteWord(word.uuid)} // ⭐ ここが削除
             />
           </li>
         ))}

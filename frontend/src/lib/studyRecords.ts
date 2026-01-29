@@ -81,28 +81,7 @@ export async function fetchStudyRecentRecords(): Promise<StudyRecord[]> {
   return data;
 }
 
-// create action
-// export async function createStudyRecord(study_date: string,
-//   wordbookUuid: string
-// ) {
-//   const res = await authFetch("http://localhost:3001/api/v1/study_records", {
-//     method: "POST",
-//     body: JSON.stringify({
-//       study_date,
-//       study_count: 0,
-//       wordbook_uuid: wordbookUuid,
-//     }),
-//   });
-
-//   const data = await res.json();
-
-//   if (!res.ok) {
-//     throw new Error("Failed to create study record");
-//   }
-
-//   return data;
-// }
-
+// 初回はcreate 二回以降はupdate
 // post action
 export async function postStudyRecord(params: PostStudyRecordParams) {
   const res = await authFetch("http://localhost:3001/api/v1/study_records", {
