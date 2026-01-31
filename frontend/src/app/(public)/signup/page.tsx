@@ -5,10 +5,11 @@ import { FaUserPlus } from "react-icons/fa";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { FloatingInput } from "@/src/components/common/ui/FloatingInput";
 import { Button } from "@/src/components/common/ui/Button";
-import styles from "./page.module.css";
-import { MdLockOutline } from "react-icons/md";
-import { MdMailOutline } from "react-icons/md";
+import { MdLockOutline, MdMailOutline } from "react-icons/md";
 import { IoPerson } from "react-icons/io5";
+import { FormLayout } from "@/src/components/layout/FormLayout";
+import styles from "./page.module.css";
+import { useSignup } from "@/src/hooks/useSignup";
 
 const attributeLabels: Record<string, string> = {
   name: "名前",
@@ -24,6 +25,8 @@ const formatError = (field: string, msg?: string) => {
 };
 
 export default function SignupPage() {
+  const signupMutation = useSignup();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,12 +41,9 @@ export default function SignupPage() {
     passwordConfirm: "",
   });
 
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("");
-
     setErrors({
       name: "",
       email: "",
@@ -51,121 +51,103 @@ export default function SignupPage() {
       passwordConfirm: "",
     });
 
-    setLoading(true);
-
-    try {
-      const res = await fetch("http://localhost:3001/api/v1/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user: {
-            name,
-            email,
-            password,
-            password_confirmation: passwordConfirm,
-          },
-        }),
-      });
-
-      const data = await res.json();
-
-      if (res.status === 422) {
-        setErrors({
-          name: formatError("name", data.errors?.name?.[0]),
-          email: formatError("email", data.errors?.email?.[0]),
-          password: formatError("password", data.errors?.password?.[0]),
-          passwordConfirm: formatError(
-            "password_confirmation",
-            data.errors?.password_confirmation?.[0]
-          ),
-        });
-        return;
+    signupMutation.mutate(
+      {
+        name,
+        email,
+        password,
+        password_confirmation: passwordConfirm,
+      },
+      {
+        onSuccess: () => {
+          setMessage("会員登録が成功しました！");
+        },
+        onError: (err: any) => {
+          if (err?.errors) {
+            setErrors({
+              name: formatError("name", err.errors?.name?.[0]),
+              email: formatError("email", err.errors?.email?.[0]),
+              password: formatError("password", err.errors?.password?.[0]),
+              passwordConfirm: formatError(
+                "password_confirmation",
+                err.errors?.password_confirmation?.[0]
+              ),
+            });
+          } else {
+            setMessage("サーバーに接続できませんでした");
+          }
+        },
       }
-
-      if (res.status >= 500) {
-        setMessage(
-          "サーバー側で問題が発生しました（DB接続エラーの可能性あり）"
-        );
-        return;
-      }
-
-      if (res.ok) {
-        setMessage("会員登録が成功しました！");
-      }
-    } catch (err) {
-      setMessage("サーバーに接続できませんでした");
-    } finally {
-      setLoading(false);
-    }
+    );
   };
 
+  const loading = signupMutation.isPending;
+
   return (
-    <>
-      <SectionTitle icon={FaUserPlus} subTitle="Signup" title="会員登録" />
-
-      <div className={styles.signupDescription}>
-        MemoRise をもっと便利に使うために、アカウントを作成しましょう。
-      </div>
-
-      <div className={styles.signupContainer}>
-        <form onSubmit={handleSubmit} className={styles.signupForm}>
-          <FloatingInput
-            id="name"
-            label="名前"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            disabled={loading}
-            error={errors.name}
-            icon={<IoPerson />}
-          />
-
-          <FloatingInput
-            id="email"
-            label="メールアドレス"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={loading}
-            error={errors.email}
-            icon={<MdMailOutline />}
-          />
-
-          <FloatingInput
-            id="password"
-            label="パスワード"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            disabled={loading}
-            error={errors.password}
-            icon={<MdLockOutline />}
-          />
-
-          <FloatingInput
-            id="passwordConfirm"
-            label="パスワード（確認）"
-            type="password"
-            value={passwordConfirm}
-            onChange={(e) => setPasswordConfirm(e.target.value)}
-            disabled={loading}
-            error={errors.passwordConfirm}
-            icon={<MdLockOutline />}
-          />
-
-          <Button>
-            <button
-              type="submit"
-              className={styles.signupSubmitBtn}
+    <FormLayout
+      header={
+        <SectionTitle icon={FaUserPlus} subTitle="Signup" title="会員登録" />
+      }
+      description={
+        <p className={styles.signupDescription}>
+          MemoRise をもっと便利に使うために、アカウントを作成しましょう。
+        </p>
+      }
+      form={
+        <>
+          <form onSubmit={handleSubmit}>
+            <FloatingInput
+              id="name"
+              label="名前"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               disabled={loading}
-            >
-              {loading ? "送信中..." : "登録する"}
-            </button>
-          </Button>
-        </form>
+              error={errors.name}
+              icon={<IoPerson />}
+            />
 
-        {loading && <p className={styles.signupLoading}>送信中です…</p>}
-        {message && <p className={styles.signupSuccess}>{message}</p>}
-      </div>
-    </>
+            <FloatingInput
+              id="email"
+              label="メールアドレス"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
+              error={errors.email}
+              icon={<MdMailOutline />}
+            />
+
+            <FloatingInput
+              id="password"
+              label="パスワード"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+              error={errors.password}
+              icon={<MdLockOutline />}
+            />
+
+            <FloatingInput
+              id="passwordConfirm"
+              label="パスワード（確認）"
+              type="password"
+              value={passwordConfirm}
+              onChange={(e) => setPasswordConfirm(e.target.value)}
+              disabled={loading}
+              error={errors.passwordConfirm}
+              icon={<MdLockOutline />}
+            />
+
+            <Button type="submit" disabled={loading}>
+              {loading ? "送信中..." : "登録する"}
+            </Button>
+          </form>
+
+          {loading && <p className={styles.signupLoading}>送信中です…</p>}
+          {message && <p className={styles.signupSuccess}>{message}</p>}
+        </>
+      }
+    />
   );
 }

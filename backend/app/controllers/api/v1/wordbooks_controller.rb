@@ -53,12 +53,12 @@ class Api::V1::WordbooksController < ApplicationController
   private
 
   def wordbook_params
-    params.require(:wordbook).permit(:title, :description, :label)
+    params.require(:wordbook).permit(:title, :description, :label ,:deleted_at)
   end
 
   def serialize_wordbook(wordbook)
     wordbook.as_json(
-      only: [ :uuid, :title, :description, :words_count, :last_studied, :label ]
+      only: [ :uuid, :title, :description, :words_count, :last_studied, :label ,:deleted_at ]
     ).merge(
       studied_today: wordbook.studied_today?
     )

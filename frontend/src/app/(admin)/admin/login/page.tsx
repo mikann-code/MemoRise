@@ -30,13 +30,12 @@ export default function AdminLoginPage() {
 
       <p className={styles.description}>
         管理者アカウントでログインしてください。
+        {login.isError && (
+          <div className={styles.errorMessage}>
+            {(login.error as Error).message}
+          </div>
+        )}
       </p>
-
-      {login.isError && (
-        <div className={styles.errorMessage}>
-          {(login.error as Error).message}
-        </div>
-      )}
 
       <form className={styles.form} onSubmit={handleSubmit} autoComplete="off">
         <div className={styles.formItem}>
@@ -61,13 +60,9 @@ export default function AdminLoginPage() {
           />
         </div>
 
-        <div className={styles.submitWrapper}>
-          <Button>
-            <button type="submit" disabled={login.isPending}>
-              {login.isPending ? "ログイン中..." : "ログイン"}
-            </button>
-          </Button>
-        </div>
+        <Button type="submit" disabled={login.isPending}>
+          {login.isPending ? "ログイン中..." : "ログイン"}
+        </Button>
       </form>
     </>
   );

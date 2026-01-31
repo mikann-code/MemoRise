@@ -1,36 +1,40 @@
 .wordCardWrapper {
   width: 100%;
+  margin-top:10px;
 }
 
+/* カード本体（不透明） */
+.wordCard {
+  position: relative;
+  border-radius: 14px;
+  padding: 6px 0;
+  background: #1f1f1f;
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+/* アクション：常に表示 */
 .wordCardActions {
   position: absolute;
-  top: 6px;
-  right:12px;
+  top: 8px;
+  right: 10px;
   display: flex;
-  gap:6px;
+  gap: 6px;
   align-items: center;
 }
 
+/* ボタンは目立たせすぎない */
 .wordCardActionButton {
   cursor: pointer;
-  color: #888;
-  font-size:24px;
-  transition: all 0.2s ease;
+  color: #777;
+  font-size: 16px;
+  transition: color 0.15s ease;
 }
 
-.wordCardActionButton:hover{
+.wordCardActionButton:hover {
   color: var(--color-primary);
-}
-
-.wordCard {
-  border: 2px solid var(--color-border);
-  border-radius: 16px;
-  padding: 4px 0;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
 }
 
 .isActive {
@@ -38,33 +42,23 @@
 }
 
 .isNotActive {
-  color: #aaa;
+  color: #777;
 }
 
 /* 質問・答え */
 .wordCardQuestion,
 .wordCardAnswer {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 500;
   font-family: var(--font-primary);
-  padding: 24px 0;
+  padding: 20px 0;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
 }
 
+/* 仕切り線は弱く */
 .wordCardAnswer {
-  border-left: 2px dashed var(--color-border);
-}
-
-/* （もし使うなら）切り替えボタン */
-.wordToggleButton {
-  padding: 8px 16px;
-  background: var(--color-primary);
-  color: #fff;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
+  border-left: 1px dashed var(--color-border);
 }

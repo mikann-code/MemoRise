@@ -8,9 +8,11 @@ import { FloatingInput } from "@/src/components/common/ui/FloatingInput";
 import { TbCircleLetterQFilled, TbCircleLetterAFilled } from "react-icons/tb";
 import { Button } from "@/src/components/common/ui/Button";
 import { WordCard } from "@/src/components/common/card/WordCard";
-
+import { WordbookListLayout } from "@/src/components/layout/WordbookListLayout";
 import { useAdminWordbookChildren } from "@/src/hooks/useAdminWordbookChildren";
 import { useAdminWords } from "@/src/hooks/useAdminWords";
+import styles from "./page.module.css";
+import { ButtonSecondary } from "@/src/components/common/ui/ButtonSecondary";
 
 export default function AdminWordbookChildPage() {
   const { parentId, childrenId } = useParams<{
@@ -18,27 +20,22 @@ export default function AdminWordbookChildPage() {
     childrenId: string;
   }>();
 
-  // 親に紐づく子（Part）一覧を取得
   const {
     children,
     loading: childrenLoading,
     error: childrenError,
   } = useAdminWordbookChildren(parentId);
 
-  console.log("parentId:", parentId);
-  console.log("childrenId:", childrenId);
-
-  // URLの childrenId に一致する Part を特定
   const childWordbook = useMemo(() => {
     return children.find((child) => child.uuid === childrenId);
   }, [children, childrenId]);
 
-  // admin 用 hook を使う
   const { words, loading, error, addWord, deleteWord } =
     useAdminWords(childrenId);
 
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [csvFile, setCsvFile] = useState<File | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,12 +59,12 @@ export default function AdminWordbookChildPage() {
       const line = lines[i].replace("\r", "").trim();
       if (!line) continue;
 
-      const [question, answer] = line.split(",");
-      if (!question || !answer) continue;
+      const [q, a] = line.split(",");
+      if (!q || !a) continue;
 
       await addWord({
-        question: question.trim(),
-        answer: answer.trim(),
+        question: q.trim(),
+        answer: a.trim(),
       });
     }
   };
@@ -80,64 +77,92 @@ export default function AdminWordbookChildPage() {
   if (error) return <p>単語の取得に失敗しました</p>;
 
   return (
-    <>
-      <SectionTitle
-        icon={LuBookMarked}
-        subTitle="Admin Wordbook Part"
-        title={childWordbook.part}
-      />
-
-      {/* 単語登録フォーム */}
-      <form onSubmit={handleSubmit}>
-        <FloatingInput
-          id="question"
-          type="text"
-          label="単語"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          icon={<TbCircleLetterQFilled />}
+    <WordbookListLayout
+      header={
+        <SectionTitle
+          icon={LuBookMarked}
+          subTitle="Admin Wordbook Part"
+          title={`${childWordbook.title} ${childWordbook.part}`}
         />
+      }
+      description={<div>
+        <p>{childWordbook.description}</p>
+        <p>登録単語数：{words.length}語</p>
+      </div>}
+      form={
+        <form onSubmit={handleSubmit}>
+          <FloatingInput
+            id="question"
+            type="text"
+            label="単語"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            icon={<TbCircleLetterQFilled />}
+          />
 
-        <FloatingInput
-          id="answer"
-          type="text"
-          label="意味"
-          value={answer}
-          onChange={(e) => setAnswer(e.target.value)}
-          icon={<TbCircleLetterAFilled />}
-        />
+          <FloatingInput
+            id="answer"
+            type="text"
+            label="意味"
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+            icon={<TbCircleLetterAFilled />}
+          />
 
-        <Button>
-          <button type="submit">単語を登録</button>
-        </Button>
+          <Button type="submit">単語を登録</Button>
 
-        <label htmlFor="csvFile">CSVファイル</label>
-        <input
-          id="csvFile"
-          type="file"
-          accept=".csv"
-          onChange={(e) => handleCsvUpload(e.target.files?.[0] || null)}
-        />
-      </form>
+          <div className={styles.csvFileContainer}>
+            <p className={styles.csvFileLabel}>CSVファイルで登録できます</p>
 
-      {/* 単語一覧 */}
-      <ul>
-        {words.length === 0 && <li>この Part にはまだ単語がありません</li>}
+            <div className={styles.csvRow}>
+              <label htmlFor="csvFile" className={styles.csvSelectButton}>
+                ファイルを選択
+              </label>
 
-        {words.map((word) => (
-          <li key={word.uuid}>
-            <WordCard
-              question={word.question}
-              answer={word.answer}
-              opened={true}
-              onToggle={() => {}}
-              onNext={() => {}}
-              onDelete={() => handleDeleteWord(word.uuid)} 
-              deletable={true}
+              <span className={styles.csvFileName}>
+                {csvFile ? csvFile.name : "選択されていません"}
+              </span>
+            </div>
+
+            <input
+              id="csvFile"
+              type="file"
+              accept=".csv"
+              onChange={(e) => setCsvFile(e.target.files?.[0] || null)}
+              className={styles.csvFileInput}
             />
-          </li>
-        ))}
-      </ul>
-    </>
+
+            <div className={styles.buttonSecondary}>
+              <ButtonSecondary
+                type="button"
+                onClick={() => handleCsvUpload(csvFile)}
+                disabled={!csvFile}
+              >
+                CSVを登録
+              </ButtonSecondary>
+            </div>
+          </div>
+        </form>
+      }
+      list={
+        <ul>
+          {words.length === 0 && <li>この Part にはまだ単語がありません</li>}
+
+          {words.map((word) => (
+            <li key={word.uuid}>
+              <WordCard
+                question={word.question}
+                answer={word.answer}
+                opened={true}
+                onToggle={() => {}}
+                onNext={() => {}}
+                onDelete={() => handleDeleteWord(word.uuid)}
+                deletable={true}
+              />
+            </li>
+          ))}
+        </ul>
+      }
+    />
   );
 }

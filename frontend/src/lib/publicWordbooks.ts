@@ -47,3 +47,21 @@ export const fetchPublicWordbookChildren = async (
   const data = await res.json();
   return data;
 }
+
+export const fetchPublicWordbook = async (
+  uuid: string
+): Promise<PublicWordbook> => {
+  const res = await fetch(
+    `http://localhost:3001/api/v1/public_wordbooks/${uuid}`
+  );
+
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(
+      data?.error || "公開単語帳の取得に失敗しました"
+    );
+  }
+
+  const data = await res.json();
+  return data;
+};

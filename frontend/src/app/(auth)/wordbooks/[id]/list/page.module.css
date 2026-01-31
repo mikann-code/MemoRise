@@ -1,11 +1,36 @@
-.wordCreateForm{
-  margin-top:20px;
+/* 削除ボタンに関する部分はこのページのみ表示のためコンポーネント化はしていない */
+/* 単語帳削除ボタン（目立ちすぎないように） */
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
-.wordSubmitButton {
-  all:unset;
-  display: block;
-  text-align: center;
-  width:100%;
-  height:100%;
+.deleteWordbookButton {
+  background: transparent;
+  border: 1px solid rgba(255, 107, 107, 0.4);
+  color: rgba(255, 107, 107, 0.7);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.deleteWordbookButton:hover {
+  background: rgba(255, 107, 107, 0.15);
+  color: #ff6b6b;
+}
+
+
+/* モバイル時：ボタンを少し小さく */
+@media (max-width: 768px) {
+  .deleteWordbookButton {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
 }

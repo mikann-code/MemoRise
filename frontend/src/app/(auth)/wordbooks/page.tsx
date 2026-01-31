@@ -16,13 +16,13 @@ export default function WordbooksPage() {
 
   return (
     <>
-      <SectionTitle
-        icon={LuBookMarked}
-        subTitle="My Wordbooks Collection"
-        title="単語帳一覧"
-      />
+      <div className={styles.headerRow}>
+        <SectionTitle
+          icon={LuBookMarked}
+          subTitle="My Wordbooks Collection"
+          title="単語帳一覧"
+        />
 
-      <div className={styles.createButtonWrapper}>
         <Link href="/wordbooks/new" className={styles.createButton}>
           ＋ 新しい単語帳
         </Link>
@@ -37,16 +37,16 @@ export default function WordbooksPage() {
             >
               {/* 左アクセント */}
               <span className={styles.accent} />
-      
+
               <div className={styles.wordbookMain}>
                 <h3 className={styles.wordbookTitle}>{wb.title}</h3>
                 <p className={styles.wordbookDescription}>{wb.description}</p>
 
                 <div className={styles.wordbooksMeta}>
-                  <p>
+                  <p className={styles.wordbookStat}>
                     <FaRegStickyNote /> {wb.words_count} words
                   </p>
-                  <p>
+                  <p className={styles.wordbookStat}>
                     <FaClock />
                     {wb.last_studied
                       ? dayjs(wb.last_studied).fromNow()
