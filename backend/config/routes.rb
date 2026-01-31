@@ -28,6 +28,13 @@ Rails.application.routes.draw do
         get :words, on: :member
       end
 
+      # タグずけされた単語
+      resources :user_word_tags, only: [:index, :create] do
+        collection do
+          delete :destroy
+        end
+      end
+
       # 学習記録API
       resources :study_records, only: [ :index, :create ] do
         collection do

@@ -6,8 +6,7 @@ import { LuBookMarked, LuChevronRight } from "react-icons/lu";
 import { FaRegStickyNote, FaClock } from "react-icons/fa";
 import styles from "./page.module.css";
 import dayjs from "@/src/lib/dayjs";
-import { FiMoreVertical } from "react-icons/fi";
-
+import { FaStar } from "react-icons/fa";
 export default function WordbooksPage() {
   const { wordbooks, loading, error } = useWordbooks();
 
@@ -23,9 +22,15 @@ export default function WordbooksPage() {
           title="単語帳一覧"
         />
 
-        <Link href="/wordbooks/new" className={styles.createButton}>
-          ＋ 新しい単語帳
-        </Link>
+        <div className={styles.headerActions}>
+          <Link href="/wordbooks/review" className={styles.reviewButton}>
+            <FaStar /> 復習単語
+          </Link>
+
+          <Link href="/wordbooks/new" className={styles.createButton}>
+            ＋ 新しい単語帳
+          </Link>
+        </div>
       </div>
 
       <ul className={styles.wordbooksList}>

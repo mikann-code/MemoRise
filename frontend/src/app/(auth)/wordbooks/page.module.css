@@ -5,6 +5,16 @@
   margin-bottom: 16px;
 }
 
+.headerActions {
+  display: flex;
+  gap: 4px;
+  @media(max-width:768px){
+    flex-direction: column;
+    margin-top:20px;
+    gap:8px;
+  }
+}
+
 .createButton {
   display: inline-flex;
   align-items: center;
@@ -24,10 +34,35 @@
   }
 }
 
+.reviewButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background-color: #3b82f6; /* 青 */
+  color: var(--color-font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: 0 4px 0 color-mix(in srgb, #3b82f6 60%, black);
+  transition: all 0.2s ease;
+  @media (max-width: 768px) {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+}
+
 .createButton:hover {
   background-color: var(--color-secondary);
   transform: translateY(2px);
   box-shadow: 0 1px 0 color-mix(in srgb, var(--color-primary) 60%, black);
+}
+
+.reviewButton:hover {
+  background-color: #2563eb; /* 濃い青 */
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 color-mix(in srgb, #3b82f6 60%, black);
 }
 
 .wordbooksItem {
@@ -58,7 +93,7 @@
 .accent {
   width: 6px;
   border-radius: 8px;
-  background: #f9a826; 
+  background: #f9a826;
 }
 
 /* 中身 */
@@ -85,10 +120,10 @@
   color: #aaa;
 }
 
-.wordbookStat{
+.wordbookStat {
   display: flex;
   align-items: center;
-  gap:1px;
+  gap: 1px;
 }
 
 .wordbooksMeta svg {

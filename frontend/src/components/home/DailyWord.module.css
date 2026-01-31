@@ -1,3 +1,36 @@
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.reviewButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background-color: #3b82f6; /* 青 */
+  color: var(--color-font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: 0 4px 0 color-mix(in srgb, #3b82f6 60%, black);
+  transition: all 0.2s ease;
+  @media (max-width: 768px) {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+}
+
+.reviewButton:hover {
+  background-color: #2563eb; /* 濃い青 */
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 color-mix(in srgb, #3b82f6 60%, black);
+}
+
+
 .dairyWordContainer{
   position: relative;
   border:2px solid var(--color-border);
