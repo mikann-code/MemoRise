@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_29_084120) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_31_125113) do
   create_table "admin_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
@@ -38,6 +38,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_084120) do
     t.bigint "user_id", null: false
     t.index ["user_id", "study_date"], name: "index_study_records_on_user_id_and_study_date", unique: true
     t.index ["user_id"], name: "index_study_records_on_user_id"
+  end
+
+  create_table "user_word_tags", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "tag", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.bigint "word_id", null: false
+    t.index ["user_id", "word_id", "tag"], name: "index_user_word_tags_on_user_id_and_word_id_and_tag", unique: true
+    t.index ["user_id"], name: "index_user_word_tags_on_user_id"
+    t.index ["word_id"], name: "index_user_word_tags_on_word_id"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -87,6 +98,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_29_084120) do
 
   add_foreign_key "study_details", "study_records"
   add_foreign_key "study_records", "users"
+  add_foreign_key "user_word_tags", "users"
+  add_foreign_key "user_word_tags", "words"
   add_foreign_key "wordbooks", "users"
   add_foreign_key "words", "wordbooks"
 end

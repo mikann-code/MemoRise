@@ -3,7 +3,7 @@
 import { use, useState, useEffect } from "react";
 import { useWords } from "@/src/hooks/useWords";
 import { useStudyWordbooks } from "@/src/hooks/useStudyWordbooks";
-import { useWordbooks, useWordbook } from "@/src/hooks/useWordbooks"; // ⭐ 追加
+import { useWordbooks, useWordbook } from "@/src/hooks/useWordbooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { FaListUl, FaTrash } from "react-icons/fa6";
@@ -14,6 +14,7 @@ import { Button } from "@/src/components/common/ui/Button";
 import { WordCard } from "@/src/components/common/card/WordCard";
 import { useRouter } from "next/navigation";
 import { WordbookListLayout } from "@/src/components/layout/WordbookListLayout";
+import { useTaggedWords } from "@/src/hooks/useTaggedWords";
 
 type Props = {
   params: Promise<{
@@ -22,16 +23,17 @@ type Props = {
 };
 
 export default function WordbookDetailPage({ params }: Props) {
-  const router = useRouter();
+  const router = useRouter();``
   const { id: wordbookUuid } = use(params);
 
   const { wordbook, loading: wordbookLoading } = useWordbook(wordbookUuid);
-
   const { words, loading, error, addWord, deleteWord } = useWords(wordbookUuid);
   const { deleteWordbook } = useWordbooks();
 
   const studyMutation = useStudyWordbooks(wordbookUuid);
   const queryClient = useQueryClient();
+
+  const { taggedWords, addTaggedWord, removeTaggedWord } = useTaggedWords();
 
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
@@ -61,6 +63,10 @@ export default function WordbookDetailPage({ params }: Props) {
     router.push("/wordbooks");
   };
 
+  const isTagged = (wordUuid: string) => {
+    return taggedWords.some((t) => t.word_uuid === wordUuid);
+  };
+
   if (loading || wordbookLoading) return <p>読み込み中...</p>;
   if (error) return <p>単語の取得に失敗しました</p>;
 
@@ -85,7 +91,7 @@ export default function WordbookDetailPage({ params }: Props) {
       }
       description={
         wordbook?.description && (
-          <div  className={styles.wordbookDescription}>
+          <div className={styles.wordbookDescription}>
             <p>{wordbook.description}</p>
             <p>登録単語数：{words.length}</p>
           </div>
@@ -116,19 +122,30 @@ export default function WordbookDetailPage({ params }: Props) {
       }
       list={
         <ul className={styles.wordList}>
-          {words.map((word) => (
-            <li key={word.uuid}>
-              <WordCard
-                question={word.question}
-                answer={word.answer}
-                review={false}
-                opened={true}
-                deletable={true}
-                onTagToggle={() => {}}
-                onDelete={() => deleteWord(word.uuid)}
-              />
-            </li>
-          ))}
+          {words.map((word) => {
+            const tagged = isTagged(word.uuid);
+
+            return (
+              <li key={word.uuid}>
+                <WordCard
+                  question={word.question}
+                  answer={word.answer}
+                  review={tagged}
+                  opened={true}
+                  deletable={true}
+                  onTagToggle={async () => {
+                    if (tagged) {
+                      if (!confirm("この単語をお気に入り登録から外しますか？")) return;
+                      await removeTaggedWord(word.uuid);
+                    } else {
+                      await addTaggedWord(word.uuid);
+                    }
+                  }}
+                  onDelete={() => deleteWord(word.uuid)}
+                />
+              </li>
+            );
+          })}
         </ul>
       }
     />

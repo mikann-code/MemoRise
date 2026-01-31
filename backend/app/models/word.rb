@@ -7,6 +7,10 @@ class Word < ApplicationRecord
   validates :question, presence: true
   validates :answer, presence: true
 
+  # タグずけされた単語の保存
+  has_many :user_word_tags, dependent: :destroy
+  has_many :tagging_users, through: :user_word_tags, source: :user
+
   private
 
   def set_uuid
