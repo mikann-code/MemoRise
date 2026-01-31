@@ -29,9 +29,7 @@ export default function BasicWordTestPage() {
 
   // ★ 二重POST防止フラグ
   const hasPostedRef = useRef(false);
-
   const total = words.length;
-
   const shuffleArray = (arr: typeof fetchedWords) => {
     const copy = [...arr];
     for (let i = copy.length - 1; i > 0; i--) {

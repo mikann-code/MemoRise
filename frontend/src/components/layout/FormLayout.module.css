@@ -1,0 +1,27 @@
+/* ListLayout と揃えている */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* タイトル */
+.header {
+}
+
+/* 説明文 */
+.description {
+  color: #aaa;
+  margin-top:10px;
+}
+
+/* フォーム */
+.form {
+  margin-top: 16px;
+  padding: 16px 12px 20px;
+  border-radius: 12px;
+  /* border: 1px solid #444; */
+  box-shadow:
+  0 3px 10px rgba(0, 0, 0, 0.7),
+  0 0 0 1px rgba(255, 255, 255, 0.12);
+}

@@ -6,29 +6,29 @@
   width: 100%;
   padding: 4px 0;
   color: var(--color-font-primary);
-  background-color: var(--color-primary);
+  background-color: #3b82f6; /* 青 */
   border-radius: 4px;
-  box-shadow: 0 4px 0 color-mix(in srgb, var(--color-primary) 60%, black);
+  box-shadow: 0 4px 0 color-mix(in srgb, #3b82f6 60%, black);
   cursor: pointer;
   font-size: 16px;
   font-weight: 500;
 }
 
 .button:hover {
-  background-color: var(--color-secondary);
+  background-color: #2563eb; /* 濃い青 */
   transition: all 0.3s ease;
   transform: translateY(2px);
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-primary) 60%, black);
+  box-shadow: 0 1px 0 color-mix(in srgb, #3b82f6 60%, black);
 }
 
 .button:disabled {
-  background-color: #ccc;          
-  color: #666;                     
+  background-color: #9ca3af; /* グレー寄り */
+  color: #e5e7eb;
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
 }
 
 .button:disabled:hover {
-  background-color: #ccc;         
+  background-color: #9ca3af;
 }

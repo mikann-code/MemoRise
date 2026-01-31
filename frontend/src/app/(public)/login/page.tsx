@@ -5,10 +5,10 @@ import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { Button } from "@/src/components/common/ui/Button";
 import { FloatingInput } from "@/src/components/common/ui/FloatingInput";
 import { FaRightToBracket } from "react-icons/fa6";
-import styles from "./page.module.css";
+import { MdLockOutline, MdMailOutline } from "react-icons/md";
 import { useLogin } from "@/src/hooks/useLogin";
-import { MdLockOutline } from "react-icons/md";
-import { MdMailOutline } from "react-icons/md";
+import { FormLayout } from "@/src/components/layout/FormLayout";
+import styles from "./page.module.css";
 
 export default function LoginPage() {
   const login = useLogin();
@@ -22,50 +22,52 @@ export default function LoginPage() {
   };
 
   return (
-    <>
-      <SectionTitle icon={FaRightToBracket} subTitle="User Login" title="ログイン" />
+    <FormLayout
+      header={
+        <SectionTitle
+          icon={FaRightToBracket}
+          subTitle="User Login"
+          title="ログイン"
+        />
+      }
+      description={
+        <p className={styles.description}>
+          登録済みのアカウントでログインします。
+        </p>
+      }
+      form={
+        <>
+          {login.isError && (
+            <div className={styles.errorMessage}>
+              {(login.error as Error).message}
+            </div>
+          )}
 
-      <p className={styles.description}>
-        登録済みのアカウントでログインします。
-      </p>
+          <form onSubmit={handleSubmit} autoComplete="off">
+            <FloatingInput
+              id="email"
+              type="email"
+              label="メールアドレス"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              icon={<MdMailOutline />}
+            />
 
-      {login.isError && (
-        <div className={styles.errorMessage}>
-          {(login.error as Error).message}
-        </div>
-      )}
+            <FloatingInput
+              id="password"
+              type="password"
+              label="パスワード"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              icon={<MdLockOutline />}
+            />
 
-      <form className={styles.form} onSubmit={handleSubmit} autoComplete="off">
-        <div className={styles.formItem}>
-          <FloatingInput
-            id="email"
-            type="email"
-            label="メールアドレス"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            icon={<MdMailOutline />}
-          />
-        </div>
-
-        <div className={styles.formItem}>
-          <FloatingInput
-            id="password"
-            type="password"
-            label="パスワード"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            icon={<MdLockOutline />}
-          />
-        </div>
-
-        <div className={styles.submitWrapper}>
-          <Button>
-            <button type="submit" disabled={login.isPending}>
+            <Button type="submit" disabled={login.isPending}>
               {login.isPending ? "ログイン中..." : "ログイン"}
-            </button>
-          </Button>
-        </div>
-      </form>
-    </>
+            </Button>
+          </form>
+        </>
+      }
+    />
   );
 }

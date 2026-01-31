@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       get "stats/total_words", to: "stats#total_words"
 
       # 単語帳
-      resources :wordbooks, param: :uuid, only: [ :index, :create, :destroy ] do
+      resources :wordbooks, param: :uuid, only: [ :index, :create, :destroy ,:show ] do
         resources :words, param: :uuid, only: [ :index, :create, :destroy ]
 
         # 単語中ごとの学習イベント
@@ -23,7 +23,7 @@ Rails.application.routes.draw do
       end
 
       # 公開単語帳一覧取得
-      resources :public_wordbooks, param: :uuid, only: [ :index ] do
+      resources :public_wordbooks, param: :uuid, only: [ :index,:show ] do
         get :children, on: :member
         get :words, on: :member
       end

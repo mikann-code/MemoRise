@@ -10,6 +10,13 @@ class Api::V1::PublicWordbooksController < ApplicationController
     render json: public_wordbooks.map { |wb| serialize_wordbook(wb) }
   end
 
+  def show
+    wordbook = Wordbook
+      .where(user_id: nil)
+      .find_by!(uuid: params[:uuid])
+    render json: serialize_wordbook(wordbook)
+  end
+
   def children
     parent = Wordbook.find_by!(uuid: params[:uuid])
 

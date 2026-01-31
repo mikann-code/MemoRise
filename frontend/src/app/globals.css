@@ -46,21 +46,9 @@ a {
   text-decoration: none;
 }
 
-select {
-  border: 2px solid var(--color-border);
-  margin-top: 10px;
-  padding: 4px;
-  font-size: 16px;
-}
-
-option {
-  background-color: var(--color-bg-primary);
-  font-size: 16px;
-  color: var(--color-font-primary);
-}
-
-option:hover {
-  background-color: var(--color-bg-secondary);
+select{
+  outline: none;
+  box-shadow: none;
 }
 
 input {

@@ -1,3 +1,35 @@
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.createButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background-color: var(--color-primary);
+  color: var(--color-font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--color-primary) 60%, black);
+  transition: all 0.2s ease;
+  @media (max-width: 768px) {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+}
+
+.createButton:hover {
+  background-color: var(--color-secondary);
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-primary) 60%, black);
+}
+
 .wordbooksItem {
   list-style: none;
   margin-bottom: 12px;
@@ -13,7 +45,9 @@
   position: relative;
   text-decoration: none;
   color: white;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .wordbooksLink:hover {
@@ -21,11 +55,10 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
 }
 
-/* 左の色バー */
 .accent {
   width: 6px;
   border-radius: 8px;
-  background: #f9a826; /* labelごとに色変えてもいい */
+  background: #f9a826; 
 }
 
 /* 中身 */
@@ -50,6 +83,12 @@
   margin-top: 8px;
   font-size: 13px;
   color: #aaa;
+}
+
+.wordbookStat{
+  display: flex;
+  align-items: center;
+  gap:1px;
 }
 
 .wordbooksMeta svg {

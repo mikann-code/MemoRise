@@ -11,7 +11,7 @@ export type Wordbook = {
   label?: string;
 };
 
-// 単語帳一覧を取得
+// #index
 export const fetchWordbooks = async (): Promise<Wordbook[]> => {
   const res = await authFetch(
     "http://localhost:3001/api/v1/wordbooks",
@@ -29,7 +29,26 @@ export const fetchWordbooks = async (): Promise<Wordbook[]> => {
   return data;
 };
 
-// 単語帳を作成
+// #show
+export const fetchWordbook = async (uuid: string): Promise<Wordbook> => {
+  const res = await authFetch(
+    `http://localhost:3001/api/v1/wordbooks/${uuid}`,
+    { cache: "no-store" }
+  );
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(
+      data?.error || "単語帳の取得に失敗しました"
+    );
+  }
+
+  return data;
+};
+
+
+// #create
 export const createWordbook = async (
   params: { title: string; description?: string | null , label?: string }
 ): Promise<Wordbook> => {
@@ -58,6 +77,24 @@ export const createWordbook = async (
   return data;
 };
 
+// #destroy
+export const deleteWordbook = async (uuid: string): Promise<void> => {
+  const res = await authFetch(
+    `http://localhost:3001/api/v1/wordbooks/${uuid}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(
+      data?.error || "単語帳の削除に失敗しました"
+    );
+  }
+};
+
+// study
 // 単語帳を学習したことにする
 export const fetchStudyWordbooks = async (
   uuid: string
