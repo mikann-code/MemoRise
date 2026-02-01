@@ -6,40 +6,39 @@ import { FaUserCircle } from "react-icons/fa";
 import { HiFire } from "react-icons/hi";
 import { MdLibraryBooks } from "react-icons/md";
 import { useStats } from "@/src/hooks/useStats";
+import { Button } from "@/src/components/common/ui/Button";
 
 type Props = {
   user: User;
 };
 
 export const UserCard = ({ user }: Props) => {
-  const { data, isLoading } = useStats();
+  // ✅ data に意味のある名前をつける
+  const { data: stats, isLoading } = useStats();
 
   return (
     <div className={styles.userCard}>
-      {/* Header */}
       <div className={styles.header}>
-        <FaUserCircle size={48} />
+        <FaUserCircle />
         <p className={styles.userName}>{user.name}</p>
       </div>
 
-      {/* Stats */}
       <div className={styles.stats}>
         <div className={styles.statItem}>
-          <MdLibraryBooks size={20} />
+          <MdLibraryBooks className={styles.icon} />
           <span className={styles.statValue}>
-            {isLoading ? "..." : data.total_words}
+            {isLoading || !stats ? "..." : stats.total_words}
           </span>
           <span className={styles.statLabel}>登録単語</span>
         </div>
 
         <div className={styles.statItem}>
-          <HiFire size={22} color="#ff6b6b" />
+          <HiFire className={styles.icon} />
           <span className={styles.statValue}>{user.streak}</span>
           <span className={styles.statLabel}>連続記録</span>
         </div>
       </div>
 
-      {/* Body */}
       <div className={styles.body}>
         <div className={styles.row}>
           <span className={styles.label}>メールアドレス</span>
@@ -47,11 +46,8 @@ export const UserCard = ({ user }: Props) => {
         </div>
       </div>
 
-      {/* Footer */}
       <div className={styles.footer}>
-        <button className={styles.primaryButton}>
-          プロフィール編集
-        </button>
+        <Button href="/my-page/edit">プロフィール編集</Button>
       </div>
     </div>
   );

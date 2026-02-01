@@ -11,6 +11,7 @@
 }
 
 .craftWordItem {
+  position: relative;
   width: 100%;
   font-family: var(--font-primary);
   height: 200px;
@@ -29,6 +30,25 @@
 .craftWordItem:hover .craftWordImage {
   transform: scale(1.08);
   transition: 0.3s all ease;
+}
+
+.craftWordLabel {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(4px);
+}
+
+.craftWordItem:hover .craftWordLabel {
+  background: rgba(255,255,255,0.18);
+  transition: all .2s ease;
 }
 
 .craftWordImage {

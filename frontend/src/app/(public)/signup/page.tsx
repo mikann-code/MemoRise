@@ -11,6 +11,17 @@ import { FormLayout } from "@/src/components/layout/FormLayout";
 import styles from "./page.module.css";
 import { useSignup } from "@/src/hooks/useSignup";
 
+/* ===== 型 ===== */
+type ApiErrorResponse = {
+  errors: {
+    name?: string[];
+    email?: string[];
+    password?: string[];
+    password_confirmation?: string[];
+  };
+};
+
+/* ===== 定数 ===== */
 const attributeLabels: Record<string, string> = {
   name: "名前",
   email: "メールアドレス",
@@ -22,6 +33,19 @@ const formatError = (field: string, msg?: string) => {
   if (!msg) return "";
   const label = attributeLabels[field] || "";
   return `${label}${msg}`;
+};
+
+/* ===== anyなし型ガード ===== */
+const isApiErrorResponse = (err: unknown): err is ApiErrorResponse => {
+  if (typeof err !== "object" || err === null) return false;
+
+  if (!("errors" in err)) return false;
+
+  const e = err as { errors: unknown };
+
+  if (typeof e.errors !== "object" || e.errors === null) return false;
+
+  return true;
 };
 
 export default function SignupPage() {
@@ -62,15 +86,15 @@ export default function SignupPage() {
         onSuccess: () => {
           setMessage("会員登録が成功しました！");
         },
-        onError: (err: any) => {
-          if (err?.errors) {
+        onError: (err: unknown) => {
+          if (isApiErrorResponse(err)) {
             setErrors({
-              name: formatError("name", err.errors?.name?.[0]),
-              email: formatError("email", err.errors?.email?.[0]),
-              password: formatError("password", err.errors?.password?.[0]),
+              name: formatError("name", err.errors.name?.[0]),
+              email: formatError("email", err.errors.email?.[0]),
+              password: formatError("password", err.errors.password?.[0]),
               passwordConfirm: formatError(
                 "password_confirmation",
-                err.errors?.password_confirmation?.[0]
+                err.errors.password_confirmation?.[0]
               ),
             });
           } else {

@@ -30,12 +30,12 @@ export const CraftWord = () => {
 
       <div className={styles.craftWordItems}>
         <Link className={styles.craftWordItem} href="/wordbooks">
-          <p className={styles.craftWordLabel}>自作単語帳を作成</p>
+          <p className={styles.craftWordLabel}>作成する</p>
           <Image
             src="/images/icon-creative.svg"
             width={180}
             height={180}
-            alt="自作単語帳の作成"
+            alt="作成する"
             className={styles.craftWordImage}
           />
         </Link>
@@ -44,12 +44,13 @@ export const CraftWord = () => {
           href="/wordbooks"
           onClick={handleClick}
         >
-          自作単語帳をテスト
+          <p className={styles.craftWordLabel}>テストする
+          </p>
           <Image
             src="/images/icon-practice.svg"
             width={200}
             height={200}
-            alt="自作単語帳をテスト"
+            alt="テストする"
             className={styles.craftWordImage}
           />
         </Link>

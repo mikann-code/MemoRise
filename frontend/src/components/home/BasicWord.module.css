@@ -1,41 +1,72 @@
-.basicSelect{
-  margin-top:8px;
-  border:1px solid #cccccc;
+.basicSelect {
+  margin-top: 8px;
+  border: 1px solid #cccccc;
   display: inline-block;
-  padding:4px 6px;
+  padding: 4px 6px;
 }
 
-.basicSelect option{
+.basicSelect option {
   background-color: var(--color-secondary);
 }
 
-.basicWordsBoxContainer{
+.basicWordsBoxContainer {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-top:12px;
+  margin-top: 12px;
 }
 
-.basicWordsBox{
+.basicWordsBox {
   display: inline-block;
-  width:150px;
-  height:150px;
+  width: 150px;
+  height: 150px;
 }
 
-.basicWordsBox:hover{
+.basicWordsBox:hover {
   transform: scale(1.08);
-  transition:.3s all ease;
+  transition: 0.3s all ease;
 }
 
-.basicWordsBoxLink{
+.basicWordsBoxLink {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap:4px;
+  gap: 4px;
 }
 
-.basicWordsBoxLable{
-
+.archiveButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background-color: var(--color-primary);
+  color: var(--color-font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--color-primary) 60%, black);
+  transition: all 0.2s ease;
+  @media (max-width: 768px) {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
 }
 
+.archiveButton:hover {
+  background-color: var(--color-secondary);
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-primary) 60%, black);
+}
+
+.archiveButton svg{
+  margin-right:6px;
+}
+
+.basicHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}

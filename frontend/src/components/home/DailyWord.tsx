@@ -21,7 +21,7 @@ export const DailyWord = () => {
           title="今日の一問"
         />
         <Link href="/wordbooks/review" className={styles.reviewButton}>
-           <FaStar /> 復習単語 {taggedWords.length + 1}
+           <FaStar /> 復習単語 ( {taggedWords.length} )
         </Link>
       </div>
 

@@ -6,6 +6,7 @@ import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { UserCard } from "@/src/components/common/card/UserCard";
 import { useMe } from "@/src/hooks/useMe";
 import { useLogout } from "@/src/hooks/useLogout";
+import styles from "./page.module.css";
 
 export default function MyPage() {
   const { data: user, isLoading, isError } = useMe();
@@ -23,13 +24,22 @@ export default function MyPage() {
 
   return (
     <>
-      <SectionTitle icon={RiInfoCardLine} subTitle="mypage" title="マイページ" />
-      
+      <SectionTitle
+        icon={RiInfoCardLine}
+        subTitle="mypage"
+        title="マイページ"
+      />
+
       <UserCard user={user} />
 
-      <div>
+      <div className={styles.logoutArea}>
         <button
+          className={styles.logoutButton}
+          type="button"
           onClick={() => {
+            const ok = confirm("ログアウトしてもよろしいですか？");
+            if (!ok) return;
+
             setIsLoggingOut(true);
             logout();
           }}
