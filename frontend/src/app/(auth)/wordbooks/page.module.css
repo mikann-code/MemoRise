@@ -53,6 +53,11 @@
   }
 }
 
+.reviewButton svg{
+  margin-right:6px;
+}
+
+
 .createButton:hover {
   background-color: var(--color-secondary);
   transform: translateY(2px);

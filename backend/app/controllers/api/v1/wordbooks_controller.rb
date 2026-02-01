@@ -32,6 +32,14 @@ class Api::V1::WordbooksController < ApplicationController
     render json: serialize_wordbook(wordbook)
   end
 
+  def update
+    wordbook = current_user.wordbooks.active.find_by!(uuid: params[:uuid])
+
+    wordbook.update!(wordbook_params)
+
+    render json: serialize_wordbook(wordbook)
+  end
+
   # 学習イベント
   def study
     wordbook = current_user.wordbooks.active.find_by!(uuid: params[:uuid])
@@ -53,7 +61,7 @@ class Api::V1::WordbooksController < ApplicationController
   private
 
   def wordbook_params
-    params.require(:wordbook).permit(:title, :description, :label ,:deleted_at)
+    params.require(:wordbook).permit(:title, :description, :label )
   end
 
   def serialize_wordbook(wordbook)

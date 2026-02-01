@@ -6,7 +6,7 @@ import { useStudyWordbooks } from "@/src/hooks/useStudyWordbooks";
 import { useWordbooks, useWordbook } from "@/src/hooks/useWordbooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
-import { FaListUl, FaTrash } from "react-icons/fa6";
+import { FaListUl, FaTrash, FaPen } from "react-icons/fa6";
 import styles from "./page.module.css";
 import { FloatingInput } from "@/src/components/common/ui/FloatingInput";
 import { TbCircleLetterQFilled, TbCircleLetterAFilled } from "react-icons/tb";
@@ -15,6 +15,8 @@ import { WordCard } from "@/src/components/common/card/WordCard";
 import { useRouter } from "next/navigation";
 import { WordbookListLayout } from "@/src/components/layout/WordbookListLayout";
 import { useTaggedWords } from "@/src/hooks/useTaggedWords";
+import Link from "next/link";
+import { ButtonSecondary } from "@/src/components/common/ui/ButtonSecondary";
 
 type Props = {
   params: Promise<{
@@ -23,7 +25,7 @@ type Props = {
 };
 
 export default function WordbookDetailPage({ params }: Props) {
-  const router = useRouter();``
+  const router = useRouter();
   const { id: wordbookUuid } = use(params);
 
   const { wordbook, loading: wordbookLoading } = useWordbook(wordbookUuid);
@@ -53,16 +55,6 @@ export default function WordbookDetailPage({ params }: Props) {
     setAnswer("");
   };
 
-  const handleDeleteWordbook = async () => {
-    const ok = confirm(
-      "この単語帳を削除しますか？\n中の単語もすべて削除されます。",
-    );
-    if (!ok) return;
-
-    await deleteWordbook(wordbookUuid);
-    router.push("/wordbooks");
-  };
-
   const isTagged = (wordUuid: string) => {
     return taggedWords.some((t) => t.word_uuid === wordUuid);
   };
@@ -79,14 +71,13 @@ export default function WordbookDetailPage({ params }: Props) {
             subTitle="My Vocabulary Archive"
             title={wordbook?.title ?? "単語一覧"}
           />
-
-          <button
-            className={styles.deleteWordbookButton}
-            onClick={handleDeleteWordbook}
+          <Link
+            href={`/wordbooks/${wordbookUuid}/edit`}
+            className={styles.editWordbookButton}
           >
-            <FaTrash />
-            単語帳を削除
-          </button>
+            <FaPen />
+            編集
+          </Link>
         </div>
       }
       description={
@@ -117,7 +108,12 @@ export default function WordbookDetailPage({ params }: Props) {
             icon={<TbCircleLetterAFilled />}
           />
 
-          <Button type="submit">単語を登録</Button>
+          <div className={styles.actionButtons}>
+            <Button type="submit">単語を登録</Button>
+            <ButtonSecondary href={`/wordbooks/${wordbookUuid}/test`}>
+              今すぐはじめる
+            </ButtonSecondary>
+          </div>
         </form>
       }
       list={
@@ -135,7 +131,8 @@ export default function WordbookDetailPage({ params }: Props) {
                   deletable={true}
                   onTagToggle={async () => {
                     if (tagged) {
-                      if (!confirm("この単語をお気に入り登録から外しますか？")) return;
+                      if (!confirm("この単語をお気に入り登録から外しますか？"))
+                        return;
                       await removeTaggedWord(word.uuid);
                     } else {
                       await addTaggedWord(word.uuid);

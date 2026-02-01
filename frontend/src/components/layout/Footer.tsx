@@ -28,7 +28,8 @@ export const Footer = () => {
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
   // admin かどうかは URL で判定
-  const isAdmin = pathname.startsWith("/admin");
+  const isAdmin =
+  pathname.startsWith("/admin") && pathname !== "/admin-login";
   const navItems = isAdmin ? adminNavItems : userNavItems;
 
   return (

@@ -1,16 +1,12 @@
 import { adminAuthFetch } from "@/src/lib/auth";
 
-/* ======================
-   型定義
-====================== */
-
 export type AdminWordbook = {
   uuid: string;
   title: string;
   description: string | null;
   level: string;
   label: string;
-  part: string;          
+  part: string | null;          
   published: boolean;
 };
 
@@ -19,7 +15,7 @@ export type CreateAdminWordbookParams = {
   description: string | null;
   level: string;
   label: string;
-  part: string;          
+  part: string | null;        
 };
 
 export type AdminWordbookChild = {
@@ -28,7 +24,7 @@ export type AdminWordbookChild = {
   description: string | null;
   level: string;
   label: string;
-  part: string;          
+  part: string | null;              
   published: boolean;
 };
 

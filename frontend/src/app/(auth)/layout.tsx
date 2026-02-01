@@ -11,9 +11,12 @@ type Props = {
 export default function AuthLayout({ children }: Props) {
   const { data: user, isLoading, isError } = useMe();
 
+  console.log(user)
+
   if (isLoading) {
     return <p>読み込み中...</p>;
   }
+
 
   if (isError) {
     redirect("/login");
@@ -22,7 +25,6 @@ export default function AuthLayout({ children }: Props) {
   if (!user) {
     redirect("/login");
   }
-
 
   return <>{children}</>;
 }

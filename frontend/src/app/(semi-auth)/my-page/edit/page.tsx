@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMe } from "@/src/hooks/useMe";
 import { useUpdateProfile } from "@/src/hooks/useUpdateProfile";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
@@ -12,19 +12,26 @@ import { Button } from "@/src/components/common/ui/Button";
 
 export default function EditProfilePage() {
   const { data: user, isLoading, isError } = useMe();
-  const { mutateAsync, isPending } = useUpdateProfile();
-
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (user) setName(user.name ?? "");
-  }, [user]);
 
   if (isLoading) return <p>読み込み中...</p>;
   if (isError || !user) return <p>ログインしてください</p>;
+
+  return <EditProfileForm user={user} />;
+}
+
+
+type Props = {
+  user: {
+    name: string | null;
+  };
+};
+
+function EditProfileForm({ user }: Props) {
+  const { mutateAsync, isPending } = useUpdateProfile();
+  const [name, setName] = useState(user.name ?? "");
+  const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +66,6 @@ export default function EditProfilePage() {
       });
 
       alert("更新しました");
-      // router.push("/mypage") してもOK
     } catch (err) {
       setError(err instanceof Error ? err.message : "更新に失敗しました");
     }
@@ -77,7 +83,6 @@ export default function EditProfilePage() {
       description="名前とパスワードを変更できます"
       form={
         <form onSubmit={onSubmit}>
-          {/* 全体エラー */}
           {error && <p style={{ color: "#ff6b6b", fontSize: 12 }}>{error}</p>}
 
           <FloatingInput
@@ -104,7 +109,9 @@ export default function EditProfilePage() {
             label="新しいパスワード（確認）"
             type="password"
             value={passwordConfirmation}
-            onChange={(e) => setPasswordConfirmation(e.target.value)}
+            onChange={(e) =>
+              setPasswordConfirmation(e.target.value)
+            }
             disabled={isPending}
             icon={<MdLockOutline />}
           />

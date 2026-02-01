@@ -1,23 +1,32 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
+import { ReactNode } from "react";
+import { redirect } from "next/navigation";
+import { useAdminMe } from "@/src/hooks/useAdminMe";
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const router = useRouter();
+type Props = {
+  children: ReactNode;
+};
 
-  useEffect(() => {
-    const token = Cookies.get("admin_token");
+// 管理者のみ通す
+export default function AdminLayout({ children }: Props) {
+  const { admin, isLoading, isError } = useAdminMe();
 
-    if (!token) {
-      router.replace("/admin/login");
-    }
-  }, [router]);
+  console.log(admin);
+
+  if (isLoading) {
+    return <p>読み込み中...</p>;
+  }
+
+  // 未ログイン or エラー
+  if (isError || !admin) {
+    redirect("/admin-login");
+  }
+
+  // role チェック（念のため）
+  if (admin.role !== "admin") {
+    redirect("/admin-login");
+  }
 
   return <>{children}</>;
 }

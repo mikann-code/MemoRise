@@ -1,0 +1,20 @@
+.deleteWordbookButton {
+  background: transparent;
+  border: 1px solid rgba(255, 107, 107, 0.4);
+  color: rgba(255, 107, 107, 0.7);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top:10px;
+  margin-left:auto;
+}
+
+.deleteWordbookButton:hover {
+  background: rgba(255, 107, 107, 0.15);
+  color: #ff6b6b;
+}

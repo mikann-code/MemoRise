@@ -6,6 +6,7 @@ type MeResponse = {
     name: string;
     email: string;
     streak: number;
+    role:string;
   };
 };
 

@@ -147,20 +147,22 @@ export default function AdminWordbooksPage() {
                         href={`/admin/wordbooks/${wb.uuid}`}
                         className={styles.wordbooksLink}
                       >
-                        <div className={styles.wordbooksHeader}>
-                          <h4>{wb.title}</h4>
-                          <LuChevronRight />
-                        </div>
+                        <div className={styles.cardContent}>
+                          <div className={styles.wordbooksHeader}>
+                            <h4>{wb.title}</h4>
+                            <LuChevronRight />
+                          </div>
 
-                        <p className={styles.description}>
-                          {wb.description || "説明なし"}
-                        </p>
+                          <p className={styles.description}>
+                            {wb.description || "説明なし"}
+                          </p>
 
-                        <div className={styles.wordbooksMeta}>
-                          <span className={styles.badge}>{wb.level}</span>
-                          {wb.part && (
-                            <span className={styles.badgeSub}>{wb.part}</span>
-                          )}
+                          <div className={styles.wordbooksMeta}>
+                            <span className={styles.badge}>{wb.level}</span>
+                            {wb.part && (
+                              <span className={styles.badgeSub}>{wb.part}</span>
+                            )}
+                          </div>
                         </div>
                       </Link>
                     </li>
