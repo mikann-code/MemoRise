@@ -3,8 +3,8 @@ import { authFetch } from "@/src/lib/auth";
 export type TaggedWord = {
   id: number;
   word_id: number;
-  word: string;
-  meaning: string;
+  question: string;
+  answer: string;
   word_uuid: string;
   tag: string;
 };

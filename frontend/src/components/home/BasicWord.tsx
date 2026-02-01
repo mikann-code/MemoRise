@@ -7,6 +7,7 @@ import { SectionTitle } from "../common/ui/SectionTitle";
 import { AiOutlineBook } from "react-icons/ai";
 import Link from "next/link";
 import { usePublicWordbooks } from "@/src/hooks/usePublicWordbooks";
+import { FaListUl } from "react-icons/fa";
 
 export const BasicWord = () => {
   const { wordbooks, loading, error } = usePublicWordbooks();
@@ -17,11 +18,16 @@ export const BasicWord = () => {
 
   return (
     <section className={styles.basicSection}>
-      <SectionTitle
-        icon={HiOutlineClipboardList}
-        subTitle="Vocabulary & Practice"
-        title="おすすめの単語・問題集"
-      />
+      <div className={styles.basicHeaderRow}>
+        <SectionTitle
+          icon={HiOutlineClipboardList}
+          subTitle="Vocabulary & Practice"
+          title="公式単語帳"
+        />
+        <Link href="/wordbooks/review" className={styles.archiveButton}>
+           <FaListUl /> 一覧を見る
+        </Link>
+      </div>
 
       <div className={styles.basicWordsBoxContainer}>
         {wordbooks.map((item) => (
@@ -32,10 +38,7 @@ export const BasicWord = () => {
           >
             <AiOutlineBook className={styles.basicWordsBox} />
 
-            <p className={styles.basicWordsBoxLabel}>
-              {item.title}
-            </p>
-            
+            <p className={styles.basicWordsBoxLabel}>{item.title}</p>
           </Link>
         ))}
       </div>

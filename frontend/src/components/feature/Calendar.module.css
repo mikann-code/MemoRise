@@ -22,3 +22,76 @@
   color: white;
   pointer-events: none;
 }
+
+.calendar{
+  margin-top:20px;
+}
+
+.calendar :global(.fc) {
+  color: #ffffff;
+  background: transparent;
+}
+
+/* マスの背景を暗く */
+.calendar :global(.fc-daygrid-day) {
+  background: #1f1f1f;
+}
+
+/* 枠線を濃グレーに */
+.calendar :global(.fc-theme-standard td),
+.calendar :global(.fc-theme-standard th) {
+  border-color: #2c2c2c;
+}
+
+/* 曜日ヘッダ */
+.calendar :global(.fc-col-header-cell) {
+  background: #1a1a1a;
+}
+
+/* 今日 */
+.calendar :global(.fc-day-today) {
+  background: rgba(255, 165, 0, 0.15) !important;
+}
+
+/* 学習日 */
+.hasRecord {
+  background: rgba(255, 165, 0, 0.25);
+  border-radius: 6px;
+}
+
+/* 学習数バッジ */
+.countBadge {
+  position: absolute;
+  background: #2d8cff;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 999px;
+}
+
+/* 日付数字 */
+.calendar :global(.fc-daygrid-day-number) {
+  color: #ffffff;
+}
+
+/* 前月・翌月 */
+.calendar :global(.fc-day-other) {
+  color: #666;
+}
+
+/* hover */
+.calendar :global(.fc-daygrid-day:hover) {
+  background: rgba(255, 165, 0, 0.1);
+}
+
+/* 外枠の線を消す */
+.calendar :global(.fc-scrollgrid) {
+  border: none !important;
+}
+
+/* ついでに table の collapse を安定させる */
+.calendar :global(table) {
+  border-collapse: collapse;
+}
+
+
+

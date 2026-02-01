@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       # 認証
       post "login", to: "auth#login"
       get  "me",    to: "auth#me"
+      put  "me",    to: "me#update" 
 
       # ユーザー情報
       get "stats/total_words", to: "stats#total_words"

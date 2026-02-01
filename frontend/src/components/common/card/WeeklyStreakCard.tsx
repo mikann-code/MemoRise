@@ -15,7 +15,6 @@ type WeekItem = {
 };
 
 type StreakData = {
-  todayLabel: string;
   thisWeek: WeekItem[];
 };
 
@@ -24,32 +23,14 @@ const format = (date: Date) => date.toISOString().split("T")[0];
 
 export const StreakCard = () => {
   const [data, setData] = useState<StreakData>({
-    todayLabel: "",
     thisWeek: [],
   });
-
   useEffect(() => {
     const today = new Date();
-
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
 
     const todayM = today.getMonth();
     const todayD = today.getDate();
     const todayY = today.getFullYear();
-    const todayLabel = `${months[todayM]} ${todayD}`;
 
     // JSの曜日(0=日) → 月曜始まり変換
     const jsDay = today.getDay();
@@ -73,9 +54,6 @@ export const StreakCard = () => {
 
         const record = weekRecords.find((r) => r.study_date === dStr);
 
-        console.log("DAY:", dStr, "RECORD:", record); // ← 追加！
-        console.log("ACTIVE:", record ? record.study_count > 0 : false); // ← 追加！
-
         const isToday =
           d.getFullYear() === todayY &&
           d.getMonth() === todayM &&
@@ -90,7 +68,6 @@ export const StreakCard = () => {
       });
 
       setData({
-        todayLabel,
         thisWeek,
       });
     };
@@ -104,8 +81,6 @@ export const StreakCard = () => {
 
       <Link href="/study-records" className={styles.streakCardLink}>
         <div className={styles.streakCard}>
-          <div className={styles.streakToday}>Today, {data.todayLabel}</div>
-
           <div className={styles.streakCardDays}>
             {data.thisWeek.map((item, index) => (
               <div

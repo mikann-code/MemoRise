@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./FormLayout.module.css";
 
 type Props = {
-  header: React.ReactNode;        // タイトル（SectionTitleなど）
+  header: React.ReactNode;        // タイトル
   description?: React.ReactNode; // 補足説明（任意）
   form: React.ReactNode;         // form 本体
 };
