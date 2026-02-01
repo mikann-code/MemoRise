@@ -2,9 +2,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   fetchWordbooks,
-  fetchWordbook, 
+  fetchWordbook,
   createWordbook,
   deleteWordbook,
+  updateWordbook,
   Wordbook,
 } from "@/src/lib/wordbooks";
 
@@ -23,9 +24,11 @@ export const useWordbooks = () => {
 
   // 単語帳作成
   const createWordbookMutation = useMutation({
-    mutationFn: (params: { title: string; description?: string | null }) =>
-      createWordbook(params),
-
+    mutationFn: (params: {
+      title: string;
+      description?: string | null;
+      label?: string | null;
+    }) => createWordbook(params),
     onSuccess: () => {
       // 作成成功後に一覧を再取得
       queryClient.invalidateQueries({
@@ -46,12 +49,33 @@ export const useWordbooks = () => {
     },
   });
 
+  // 更新
+  const updateWordbookMutation = useMutation({
+    mutationFn: (params: {
+      uuid: string;
+      title: string;
+      description?: string | null;
+      label?: string;
+    }) =>
+      updateWordbook(params.uuid, {
+        title: params.title,
+        description: params.description,
+        label: params.label,
+      }),
+
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["wordbooks"] });
+      queryClient.invalidateQueries({ queryKey: ["wordbook", variables.uuid] });
+    },
+  });
+
   return {
     wordbooks,
     loading: isLoading,
     error: isError,
     createWordbook: createWordbookMutation.mutateAsync,
     deleteWordbook: deleteWordbookMutation.mutateAsync,
+    updateWordbook: updateWordbookMutation.mutateAsync,
   };
 };
 

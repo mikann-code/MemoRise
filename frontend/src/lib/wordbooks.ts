@@ -50,7 +50,7 @@ export const fetchWordbook = async (uuid: string): Promise<Wordbook> => {
 
 // #create
 export const createWordbook = async (
-  params: { title: string; description?: string | null , label?: string }
+  params: { title: string; description?: string | null , label?: string | null}
 ): Promise<Wordbook> => {
   const res = await authFetch(
     "http://localhost:3001/api/v1/wordbooks",
@@ -92,6 +92,36 @@ export const deleteWordbook = async (uuid: string): Promise<void> => {
       data?.error || "単語帳の削除に失敗しました"
     );
   }
+};
+
+// #update
+export const updateWordbook = async (
+  uuid: string,
+  params: { title: string; description?: string | null; label?: string | null }
+): Promise<Wordbook> => {
+  const res = await authFetch(
+    `http://localhost:3001/api/v1/wordbooks/${uuid}`,
+    {
+      method: "PUT",
+      body: JSON.stringify({
+        wordbook: {
+          title: params.title,
+          description: params.description ?? null,
+          label: params.label,
+        },
+      }),
+    }
+  );
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(
+      data?.error || "単語帳の更新に失敗しました"
+    );
+  }
+
+  return data;
 };
 
 // study

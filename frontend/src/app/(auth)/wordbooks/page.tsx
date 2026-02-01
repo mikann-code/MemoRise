@@ -7,9 +7,11 @@ import { FaRegStickyNote, FaClock } from "react-icons/fa";
 import styles from "./page.module.css";
 import dayjs from "@/src/lib/dayjs";
 import { FaStar } from "react-icons/fa";
+import { useTaggedWords } from "@/src/hooks/useTaggedWords";
+
 export default function WordbooksPage() {
   const { wordbooks, loading, error } = useWordbooks();
-
+  const { taggedWords } = useTaggedWords();
   if (loading) return <p>読み込み中...</p>;
   if (error) return <p>エラーが発生しました</p>;
 
@@ -24,7 +26,7 @@ export default function WordbooksPage() {
 
         <div className={styles.headerActions}>
           <Link href="/wordbooks/review" className={styles.reviewButton}>
-            <FaStar /> 復習単語
+            <FaStar /> 復習単語 ( {taggedWords.length} )
           </Link>
 
           <Link href="/wordbooks/new" className={styles.createButton}>

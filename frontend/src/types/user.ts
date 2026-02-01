@@ -6,9 +6,7 @@ export type User = {
   
   // 連続ログイン日数
   streak: number;
-  
-  // 登録単語合計数
-  // totalWords:number;
+  role :string;
 };
 
 // ログイン用パラメータとレスポンス

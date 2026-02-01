@@ -1,15 +1,14 @@
-/* 削除ボタンに関する部分はこのページのみ表示のためコンポーネント化はしていない */
-/* 単語帳削除ボタン（目立ちすぎないように） */
+/* 編集ボタンに関する部分はこのページのみ表示のためコンポーネント化はしていない */
 .headerRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.deleteWordbookButton {
+.editWordbookButton {
   background: transparent;
-  border: 1px solid rgba(255, 107, 107, 0.4);
-  color: rgba(255, 107, 107, 0.7);
+  border: 1px solid rgba(100, 149, 237, 0.6);
+  color: rgba(100, 149, 237, 0.8);
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 0.75rem;
@@ -20,11 +19,15 @@
   transition: all 0.2s ease;
 }
 
-.deleteWordbookButton:hover {
-  background: rgba(255, 107, 107, 0.15);
-  color: #ff6b6b;
+.editWordbookButton:hover {
+  background: rgba(100, 149, 237, 0.15);
+  color: #6495ed;
 }
 
+.actionButtons{
+  display: flex;
+  gap:10px;
+}
 
 /* モバイル時：ボタンを少し小さく */
 @media (max-width: 768px) {

@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       get "stats/total_words", to: "stats#total_words"
 
       # 単語帳
-      resources :wordbooks, param: :uuid, only: [ :index, :create, :destroy ,:show ] do
+      resources :wordbooks, param: :uuid, only: [ :index, :create, :destroy ,:show,:update ] do
         resources :words, param: :uuid, only: [ :index, :create, :destroy ]
 
         # 単語中ごとの学習イベント
@@ -48,6 +48,7 @@ Rails.application.routes.draw do
     # admin
     namespace :admin do
       post "login", to: "auth#login"
+      get  "me",    to: "auth#me" 
 
       resources :wordbooks, param: :uuid, only: [ :index, :show, :create, :update, :destroy ] do
         get :children, on: :member

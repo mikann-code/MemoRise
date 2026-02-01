@@ -15,7 +15,7 @@ export const useAdminLogin = () => {
       Cookies.set("admin_token", data.token, {
         expires: 7, // 7日間保持
         sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
       });
 
       // admin は user の me を持たないので invalidate しない

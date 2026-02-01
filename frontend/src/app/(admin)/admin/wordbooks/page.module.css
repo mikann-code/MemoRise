@@ -57,23 +57,25 @@
   gap: 16px;
 }
 
-.wordbooksItem {
-  background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  transition: box-shadow 0.2s ease, transform 0.15s ease;
-}
+/* ▼ 単語帳カード部分だけ修正 ▼ */
 
-.wordbooksItem:hover {
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  transform: translateY(-2px);
+.wordbooksItem {
+  list-style: none;
 }
 
 .wordbooksLink {
-  display: block;
-  padding: 16px;
+  display: flex;
+  align-items: stretch;
+  background: #2a2a2a;
+  border-radius: 16px;
+  padding: 14px;
   text-decoration: none;
   color: inherit;
+  transition: background 0.2s ease;
+}
+
+.wordbooksLink:hover {
+  background: #333;
 }
 
 .wordbooksHeader {
@@ -88,9 +90,9 @@
 }
 
 .description {
-  margin: 8px 0 12px;
+  margin: 6px 0 10px;
   font-size: 0.85rem;
-  color: #6b7280;
+  color: #bbb;
   line-height: 1.4;
 }
 
@@ -101,8 +103,8 @@
 }
 
 .badge {
-  background: #eef2ff;
-  color: #4338ca;
+  background: #444;
+  color: #fff;
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 0.75rem;
@@ -110,12 +112,14 @@
 }
 
 .badgeSub {
-  background: #f3f4f6;
-  color: #374151;
+  background: #333;
+  color: #ddd;
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 0.75rem;
 }
+
+/* ▲ 単語帳カード部分だけ修正 ▲ */
 
 .empty {
   font-size: 0.85rem;
