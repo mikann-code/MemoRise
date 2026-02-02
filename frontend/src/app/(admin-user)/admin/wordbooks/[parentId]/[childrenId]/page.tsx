@@ -154,10 +154,10 @@ export default function AdminWordbookChildPage() {
                 question={word.question}
                 answer={word.answer}
                 opened={true}
-                onToggle={() => {}}
-                onNext={() => {}}
+                onTagToggle={() => {}}
                 onDelete={() => handleDeleteWord(word.uuid)}
                 deletable={true}
+                review={false}
               />
             </li>
           ))}

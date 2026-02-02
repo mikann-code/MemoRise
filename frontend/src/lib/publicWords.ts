@@ -2,14 +2,15 @@ export type PublicWord = {
   uuid: string;
   question: string;
   answer: string;
-  pos: string[];
+  pos?: string[];
+  review?: boolean;
 };
 
 export const fetchPublicWords = async (
   wordbookUuid: string
 ): Promise<PublicWord[]> => {
   const res = await fetch(
-    `http://localhost:3001/api/v1/public_wordbooks/${wordbookUuid}/words`
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/public_wordbooks/${wordbookUuid}/words`
   );
 
   if (!res.ok) {
@@ -19,6 +20,6 @@ export const fetchPublicWords = async (
     );
   }
 
-  const data = await res.json();      
+  const data = await res.json();
   return data;
 };

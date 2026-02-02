@@ -17,3 +17,11 @@
   opacity: 0.8;
   transition: all .2s ease;
 }
+
+.spacer{
+  display: none;
+  @media(max-width:768px){
+    display: block;
+  }
+}
+

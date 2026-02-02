@@ -6,6 +6,9 @@ import styles from "./WeeklyStreakCard.module.css";
 import { BsFire } from "react-icons/bs";
 import { fetchStudyWeekRecords } from "@/src/lib/studyRecords";
 import Link from "next/link";
+import { useMe } from "@/src/hooks/useMe";
+import { Button } from "@/src/components/common/ui/Button";
+import { ButtonSecondary } from "@/src/components/common/ui/ButtonSecondary";
 
 type WeekItem = {
   dateLabel: string;
@@ -22,10 +25,15 @@ type StreakData = {
 const format = (date: Date) => date.toISOString().split("T")[0];
 
 export const StreakCard = () => {
+  const { data: user, isLoading, isError } = useMe();
+
   const [data, setData] = useState<StreakData>({
     thisWeek: [],
   });
+
   useEffect(() => {
+    if (!user) return; // 🔑 未ログイン時は取得しない
+
     const today = new Date();
 
     const todayM = today.getMonth();
@@ -73,7 +81,33 @@ export const StreakCard = () => {
     };
 
     fetchWeek();
-  }, []);
+  }, [user]);
+
+  // 読み込み中
+  if (isLoading) {
+    return null; // or スケルトン
+  }
+
+  // 🚫 未ログイン時
+  if (isError || !user) {
+    return (
+     <div className={styles.streakCardContainer}>
+        <SectionTitle icon={FaChartLine} subTitle="Streak" title="継続記録" />
+
+        <div className={styles.streakCard}>
+          <p className={styles.loginMessage}>
+            継続記録を見るにはログインが必要です
+          </p>
+          <div className={styles.actionsWrapper}>
+            <Button href="/login">ログインする</Button>
+            <ButtonSecondary href="/signup">
+              新規登録
+            </ButtonSecondary>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.streakCardContainer}>

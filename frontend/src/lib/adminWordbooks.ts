@@ -6,7 +6,7 @@ export type AdminWordbook = {
   description: string | null;
   level: string;
   label: string;
-  part: string | null;          
+  part: string | null;
   published: boolean;
 };
 
@@ -15,7 +15,7 @@ export type CreateAdminWordbookParams = {
   description: string | null;
   level: string;
   label: string;
-  part: string | null;        
+  part: string | null;
 };
 
 export type AdminWordbookChild = {
@@ -24,17 +24,13 @@ export type AdminWordbookChild = {
   description: string | null;
   level: string;
   label: string;
-  part: string | null;              
+  part: string | null;
   published: boolean;
 };
 
-/* ======================
-   単語帳一覧取得
-====================== */
-
 export const fetchAdminWordbooks = async (): Promise<AdminWordbook[]> => {
   const res = await adminAuthFetch(
-    "http://localhost:3001/api/admin/wordbooks",
+    `${process.env.NEXT_PUBLIC_API_URL}/api/admin/wordbooks`,
     { cache: "no-store" }
   );
 
@@ -47,15 +43,11 @@ export const fetchAdminWordbooks = async (): Promise<AdminWordbook[]> => {
   return data;
 };
 
-/* ======================
-   単語帳作成
-====================== */
-
 export const createAdminWordbook = async (
   params: CreateAdminWordbookParams
 ): Promise<AdminWordbook> => {
   const res = await adminAuthFetch(
-    "http://localhost:3001/api/admin/wordbooks",
+    `${process.env.NEXT_PUBLIC_API_URL}/api/admin/wordbooks`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -80,7 +72,7 @@ export const fetchAdminWordbookChildren = async (
   uuid: string
 ): Promise<AdminWordbookChild[]> => {
   const res = await adminAuthFetch(
-    `http://localhost:3001/api/admin/wordbooks/${uuid}/children`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/admin/wordbooks/${uuid}/children`,
     { cache: "no-store" }
   );
 

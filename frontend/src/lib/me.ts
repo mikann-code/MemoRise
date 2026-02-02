@@ -6,13 +6,13 @@ type MeResponse = {
     name: string;
     email: string;
     streak: number;
-    role:string;
+    role: string;
   };
 };
 
 export const fetchMe = async (): Promise<MeResponse> => {
   const res = await authFetch(
-    "http://localhost:3001/api/v1/me",
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/me`,
     { cache: "no-store" }
   );
 

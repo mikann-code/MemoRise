@@ -5,7 +5,9 @@ export type TotalWordsResponse = {
 };
 
 export async function fetchTotalWords(): Promise<TotalWordsResponse> {
-  const res = await authFetch("http://localhost:3001/api/v1/stats/total_words");
+  const res = await authFetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/stats/total_words`
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch total words");

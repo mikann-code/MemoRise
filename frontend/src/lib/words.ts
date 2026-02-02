@@ -16,7 +16,7 @@ export const fetchWords = async (
   wordbookUuid: string
 ): Promise<Word[]> => {
   const res = await authFetch(
-    `http://localhost:3001/api/v1/wordbooks/${wordbookUuid}/words`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/wordbooks/${wordbookUuid}/words`,
     { cache: "no-store" }
   );
 
@@ -34,7 +34,7 @@ export const createWord = async (
   params: CreateWordParams
 ): Promise<Word> => {
   const res = await authFetch(
-    `http://localhost:3001/api/v1/wordbooks/${wordbookUuid}/words`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/wordbooks/${wordbookUuid}/words`,
     {
       method: "POST",
       body: JSON.stringify({
@@ -61,7 +61,7 @@ export const deleteWord = async (
   wordUuid: string
 ): Promise<void> => {
   const res = await authFetch(
-    `http://localhost:3001/api/v1/wordbooks/${wordbookUuid}/words/${wordUuid}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/wordbooks/${wordbookUuid}/words/${wordUuid}`,
     {
       method: "DELETE",
     }

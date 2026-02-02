@@ -17,7 +17,9 @@ export type PublicWordbookChild = {
 
 // 公開単語帳一覧を取得（認証なし）
 export const fetchPublicWordbooks = async (): Promise<PublicWordbook[]> => {
-  const res = await fetch("http://localhost:3001/api/v1/public_wordbooks");
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/public_wordbooks`
+  );
 
   if (!res.ok) {
     const data = await res.json();
@@ -34,7 +36,7 @@ export const fetchPublicWordbookChildren = async (
   parentUuid: string
 ): Promise<PublicWordbookChild[]> => {
   const res = await fetch(
-    `http://localhost:3001/api/v1/public_wordbooks/${parentUuid}/children`
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/public_wordbooks/${parentUuid}/children`
   );
 
   if (!res.ok) {
@@ -46,13 +48,13 @@ export const fetchPublicWordbookChildren = async (
 
   const data = await res.json();
   return data;
-}
+};
 
 export const fetchPublicWordbook = async (
   uuid: string
 ): Promise<PublicWordbook> => {
   const res = await fetch(
-    `http://localhost:3001/api/v1/public_wordbooks/${uuid}`
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/public_wordbooks/${uuid}`
   );
 
   if (!res.ok) {
