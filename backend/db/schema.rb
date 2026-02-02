@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_31_125113) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_02_081350) do
   create_table "admin_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
@@ -60,6 +60,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_31_125113) do
     t.string "role", default: "user", null: false
     t.integer "streak", default: 0, null: false
     t.datetime "updated_at", null: false
+    t.integer "words_count", default: 0, null: false
   end
 
   create_table "wordbooks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -90,8 +91,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_31_125113) do
     t.string "question", null: false
     t.boolean "review", default: false, null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.string "uuid", null: false
     t.bigint "wordbook_id", null: false
+    t.index ["user_id"], name: "index_words_on_user_id"
     t.index ["uuid"], name: "index_words_on_uuid", unique: true
     t.index ["wordbook_id"], name: "index_words_on_wordbook_id"
   end
