@@ -23,7 +23,7 @@ export default function AdminLayout({ children }: Props) {
     redirect("/admin-login");
   }
 
-  // role チェック（念のため）
+  // role
   if (admin.role !== "admin") {
     redirect("/admin-login");
   }

@@ -1,0 +1,69 @@
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;   /* 横スクロールを許可 */
+}
+
+.table {
+  min-width: 700px;   /* 列が潰れないように最低幅を確保 */
+  border-collapse: collapse;
+}
+
+/* ヘッダー */
+.table thead th {
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #aaa;
+  text-align: left;
+}
+
+/* 行をカード化 */
+.table tbody tr {
+  background: #1f1f1f;
+  border-radius: 10px;
+  transition: background 0.15s ease;
+}
+
+.table tbody tr:hover {
+  background: #2a2a2a;
+}
+
+/* セル */
+.table td {
+  padding: 14px 12px;
+  font-size: 14px;
+  border-bottom: none;
+}
+
+/* ID：目立たせない */
+.idCell {
+  color: #777;
+  font-size: 12px;
+}
+
+/* 名前：主役 */
+.nameCell {
+  font-weight: 600;
+  color: #fff;
+}
+
+/* メール：補足 */
+.emailCell {
+  color: #aaa;
+  font-size: 13px;
+}
+
+/* 登録日 */
+.dateCell {
+  color: #888;
+  font-size: 13px;
+}
+
+/* streak */
+.activeStreak {
+  color: #ff9800;
+  font-weight: 600;
+}
+
+.zeroStreak {
+  color: #666;
+}

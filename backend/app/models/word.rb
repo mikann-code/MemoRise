@@ -1,5 +1,6 @@
 class Word < ApplicationRecord
   belongs_to :wordbook, counter_cache: true
+  belongs_to :user, counter_cache: true
 
   before_validation :set_uuid, on: :create
 
