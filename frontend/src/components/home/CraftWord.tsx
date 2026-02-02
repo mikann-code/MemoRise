@@ -3,16 +3,34 @@ import { SectionTitle } from "../common/ui/SectionTitle";
 import { FiEdit3 } from "react-icons/fi";
 import styles from "./CraftWord.module.css";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useMe } from "@/src/hooks/useMe";
 
 export const CraftWord = () => {
   const router = useRouter();
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault(); // Linkのデフォルト遷移を止める
+  const { data: user } = useMe();
 
+  const handleListClick = (e: React.MouseEvent<HTMLElement>) => {
+  if (!user) {
+    router.push("/wordbooks");
+    return;
+  }
+
+  const uuid = localStorage.getItem("lastWordbookUuid");
+
+  if (uuid) {
+    router.push(`/wordbooks/${uuid}/list`);
+  } else {
+    router.push("/wordbooks");
+  }
+};
+
+  const handleTestClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (!user) {
+      router.push("/wordbooks");
+      return;
+    }
     const uuid = localStorage.getItem("lastWordbookUuid");
-
     if (uuid) {
       router.push(`/wordbooks/${uuid}/test`);
     } else {
@@ -29,7 +47,7 @@ export const CraftWord = () => {
       />
 
       <div className={styles.craftWordItems}>
-        <Link className={styles.craftWordItem} href="/wordbooks">
+        <div className={styles.craftWordItem}  onClick={handleListClick}>
           <p className={styles.craftWordLabel}>作成する</p>
           <Image
             src="/images/icon-creative.svg"
@@ -38,11 +56,10 @@ export const CraftWord = () => {
             alt="作成する"
             className={styles.craftWordImage}
           />
-        </Link>
-        <Link
+        </div>
+        <div
           className={styles.craftWordItem}
-          href="/wordbooks"
-          onClick={handleClick}
+          onClick={handleTestClick}
         >
           <p className={styles.craftWordLabel}>テストする
           </p>
@@ -53,7 +70,7 @@ export const CraftWord = () => {
             alt="テストする"
             className={styles.craftWordImage}
           />
-        </Link>
+        </div>
       </div>
     </div>
   );

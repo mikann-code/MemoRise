@@ -12,7 +12,7 @@ type AdminMeResponse = {
 
 export const fetchAdminMe = async (): Promise<AdminMeResponse> => {
   const res = await adminAuthFetch(
-    "http://localhost:3001/api/admin/me",
+    `${process.env.NEXT_PUBLIC_API_URL}/api/admin/me`,
     { cache: "no-store" }
   );
 

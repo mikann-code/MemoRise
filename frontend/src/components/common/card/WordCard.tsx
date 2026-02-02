@@ -8,9 +8,9 @@ import { RiDeleteBack2Line } from "react-icons/ri";
 type WordCardProps = {
   question: string;
   answer: string;
-  review: boolean;
+  review?: boolean;
   opened: boolean;
-  onTagToggle: () => void;
+  onTagToggle?: () => void;
   onDelete: () => void;
   deletable?: boolean;
 };

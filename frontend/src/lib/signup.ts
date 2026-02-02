@@ -7,7 +7,7 @@ export type SignupParams = {
 
 export const signup = async (params: SignupParams) => {
   const res = await fetch(
-    "http://localhost:3001/api/v1/users",
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },

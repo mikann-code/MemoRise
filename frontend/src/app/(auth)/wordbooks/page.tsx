@@ -3,16 +3,43 @@ import Link from "next/link";
 import { useWordbooks } from "@/src/hooks/useWordbooks";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
 import { LuBookMarked, LuChevronRight } from "react-icons/lu";
-import { FaRegStickyNote, FaClock } from "react-icons/fa";
+import { FaRegStickyNote, FaClock, FaStar } from "react-icons/fa";
 import styles from "./page.module.css";
 import dayjs from "@/src/lib/dayjs";
-import { FaStar } from "react-icons/fa";
 import { useTaggedWords } from "@/src/hooks/useTaggedWords";
+
+import { useMe } from "@/src/hooks/useMe";
+import { ErrorCard } from "@/src/components/common/card/ErrorCard";
 
 export default function WordbooksPage() {
   const { wordbooks, loading, error } = useWordbooks();
   const { taggedWords } = useTaggedWords();
-  if (loading) return <p>読み込み中...</p>;
+
+  // 🔑 ログイン状態
+  const { data: user, isLoading: meLoading, isError: meError } = useMe();
+
+  if (loading || meLoading) return <p>読み込み中...</p>;
+
+  // 🚫 未ログイン時
+  if (meError || !user) {
+    return (
+      <>
+        <SectionTitle
+          icon={LuBookMarked}
+          subTitle="My Wordbooks Collection"
+          title="単語帳一覧"
+        />
+        <ErrorCard
+          text={<>単語帳を見るにはログインが必要です</>}
+          buttonLabel="ログインする"
+          href="/login"
+          secondaryButtonLabel="新規登録"
+          secondaryHref="/signup"
+        />
+      </>
+    );
+  }
+
   if (error) return <p>エラーが発生しました</p>;
 
   return (

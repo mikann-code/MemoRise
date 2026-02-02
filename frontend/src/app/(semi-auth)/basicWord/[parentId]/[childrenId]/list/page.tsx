@@ -50,8 +50,10 @@ export default function WordListPage() {
           question={word.question}
           answer={word.answer}
           opened={true}
-          onToggle={() => {}}
-          onNext={() => {}}
+          onTagToggle={() => {}}
+          onDelete={() => {}}
+          review={false}
+          deletable={false}
         />
       ))}
     </>

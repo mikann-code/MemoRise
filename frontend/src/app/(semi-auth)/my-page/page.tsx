@@ -7,6 +7,7 @@ import { UserCard } from "@/src/components/common/card/UserCard";
 import { useMe } from "@/src/hooks/useMe";
 import { useLogout } from "@/src/hooks/useLogout";
 import styles from "./page.module.css";
+import { ErrorCard } from "@/src/components/common/card/ErrorCard";
 
 export default function MyPage() {
   const { data: user, isLoading, isError } = useMe();
@@ -19,7 +20,22 @@ export default function MyPage() {
   }
 
   if (isError || !user) {
-    return <p>ログインしてください</p>;
+    return (
+      <>
+        <SectionTitle
+          icon={RiInfoCardLine}
+          subTitle="mypage"
+          title="マイページ"
+        />
+        <ErrorCard
+          text={<>マイページを見るには<br className={styles.spacer} />ログインが必要です</>}
+          buttonLabel="ログインする"
+          href="/login"
+          secondaryButtonLabel="新規登録"
+          secondaryHref="/signup"
+        />
+      </>
+    );
   }
 
   return (

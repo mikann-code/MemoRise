@@ -7,6 +7,7 @@ import { useState } from "react";
 import { FaHome, FaUser } from "react-icons/fa";
 import { MdCreate, MdAdminPanelSettings } from "react-icons/md";
 import { HiAcademicCap } from "react-icons/hi";
+import { LuBook } from "react-icons/lu"; 
 
 // user用admin用でfooterを分離
 const userNavItems = [
@@ -18,7 +19,8 @@ const userNavItems = [
 
 const adminNavItems = [
   { href: "/admin", label: "管理トップ", icon: <MdAdminPanelSettings size={24} /> },
-  { href: "/admin/wordbooks", label: "単語帳管理", icon: <MdCreate size={24} /> },
+  { href: "/admin/wordbooks", label: "単語帳管理", icon: <LuBook size={24} /> },
+  { href: "/admin/users", label: "ユーザー一覧", icon: <FaUser size={24} /> },
   { href: "/admin/news", label: "ダッシュボード", icon: <MdCreate size={24} /> },
 ];
 

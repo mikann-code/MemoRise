@@ -16,7 +16,7 @@ export const fetchAdminWords = async (
   wordbookUuid: string
 ): Promise<AdminWord[]> => {
   const res = await adminAuthFetch(
-    `http://localhost:3001/api/admin/wordbooks/${wordbookUuid}/words`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/admin/wordbooks/${wordbookUuid}/words`,
     { cache: "no-store" }
   );
 
@@ -36,7 +36,7 @@ export const createAdminWord = async (
   params: CreateAdminWordParams
 ): Promise<AdminWord> => {
   const res = await adminAuthFetch(
-    `http://localhost:3001/api/admin/wordbooks/${wordbookUuid}/words`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/admin/wordbooks/${wordbookUuid}/words`,
     {
       method: "POST",
       body: JSON.stringify({
@@ -63,7 +63,7 @@ export const deleteAdminWord = async (
   wordUuid: string
 ): Promise<void> => {
   const res = await adminAuthFetch(
-    `http://localhost:3001/api/admin/wordbooks/${wordbookUuid}/words/${wordUuid}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/admin/wordbooks/${wordbookUuid}/words/${wordUuid}`,
     {
       method: "DELETE",
     }

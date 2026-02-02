@@ -25,15 +25,13 @@ export type PostStudyRecordParams = {
   children_id: string;
 };
 
-
 // index action
 export async function fetchStudyRecords(
   year: number,
   month: number
 ): Promise<StudyRecord[]> {
-
   const res = await authFetch(
-    `http://localhost:3001/api/v1/study_records?year=${year}&month=${month}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/study_records?year=${year}&month=${month}`,
     { cache: "no-store" }
   );
 
@@ -50,9 +48,8 @@ export async function fetchStudyRecords(
 export async function fetchStudyWeekRecords(
   startDate: string
 ): Promise<StudyRecord[]> {
-
   const res = await authFetch(
-    `http://localhost:3001/api/v1/study_records/week?start_date=${startDate}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/study_records/week?start_date=${startDate}`,
     { cache: "no-store" }
   );
 
@@ -68,7 +65,7 @@ export async function fetchStudyWeekRecords(
 // recent action (最近30件)
 export async function fetchStudyRecentRecords(): Promise<StudyRecord[]> {
   const res = await authFetch(
-    "http://localhost:3001/api/v1/study_records/recent",
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/study_records/recent`,
     { cache: "no-store" }
   );
 
@@ -84,20 +81,23 @@ export async function fetchStudyRecentRecords(): Promise<StudyRecord[]> {
 // 初回はcreate 二回以降はupdate
 // post action
 export async function postStudyRecord(params: PostStudyRecordParams) {
-  const res = await authFetch("http://localhost:3001/api/v1/study_records", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      study_date: params.study_date,
-      total_count: params.total_count,
-      title: params.title,
-      rate: params.rate,
-      count: params.count,
-      children_id: params.children_id,
-    }),
-  });
+  const res = await authFetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/study_records`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        study_date: params.study_date,
+        total_count: params.total_count,
+        title: params.title,
+        rate: params.rate,
+        count: params.count,
+        children_id: params.children_id,
+      }),
+    }
+  );
 
   const data = await res.json();
 
@@ -107,6 +107,3 @@ export async function postStudyRecord(params: PostStudyRecordParams) {
 
   return data;
 }
-
-
-

@@ -16,11 +16,14 @@ export type UpdateProfileResponse = {
 export async function updateProfile(
   params: UpdateProfileParams
 ): Promise<UpdateProfileResponse> {
-  const res = await authFetch("http://localhost:3001/api/v1/me", {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(params),
-  });
+  const res = await authFetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/me`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params),
+    }
+  );
 
   if (!res.ok) {
     throw new Error("プロフィール更新に失敗しました");
