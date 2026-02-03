@@ -8,7 +8,6 @@ import styles from "./page.module.css";
 
 import { useAdminWordbooks } from "@/src/hooks/useAdminWordbooks";
 import { WORDBOOK_LABELS } from "@/src/constants/wordbookLabels";
-import { LEVELS_BY_LABEL } from "@/src/constants/wordbookLevels";
 
 import { FloatingInput } from "@/src/components/common/ui/FloatingInput";
 import { Button } from "@/src/components/common/ui/Button";
@@ -22,17 +21,14 @@ export default function AdminWordbooksPage() {
   const [description, setDescription] = useState("");
   const [label, setLabel] = useState("");
   const [level, setLevel] = useState("");
-  const [part, setPart] = useState("");
 
-  const levels =
-    label && label in LEVELS_BY_LABEL
-      ? LEVELS_BY_LABEL[label as keyof typeof LEVELS_BY_LABEL]
-      : [];
-
+  // 親単語帳のみ表示
   const groupedWordbooks = useMemo(() => {
     return WORDBOOK_LABELS.map((labelDef) => ({
       ...labelDef,
-      items: wordbooks.filter((wb) => wb.label === labelDef.value),
+      items: wordbooks.filter(
+        (wb) => wb.label === labelDef.value && !wb.parent_uuid
+      ),
     }));
   }, [wordbooks]);
 
@@ -50,15 +46,15 @@ export default function AdminWordbooksPage() {
         description,
         label,
         level,
-        part: part || null,
+        part: null,
+        parent_uuid: null, // 親として作成
       });
 
       setTitle("");
       setDescription("");
       setLabel("");
       setLevel("");
-      setPart("");
-    } catch (e) {
+    } catch {
       alert("作成に失敗しました");
     }
   };
@@ -96,6 +92,13 @@ export default function AdminWordbooksPage() {
             onChange={(e) => setDescription(e.target.value)}
           />
 
+          <FloatingInput
+            id="level"
+            label="レベル（例: A1, A2, B1, 初級 など）"
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+          />
+
           <label
             id="wordbook-label-label"
             htmlFor="wordbook-label"
@@ -107,10 +110,7 @@ export default function AdminWordbooksPage() {
             id="wordbook-label"
             aria-labelledby="wordbook-label-label"
             value={label}
-            onChange={(e) => {
-              setLabel(e.target.value);
-              setLevel("");
-            }}
+            onChange={(e) => setLabel(e.target.value)}
             className={styles.select}
           >
             <option value="">ラベルを選択</option>
@@ -148,9 +148,10 @@ export default function AdminWordbooksPage() {
                         className={styles.wordbooksLink}
                       >
                         <div className={styles.cardContent}>
+                          <LuChevronRight className={styles.arrowIcon} />
+
                           <div className={styles.wordbooksHeader}>
                             <h4>{wb.title}</h4>
-                            <LuChevronRight />
                           </div>
 
                           <p className={styles.description}>
@@ -159,9 +160,6 @@ export default function AdminWordbooksPage() {
 
                           <div className={styles.wordbooksMeta}>
                             <span className={styles.badge}>{wb.level}</span>
-                            {wb.part && (
-                              <span className={styles.badgeSub}>{wb.part}</span>
-                            )}
                           </div>
                         </div>
                       </Link>

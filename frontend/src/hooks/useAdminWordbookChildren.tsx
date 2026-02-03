@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import {
   fetchAdminWordbookChildren,
-  AdminWordbookChild,
+  AdminWordbook,
 } from "@/src/lib/adminWordbooks";
 
 export const useAdminWordbookChildren = (uuid?: string) => {
@@ -11,7 +11,7 @@ export const useAdminWordbookChildren = (uuid?: string) => {
     data: children = [],
     isLoading,
     isError,
-  } = useQuery<AdminWordbookChild[]>({
+  } = useQuery<AdminWordbook[]>({
     queryKey: ["adminWordbookChildren", uuid],
     queryFn: () => {
       if (!uuid) return Promise.resolve([]);

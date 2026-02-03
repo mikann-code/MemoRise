@@ -1,12 +1,51 @@
-.description {
-  margin: 8px 0 24px;
-  color: #6b7280;
-  font-size: 0.9rem;
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-/* ======================
-   フィルタ
-====================== */
+/* 右側のタグ群 */
+.metaTags {
+  display: flex;
+  gap: 8px;
+}
+
+/* 共通バッジ */
+.labelTag,
+.levelTag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+/* label用 */
+.labelTag {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: #e5edff;
+  border-color: #1e3a8a;
+}
+
+/* level用 */
+.levelTag {
+  background: linear-gradient(135deg, #059669, #065f46);
+  color: #ecfdf5;
+  border-color: #064e3b;
+}
+
+.partCreateTitle{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap:3px;
+  font-size:16px;
+  margin-bottom:12px;
+}
 
 .filterBox {
   display: flex;
@@ -16,38 +55,65 @@
 }
 
 .filterItem {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  width: 100%;
 }
 
 .filterItem label {
   font-size: 0.75rem;
-  color: #6b7280;
-}
-
-.filterItem select {
-  padding: 10px 12px;
-  min-width: 180px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  font-size: 0.9rem;
-}
-
-.filterItem select:disabled {
-  background: #f3f4f6;
   color: #9ca3af;
-}
-
-.filterItem select:focus {
-  outline: none;
-  border-color: #6366f1;
+  margin-bottom: 6px;
+  display: block;
 }
 
 /* ======================
-   補足表示
+   Part リスト
 ====================== */
 
+.partList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.partItem {
+  margin: 0;
+}
+
+.partItem a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+
+  color: #f9fafb;
+  background: linear-gradient(135deg, #2f2f2f, #1f1f1f);
+  border: 1px solid #333;
+
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+/* ホバー演出 */
+.partItem a:hover {
+  background: linear-gradient(135deg, #3a3a3a, #262626);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* 押した感 */
+.partItem a:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* 空表示テキスト */
 .notice {
   font-size: 0.85rem;
   color: #9ca3af;

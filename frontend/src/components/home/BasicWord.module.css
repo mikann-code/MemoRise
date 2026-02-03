@@ -14,6 +14,34 @@
   align-items: center;
   justify-content: flex-start;
   margin-top: 12px;
+
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 12px;
+  padding-bottom: 12px; /* スクロールバーと要素の距離 */
+
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===== スクロールバー全体 ===== */
+.basicWordsBoxContainer::-webkit-scrollbar {
+  height: 8px; /* 横スクロールなので height */
+}
+
+.basicWordsBoxContainer::-webkit-scrollbar-track {
+  background: #333; /* 背景と自然に馴染ませる */
+  border-radius: 10px;
+}
+
+.basicWordsBoxContainer::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 10px;
+}
+
+/* hover時 */
+.basicWordsBoxContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--color-secondary);
 }
 
 .basicWordsBox {
@@ -33,6 +61,8 @@
   align-items: center;
   flex-direction: column;
   gap: 4px;
+
+  flex-shrink: 0; 
 }
 
 .archiveButton {
