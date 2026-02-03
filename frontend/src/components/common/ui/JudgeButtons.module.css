@@ -1,0 +1,51 @@
+.wrapper {
+  display: flex;
+  gap: 10px;           
+  width: 100%;
+}
+
+/* 正解ボタン */
+.correctButton {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 4px 0;
+  color: var(--color-font-primary);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: #4caf50; /* 緑 */
+  box-shadow: 0 4px 0 color-mix(in srgb, #4caf50 60%, black);
+}
+
+.correctButton:hover {
+  background-color: #43a047;
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 color-mix(in srgb, #4caf50 60%, black);
+}
+
+/* 不正解ボタン */
+.wrongButton {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 4px 0;
+  color: var(--color-font-primary);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: #f44336; /* 赤 */
+  box-shadow: 0 4px 0 color-mix(in srgb, #f44336 60%, black);
+}
+
+.wrongButton:hover {
+  background-color: #e53935;
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 color-mix(in srgb, #f44336 60%, black);
+}
