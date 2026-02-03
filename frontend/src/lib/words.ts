@@ -25,7 +25,7 @@ export const fetchWords = async (
   }
 
   const data = await res.json();
-  return Array.isArray(data) ? data : [];
+  return data;
 };
 
 // 単語作成

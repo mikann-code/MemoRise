@@ -1,6 +1,6 @@
 .wrapper {
   display: flex;
-  gap: 10px;           
+  gap: 10px;
   width: 100%;
 }
 
@@ -48,4 +48,18 @@
   background-color: #e53935;
   transform: translateY(2px);
   box-shadow: 0 1px 0 color-mix(in srgb, #f44336 60%, black);
+}
+
+.correctButton:disabled,
+.wrongButton:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.correctButton:disabled:hover,
+.wrongButton:disabled:hover {
+  background-color: #ccc;
 }

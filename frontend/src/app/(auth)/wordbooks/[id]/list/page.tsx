@@ -25,12 +25,10 @@ type Props = {
 };
 
 export default function WordbookDetailPage({ params }: Props) {
-  const router = useRouter();
   const { id: wordbookUuid } = use(params);
 
   const { wordbook, loading: wordbookLoading } = useWordbook(wordbookUuid);
   const { words, loading, error, addWord, deleteWord } = useWords(wordbookUuid);
-  const { deleteWordbook } = useWordbooks();
 
   const studyMutation = useStudyWordbooks(wordbookUuid);
   const queryClient = useQueryClient();
@@ -131,7 +129,7 @@ export default function WordbookDetailPage({ params }: Props) {
                   deletable={true}
                   onTagToggle={async () => {
                     if (tagged) {
-                      if (!confirm("この単語をお気に入り登録から外しますか？"))
+                      if (!confirm("この単語を復習リストの登録から外しますか？"))
                         return;
                       await removeTaggedWord(word.uuid);
                     } else {

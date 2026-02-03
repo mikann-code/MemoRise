@@ -2,7 +2,7 @@ class Api::V1::UserWordTagsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    tags = current_user.user_word_tags.includes(:word)
+    tags = current_user.user_word_tags.includes(:word).order(created_at: :desc)
 
     render json: tags.map { |t|
       {

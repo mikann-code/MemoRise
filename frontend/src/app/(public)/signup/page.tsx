@@ -10,6 +10,7 @@ import { IoPerson } from "react-icons/io5";
 import { FormLayout } from "@/src/components/layout/FormLayout";
 import styles from "./page.module.css";
 import { useSignup } from "@/src/hooks/useSignup";
+import Image from "next/image";
 
 /* ===== 型 ===== */
 type ApiErrorResponse = {
@@ -94,14 +95,14 @@ export default function SignupPage() {
               password: formatError("password", err.errors.password?.[0]),
               passwordConfirm: formatError(
                 "password_confirmation",
-                err.errors.password_confirmation?.[0]
+                err.errors.password_confirmation?.[0],
               ),
             });
           } else {
             setMessage("サーバーに接続できませんでした");
           }
         },
-      }
+      },
     );
   };
 
@@ -110,7 +111,9 @@ export default function SignupPage() {
   return (
     <FormLayout
       header={
-        <SectionTitle icon={FaUserPlus} subTitle="Signup" title="会員登録" />
+        <>
+          <SectionTitle icon={FaUserPlus} subTitle="Signup" title="会員登録" />
+        </>
       }
       description={
         <p className={styles.signupDescription}>
