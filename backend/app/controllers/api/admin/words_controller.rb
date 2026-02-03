@@ -1,4 +1,7 @@
 class Api::Admin::WordsController < Api::Admin::BaseController
+  #wordbook.user_id == nil（公式単語帳）
+  #word.user_id == nil（公式単語）
+
   before_action :set_wordbook
   before_action :set_word, only: [ :show, :update, :destroy ]
 
@@ -13,6 +16,7 @@ class Api::Admin::WordsController < Api::Admin::BaseController
 
   def create
     @word = @wordbook.words.new(word_params)
+    @word.user = nil  
 
     if @word.save
       render json: @word, status: :created
@@ -22,6 +26,7 @@ class Api::Admin::WordsController < Api::Admin::BaseController
   end
 
   def update
+    @word.user = nil
     if @word.update(word_params)
       render json: @word
     else
@@ -37,7 +42,7 @@ class Api::Admin::WordsController < Api::Admin::BaseController
   private
 
   def set_wordbook
-    @wordbook = Wordbook.find_by!(uuid: params[:wordbook_uuid])
+    @wordbook = Wordbook.where(user_id: nil).find_by!(uuid: params[:wordbook_uuid])
   end
 
   def set_word

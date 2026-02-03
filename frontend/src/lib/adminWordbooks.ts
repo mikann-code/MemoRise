@@ -8,6 +8,7 @@ export type AdminWordbook = {
   label: string;
   part: string | null;
   published: boolean;
+  parent_uuid: string | null;
 };
 
 export type CreateAdminWordbookParams = {
@@ -16,16 +17,7 @@ export type CreateAdminWordbookParams = {
   level: string;
   label: string;
   part: string | null;
-};
-
-export type AdminWordbookChild = {
-  uuid: string;
-  title: string;
-  description: string | null;
-  level: string;
-  label: string;
-  part: string | null;
-  published: boolean;
+  parent_uuid?: string | null;
 };
 
 export const fetchAdminWordbooks = async (): Promise<AdminWordbook[]> => {
@@ -38,6 +30,23 @@ export const fetchAdminWordbooks = async (): Promise<AdminWordbook[]> => {
 
   if (!res.ok) {
     throw new Error("admin 単語帳の取得に失敗しました");
+  }
+
+  return data;
+};
+
+export const fetchAdminWordbookChildren = async (
+  uuid: string
+): Promise<AdminWordbook[]> => {
+  const res = await adminAuthFetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/admin/wordbooks/${uuid}/children`,
+    { cache: "no-store" }
+  );
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error("admin 単語帳の 子一覧の取得に失敗しました");
   }
 
   return data;
@@ -62,24 +71,6 @@ export const createAdminWordbook = async (
       data?.errors?.join(", ") ||
         "admin 単語帳の作成に失敗しました"
     );
-  }
-
-  return data;
-};
-
-// part(子 単語帳の取得)
-export const fetchAdminWordbookChildren = async (
-  uuid: string
-): Promise<AdminWordbookChild[]> => {
-  const res = await adminAuthFetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/admin/wordbooks/${uuid}/children`,
-    { cache: "no-store" }
-  );
-
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error("admin 単語帳の 子一覧の取得に失敗しました");
   }
 
   return data;

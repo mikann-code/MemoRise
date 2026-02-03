@@ -29,7 +29,7 @@ export default function BasicWordDetailPage() {
       <div>
         <h2>😢 教材が見つかりません</h2>
         <p>{parentId} の教材データがありません。</p>
-        <Link href="/basicWord">← 一覧へ戻る</Link>
+        <Link href="/">← 一覧へ戻る</Link>
       </div>
     );
   }

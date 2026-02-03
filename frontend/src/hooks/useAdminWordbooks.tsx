@@ -11,7 +11,7 @@ import {
 export const useAdminWordbooks = () => {
   const queryClient = useQueryClient();
 
-  //  一覧取得（GET）
+  // 親単語帳一覧取得
   const {
     data: wordbooks = [],
     isLoading,
@@ -21,16 +21,20 @@ export const useAdminWordbooks = () => {
     queryFn: fetchAdminWordbooks,
   });
 
-  //  新規作成（POST）
+  // 単語帳作成（親・子 共通）
   const createWordbookMutation = useMutation({
     mutationFn: (params: CreateAdminWordbookParams) =>
       createAdminWordbook(params),
+    onSuccess: (_, variables) => {
+      // 親一覧更新
+      queryClient.invalidateQueries({ queryKey: ["adminWordbooks"] });
 
-    onSuccess: () => {
-      // 一覧を再取得
-      queryClient.invalidateQueries({
-        queryKey: ["adminWordbooks"],
-      });
+      // 子作成時は、その親の children も更新
+      if (variables.parent_uuid) {
+        queryClient.invalidateQueries({
+          queryKey: ["adminWordbookChildren", variables.parent_uuid],
+        });
+      }
     },
   });
 
@@ -38,6 +42,8 @@ export const useAdminWordbooks = () => {
     wordbooks,
     loading: isLoading,
     error: isError,
+
+    // 親・子 共通作成
     addWordbook: createWordbookMutation.mutateAsync,
     creating: createWordbookMutation.isPending,
   };

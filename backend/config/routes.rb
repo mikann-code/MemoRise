@@ -47,11 +47,13 @@ Rails.application.routes.draw do
 
     # admin
     namespace :admin do
+      get "stats/index"
       get "users/index"
       post "login", to: "auth#login"
       get  "me",    to: "auth#me" 
 
       resources :users, only: [:index]
+      resources :stats, only: [:index]
 
       resources :wordbooks, param: :uuid, only: [ :index, :show, :create, :update, :destroy ] do
         get :children, on: :member

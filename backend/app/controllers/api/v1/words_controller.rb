@@ -9,9 +9,16 @@ class Api::V1::WordsController < ApplicationController
   end
 
   def create
-    word = @wordbook.words.create!(word_params)
-    render json: word, status: :created
+    word = @wordbook.words.new(word_params)
+    word.user = current_user   
+
+    if word.save
+      render json: word, status: :created
+    else
+      render json: { errors: word.errors.full_messages }, status: :unprocessable_entity
+    end
   end
+
 
   def destroy
     @word.destroy

@@ -1,22 +1,47 @@
 .tableWrapper {
   width: 100%;
-  overflow-x: auto;   /* 横スクロールを許可 */
+  max-width: 100%;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  -webkit-overflow-scrolling: touch;
 }
+
+/* ===== スクロールバー（オレンジ統一） ===== */
+.tableWrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.tableWrapper::-webkit-scrollbar-track {
+  background: #1f1f1f;
+  border-radius: 999px;
+}
+
+.tableWrapper::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #ff8a00, #ffb347);
+  border-radius: 999px;
+}
+
+.tableWrapper::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #ffa733, #ffd18a);
+}
+
 
 .table {
-  min-width: 700px;   /* 列が潰れないように最低幅を確保 */
-  border-collapse: collapse;
+  width: 100%;
+  min-width: 700px;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  margin: 0 auto;
 }
 
-/* ヘッダー */
 .table thead th {
   padding: 10px 12px;
   font-size: 12px;
   color: #aaa;
   text-align: left;
+  border-bottom: 1px solid #333;
 }
 
-/* 行をカード化 */
 .table tbody tr {
   background: #1f1f1f;
   border-radius: 10px;
@@ -27,38 +52,45 @@
   background: #2a2a2a;
 }
 
-/* セル */
 .table td {
   padding: 14px 12px;
   font-size: 14px;
-  border-bottom: none;
+  border-top: 1px solid #2f2f2f;
+  border-bottom: 1px solid #2f2f2f;
 }
 
-/* ID：目立たせない */
+.table tbody tr td:first-child {
+  border-left: 1px solid #2f2f2f;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.table tbody tr td:last-child {
+  border-right: 1px solid #2f2f2f;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
 .idCell {
   color: #777;
   font-size: 12px;
 }
 
-/* 名前：主役 */
 .nameCell {
   font-weight: 600;
   color: #fff;
 }
 
-/* メール：補足 */
 .emailCell {
   color: #aaa;
   font-size: 13px;
 }
 
-/* 登録日 */
 .dateCell {
   color: #888;
   font-size: 13px;
 }
 
-/* streak */
 .activeStreak {
   color: #ff9800;
   font-weight: 600;

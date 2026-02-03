@@ -3,8 +3,8 @@ class Api::Admin::UsersController < ApplicationController
     users = User
       .left_joins(wordbooks: :words)
       .group("users.id")
-      .order(created_at: :desc)
       .select("users.*, COUNT(words.id) AS total_words")
+      .order(streak: :desc) 
 
     render json: users.map { |u|
       {

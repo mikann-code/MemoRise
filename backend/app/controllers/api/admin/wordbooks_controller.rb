@@ -26,9 +26,14 @@ class Api::Admin::WordbooksController < Api::Admin::BaseController
   end
 
   def create
-    # admin 用 user = nil に固定
     wordbook = Wordbook.new(wordbook_params)
     wordbook.user = nil
+
+    # 親UUIDが来ていれば、親を探して parent_id に変換
+    if params[:wordbook][:parent_uuid].present?
+      parent = Wordbook.where(user_id: nil).find_by!(uuid: params[:wordbook][:parent_uuid])
+      wordbook.parent_id = parent.id
+    end
 
     if wordbook.save
       render json: wordbook, status: :created
@@ -92,6 +97,7 @@ class Api::Admin::WordbooksController < Api::Admin::BaseController
       :description,
       :level,
       :label,
+      :part
     )
   end
 end
