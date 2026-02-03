@@ -1,0 +1,19 @@
+.signupLinkWrapper {
+  margin-top: 16px;
+  text-align: right;
+}
+
+.signupLink {
+  color: #ffffff;
+  font-size: 0.85rem;
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, text-decoration 0.2s ease;
+  padding-bottom:1px;
+}
+
+.signupLink:hover {
+  opacity: 1;
+  border-bottom: #ffffff 1px solid;
+  transition: all .2s ease;
+}

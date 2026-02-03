@@ -9,6 +9,7 @@ import { MdLockOutline, MdMailOutline } from "react-icons/md";
 import { useLogin } from "@/src/hooks/useLogin";
 import { FormLayout } from "@/src/components/layout/FormLayout";
 import styles from "./page.module.css";
+import Link from "next/link";
 
 export default function LoginPage() {
   const login = useLogin();
@@ -66,6 +67,12 @@ export default function LoginPage() {
               {login.isPending ? "ログイン中..." : "ログイン"}
             </Button>
           </form>
+
+           <div className={styles.signupLinkWrapper}>
+            <Link href="/signup" className={styles.signupLink}>
+              新規登録はこちら
+            </Link>
+          </div>
         </>
       }
     />

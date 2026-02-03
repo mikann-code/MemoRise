@@ -8,6 +8,7 @@ import { JudgeButtons } from "@/src/components/common/ui/JudgeButtons";
 import { Button } from "@/src/components/common/ui/Button";
 import { WordCard } from "@/src/components/common/card/WordCard";
 import { usePostStudyRecord } from "@/src/hooks/usePostStudyRecord";
+import { useTaggedWords } from "@/src/hooks/useTaggedWords";
 
 type PublicWord = {
   uuid: string;
@@ -30,13 +31,37 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
   const [correctCount, setCorrectCount] = useState(0);
   const [wrongQuestions, setWrongQuestions] = useState<TestWord[]>([]);
 
+  const { taggedWords, addTaggedWord, removeTaggedWord } = useTaggedWords();
   const { mutate: postStudyRecord } = usePostStudyRecord();
   const hasPostedRef = useRef(false);
 
   const total = words.length;
+
+  // 表示用
   const currentNumber = currentIndex + 1;
+
+  // すでに答えた数
+  const answeredCount = currentIndex;
+
+  // 正答率（答えた分だけ）
   const rate =
-    currentNumber > 0 ? Math.round((correctCount / currentNumber) * 100) : 0;
+    answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
+
+  const currentWord = words[currentIndex];
+
+  // この単語がタグ済みか？
+  const isTagged = taggedWords.some((tw) => tw.word_uuid === currentWord?.uuid);
+
+  // タグボタン用
+  const handleTagToggle = async () => {
+    if (!currentWord) return;
+
+    if (isTagged) {
+      await removeTaggedWord(currentWord.uuid);
+    } else {
+      await addTaggedWord(currentWord.uuid);
+    }
+  };
 
   useEffect(() => {
     if (currentIndex >= total && total > 0 && !hasPostedRef.current) {
@@ -53,9 +78,7 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
         children_id: childrenId,
       });
     }
-  }, [currentIndex, total, correctCount, childrenId, postStudyRecord, rate]);
-
-  const currentWord = words[currentIndex];
+  }, [currentIndex, total, childrenId, postStudyRecord, rate]);
 
   const next = () => {
     if (currentIndex < total - 1) {
@@ -66,21 +89,15 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
     }
   };
 
-  // ★ 最後の問題では分子を増やさない
   const handleCorrect = () => {
-    if (currentIndex >= total - 1) {
-      next();
-      return;
-    }
-
     setCorrectCount((prev) => prev + 1);
     next();
   };
 
-  const handleWrong = () => {
-    if (currentIndex >= total - 1) {
-      next();
-      return;
+  const handleWrong = async () => {
+    // 不正解時：タグ登録（未登録なら）
+    if (!isTagged) {
+      await addTaggedWord(currentWord.uuid);
     }
 
     setWrongQuestions((prev) => [...prev, currentWord]);
@@ -105,7 +122,7 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
           <div className={styles.progressWrapper}>
             <div className={styles.progressInfo}>
               <span>
-                {currentNumber} / {total} 問目
+                {total} / {total} 問目
               </span>
               <span>正答率 {rate}%</span>
             </div>
@@ -118,23 +135,33 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
           </div>
 
           <div className={styles.wrongList}>
-            {wrongQuestions.map((w, idx) => (
-              <WordCard
-                key={idx}
-                question={w.question}
-                answer={w.answer}
-                review={w.review}
-                opened={true}
-                onTagToggle={() => {}}
-                onDelete={() => {}}
-                deletable={false}
-              />
-            ))}
+            {wrongQuestions.map((w) => {
+              const tagged = taggedWords.some((tw) => tw.word_uuid === w.uuid);
+
+              const handleResultTagToggle = async () => {
+                if (tagged) {
+                  await removeTaggedWord(w.uuid);
+                } else {
+                  await addTaggedWord(w.uuid);
+                }
+              };
+
+              return (
+                <WordCard
+                  key={w.uuid}
+                  question={w.question}
+                  answer={w.answer}
+                  review={tagged}
+                  opened={true}
+                  onTagToggle={handleResultTagToggle}
+                  onDelete={() => {}}
+                  deletable={false}
+                />
+              );
+            })}
           </div>
 
-          <div className={styles.resultActions}>
-            <JudgeButtons onCorrect={handleCorrect} onWrong={handleWrong} />
-          </div>
+          <Button href="./list">一覧に戻る</Button>
         </div>
       </>
     );
@@ -149,38 +176,40 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
         title="単語テスト"
       />
 
-      <div className={styles.progressWrapper}>
-        <div className={styles.progressInfo}>
-          <span>
-            {currentNumber} / {total} 問目
-          </span>
-          <span>正答率 {rate}%</span>
+      <div className={styles.testCard}>
+        <div className={styles.progressWrapper}>
+          <div className={styles.progressInfo}>
+            <span>
+              {currentNumber} / {total} 問目
+            </span>
+            <span>正答率 {rate}%</span>
+          </div>
+
+          <progress
+            className={styles.progressBar}
+            value={answeredCount}
+            max={total}
+          />
         </div>
 
-        <progress
-          className={styles.progressBar}
-          value={currentIndex}
-          max={total}
+        <WordCard
+          question={currentWord.question}
+          answer={currentWord.answer}
+          review={isTagged}
+          opened={opened}
+          onTagToggle={handleTagToggle}
+          onDelete={() => {}}
+          deletable={false}
         />
-      </div>
 
-      <WordCard
-        question={currentWord.question}
-        answer={currentWord.answer}
-        review={currentWord.review}
-        opened={opened}
-        onTagToggle={() => {}}
-        onDelete={() => {}}
-        deletable={false}
-      />
+        <div className={styles.actions}>
+          <Button onClick={handleToggleAnswer}  disabled={opened}>
+            {opened ? "答えを表示中" : "答えを見る"}
+          </Button>
 
-      <div className={styles.actions}>
-        <Button onClick={handleToggleAnswer}>
-          {opened ? "答えを隠す" : "答えを見る"}
-        </Button>
-
-        <div className={styles.judgeButtons}>
-          <JudgeButtons onCorrect={handleCorrect} onWrong={handleWrong} />
+          <div className={styles.judgeButtons}>
+            <JudgeButtons onCorrect={handleCorrect} onWrong={handleWrong} disabled={!opened}/>
+          </div>
         </div>
       </div>
     </>

@@ -28,7 +28,13 @@ export default function ReviewPage() {
           subTitle="Tagged Words for Review"
         />
         <ErrorCard
-          text={<>復習単語を見るには<br className={styles.spacer} />ログインが必要です</>}
+          text={
+            <>
+              復習単語を見るには
+              <br className={styles.spacer} />
+              ログインが必要です
+            </>
+          }
           buttonLabel="ログインする"
           href="/login"
           secondaryButtonLabel="新規登録"
@@ -80,6 +86,11 @@ export default function ReviewPage() {
                   opened={true}
                   deletable={false}
                   onTagToggle={async () => {
+                    if (
+                      !confirm("この単語を復習リストの登録から外しますか？")
+                    ) {
+                      return;
+                    }
                     await removeTaggedWord(t.word_uuid);
                   }}
                   onDelete={() => {}}
