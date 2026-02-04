@@ -3,9 +3,15 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   fetchAdminWordbooks,
-  createAdminWordbook,
+  createParentWordbook,
+  createChildWordbook,
+  deleteParentWordbook,
+  deleteChildWordbook, // ★追加
+  updateParentWordbook,
   AdminWordbook,
-  CreateAdminWordbookParams,
+  CreateParentWordbookParams,
+  CreateChildWordbookParams,
+  UpdateParentWordbookParams,
 } from "@/src/lib/adminWordbooks";
 
 export const useAdminWordbooks = () => {
@@ -21,20 +27,54 @@ export const useAdminWordbooks = () => {
     queryFn: fetchAdminWordbooks,
   });
 
-  // 単語帳作成（親・子 共通）
-  const createWordbookMutation = useMutation({
-    mutationFn: (params: CreateAdminWordbookParams) =>
-      createAdminWordbook(params),
-    onSuccess: (_, variables) => {
-      // 親一覧更新
+  // 親単語帳 作成
+  const createParentMutation = useMutation({
+    mutationFn: (params: CreateParentWordbookParams) =>
+      createParentWordbook(params),
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["adminWordbooks"] });
+    },
+  });
 
-      // 子作成時は、その親の children も更新
-      if (variables.parent_uuid) {
-        queryClient.invalidateQueries({
-          queryKey: ["adminWordbookChildren", variables.parent_uuid],
-        });
-      }
+  // 子単語帳 作成
+  const createChildMutation = useMutation({
+    mutationFn: (params: CreateChildWordbookParams) =>
+      createChildWordbook(params),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["adminWordbooks"] });
+      queryClient.invalidateQueries({
+        queryKey: ["adminWordbookChildren", variables.parent_uuid],
+      });
+    },
+  });
+
+  // 親単語帳 更新
+  const updateParentMutation = useMutation({
+    mutationFn: (params: UpdateParentWordbookParams) =>
+      updateParentWordbook(params),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["adminWordbooks"] });
+      queryClient.invalidateQueries({
+        queryKey: ["adminWordbookChildren", variables.uuid],
+      });
+    },
+  });
+
+  // 親単語帳 削除
+  const deleteParentMutation = useMutation({
+    mutationFn: (uuid: string) => deleteParentWordbook(uuid),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminWordbooks"] });
+    },
+  });
+
+  // 子単語帳 削除 ★追加
+  const deleteChildMutation = useMutation({
+    mutationFn: (uuid: string) => deleteChildWordbook(uuid),
+    onSuccess: (_, uuid) => {
+      queryClient.invalidateQueries({
+        queryKey: ["adminWordbookChildren"],
+      });
     },
   });
 
@@ -43,8 +83,21 @@ export const useAdminWordbooks = () => {
     loading: isLoading,
     error: isError,
 
-    // 親・子 共通作成
-    addWordbook: createWordbookMutation.mutateAsync,
-    creating: createWordbookMutation.isPending,
+    // 親用
+    addParentWordbook: createParentMutation.mutateAsync,
+    creatingParent: createParentMutation.isPending,
+
+    updateParentWordbook: updateParentMutation.mutateAsync,
+    updatingParent: updateParentMutation.isPending,
+
+    deleteParentWordbook: deleteParentMutation.mutateAsync,
+    deletingParent: deleteParentMutation.isPending,
+
+    // 子用
+    addChildWordbook: createChildMutation.mutateAsync,
+    creatingChild: createChildMutation.isPending,
+
+    deleteChildWordbook: deleteChildMutation.mutateAsync, // ★追加
+    deletingChild: deleteChildMutation.isPending,         // ★追加
   };
 };

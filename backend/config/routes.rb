@@ -43,6 +43,12 @@ Rails.application.routes.draw do
           get :week
         end
       end
+
+      # 完了登録
+      resources :user_wordbook_progresses, only: [:index] do
+        post "complete", on: :collection
+      end
+      
     end
 
     # admin
