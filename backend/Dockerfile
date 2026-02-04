@@ -5,10 +5,13 @@ RUN apt-get update -qq && \
 
 WORKDIR /app
 
-COPY Gemfile Gemfile.lock ./
+ENV RAILS_ENV=production
 
-RUN bundle install
+COPY Gemfile Gemfile.lock ./
+RUN bundle install --without development test
 
 COPY . .
 
 EXPOSE 3001
+
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
