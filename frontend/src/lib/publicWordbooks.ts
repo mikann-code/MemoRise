@@ -1,5 +1,6 @@
 // 公開単語帳（公式テンプレ）の取得
 export type PublicWordbook = {
+  id:number,
   uuid: string;
   title: string;
   description: string | null;
@@ -13,6 +14,7 @@ export type PublicWordbookChild = {
   uuid: string;
   title: string;
   part: string;
+  id:number,
 };
 
 // 公開単語帳一覧を取得（認証なし）

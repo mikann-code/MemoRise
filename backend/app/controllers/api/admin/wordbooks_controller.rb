@@ -1,10 +1,13 @@
 require "csv"
+
 class Api::Admin::WordbooksController < Api::Admin::BaseController
-  before_action :set_wordbook, only: [ :show, :update, :destroy ]
+  before_action :set_wordbook, only: [:show, :update, :destroy]
 
   # 親 単語帳の表示
   def index
-    wordbooks = Wordbook.where(user_id: nil, parent_id: nil).includes(:children).order(created_at: :desc)
+    wordbooks = Wordbook.where(user_id: nil, parent_id: nil)
+                        .includes(:children)
+                        .order(created_at: :desc)
 
     wordbooks = wordbooks.where(level: params[:level]) if params[:level].present?
     wordbooks = wordbooks.where(label: params[:label]) if params[:label].present?
@@ -14,11 +17,11 @@ class Api::Admin::WordbooksController < Api::Admin::BaseController
 
   # 子 単語帳の表示
   def children
-  parent = Wordbook
-    .where(user_id: nil, parent_id: nil)
-    .find_by!(uuid: params[:uuid])
+    parent = Wordbook
+      .where(user_id: nil, parent_id: nil)
+      .find_by!(uuid: params[:uuid])
 
-  render json: parent.children.order(:part)
+    render json: parent.children.order(:part)
   end
 
   def show
@@ -26,16 +29,30 @@ class Api::Admin::WordbooksController < Api::Admin::BaseController
   end
 
   def create
-    wordbook = Wordbook.new(wordbook_params)
+    wordbook = Wordbook.new
     wordbook.user = nil
 
-    # 親UUIDが来ていれば、親を探して parent_id に変換
-    if params[:wordbook][:parent_uuid].present?
-      parent = Wordbook.where(user_id: nil).find_by!(uuid: params[:wordbook][:parent_uuid])
+    # 親UUIDが来ていれば子単語帳
+    if params[:wordbook]&.[](:parent_uuid).present?
+      parent = Wordbook.where(user_id: nil, parent_id: nil).find_by!(uuid: params[:wordbook][:parent_uuid])
+
+      # 親と同じ値をコピー
+      wordbook.title       = parent.title
+      wordbook.description = parent.description
+      wordbook.level       = parent.level
+      wordbook.label       = parent.label
+      
+      # 子だけの値
       wordbook.parent_id = parent.id
+      wordbook.part = params[:wordbook][:part]
+
+      ok = wordbook.save
+    else
+      # 親単語帳
+      ok = wordbook.update(parent_wordbook_params)
     end
 
-    if wordbook.save
+    if ok
       render json: wordbook, status: :created
     else
       render json: { errors: wordbook.errors.full_messages }, status: :unprocessable_entity
@@ -43,7 +60,26 @@ class Api::Admin::WordbooksController < Api::Admin::BaseController
   end
 
   def update
-    if @wordbook.update(wordbook_params)
+    if @wordbook.parent_id.nil?
+      # 親単語帳を更新
+      ok = @wordbook.update(parent_wordbook_params)
+
+      if ok
+        # 子単語帳も同じ値に更新
+        @wordbook.children.update_all(
+          title:       @wordbook.title,
+          description: @wordbook.description,
+          level:       @wordbook.level,
+          label:       @wordbook.label,
+          updated_at:  Time.current
+        )
+      end
+    else
+      # 子単語帳
+      ok = @wordbook.update(child_wordbook_params)
+    end
+
+    if ok
       render json: @wordbook
     else
       render json: { errors: @wordbook.errors.full_messages }, status: :unprocessable_entity
@@ -52,7 +88,9 @@ class Api::Admin::WordbooksController < Api::Admin::BaseController
 
   def destroy
     @wordbook.destroy
-    head :no_content
+    render json: {
+      message: @wordbook.parent_id.nil? ? "親単語帳と子単語帳を削除しました" : "子単語帳を削除しました"
+    }
   end
 
   # CSVインポート
@@ -91,12 +129,19 @@ class Api::Admin::WordbooksController < Api::Admin::BaseController
     @wordbook = Wordbook.where(user_id: nil).find_by!(uuid: params[:uuid])
   end
 
-  def wordbook_params
+  # 親単語帳用
+  def parent_wordbook_params
     params.require(:wordbook).permit(
       :title,
       :description,
       :level,
-      :label,
+      :label
+    )
+  end
+
+  # 子単語帳用
+  def child_wordbook_params
+    params.require(:wordbook).permit(
       :part
     )
   end

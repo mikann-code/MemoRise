@@ -9,6 +9,7 @@ import { Button } from "@/src/components/common/ui/Button";
 import { WordCard } from "@/src/components/common/card/WordCard";
 import { usePostStudyRecord } from "@/src/hooks/usePostStudyRecord";
 import { useTaggedWords } from "@/src/hooks/useTaggedWords";
+import { useCompleteWordbook } from "@/src/hooks/useProgress";
 
 type PublicWord = {
   uuid: string;
@@ -33,6 +34,7 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
 
   const { taggedWords, addTaggedWord, removeTaggedWord } = useTaggedWords();
   const { mutate: postStudyRecord } = usePostStudyRecord();
+  const { mutate: completeWordbook } = useCompleteWordbook();
   const hasPostedRef = useRef(false);
 
   const total = words.length;
@@ -77,6 +79,10 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
         count: total,
         children_id: childrenId,
       });
+
+      if (childrenId) {
+        completeWordbook(Number(childrenId));
+      }
     }
   }, [currentIndex, total, childrenId, postStudyRecord, rate]);
 
@@ -203,12 +209,16 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
         />
 
         <div className={styles.actions}>
-          <Button onClick={handleToggleAnswer}  disabled={opened}>
+          <Button onClick={handleToggleAnswer} disabled={opened}>
             {opened ? "答えを表示中" : "答えを見る"}
           </Button>
 
           <div className={styles.judgeButtons}>
-            <JudgeButtons onCorrect={handleCorrect} onWrong={handleWrong} disabled={!opened}/>
+            <JudgeButtons
+              onCorrect={handleCorrect}
+              onWrong={handleWrong}
+              disabled={!opened}
+            />
           </div>
         </div>
       </div>

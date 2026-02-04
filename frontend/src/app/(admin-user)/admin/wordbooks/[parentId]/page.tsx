@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { SectionTitle } from "@/src/components/common/ui/SectionTitle";
-import { LuBookMarked, LuPlus } from "react-icons/lu";
+import { LuBookMarked, LuPlus, LuTrash2 } from "react-icons/lu";
 import styles from "./page.module.css";
 import Link from "next/link";
 
@@ -17,9 +17,15 @@ import { WordbookListLayout } from "@/src/components/layout/WordbookListLayout";
 export default function AdminWordbookDetailPage() {
   const { parentId } = useParams<{ parentId: string }>();
 
-  // 親一覧（表示用）＋ 作成用
-  const { wordbooks, loading, error, addWordbook, creating } =
-    useAdminWordbooks();
+  // 親一覧 + 子作成 + 子削除
+  const {
+    wordbooks,
+    loading,
+    error,
+    addChildWordbook,
+    creatingChild,
+    deleteChildWordbook, // ★ 子削除用を使う
+  } = useAdminWordbooks();
 
   // 子一覧
   const {
@@ -39,7 +45,7 @@ export default function AdminWordbookDetailPage() {
   if (error) return <p>単語帳の取得に失敗しました</p>;
   if (!wordbook) return <p>単語帳が見つかりません</p>;
 
-  // Part（子単語帳）作成
+  // Part 作成
   const handleCreatePart = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -49,18 +55,24 @@ export default function AdminWordbookDetailPage() {
     }
 
     try {
-      await addWordbook({
-        title: wordbook.title,
-        description: wordbook.description,
-        label: wordbook.label,
-        level: wordbook.level,
-        part: part,
-        parent_uuid: parentId, // ← 親uuidを指定
+      await addChildWordbook({
+        parent_uuid: parentId,
+        part,
       });
-
       setPart("");
     } catch {
       alert("Part の作成に失敗しました");
+    }
+  };
+
+  // Part 削除（子単語帳削除）
+  const handleDeletePart = async (uuid: string) => {
+    if (!confirm("この Part を削除しますか？")) return;
+
+    try {
+      await deleteChildWordbook(uuid); // ★ここを修正
+    } catch {
+      alert("削除に失敗しました");
     }
   };
 
@@ -71,13 +83,15 @@ export default function AdminWordbookDetailPage() {
           <SectionTitle
             icon={LuBookMarked}
             subTitle="Admin Wordbook"
-            title={wordbook.title}
+            title={`${wordbook.title} ${wordbook.level}`}
           />
 
-          <div className={styles.metaTags}>
-            <span className={styles.labelTag}>{wordbook.label}</span>
-            <span className={styles.levelTag}>{wordbook.level}</span>
-          </div>
+          <Link
+            href={`/admin/wordbooks/${parentId}/edit`}
+            className={styles.editButton}
+          >
+            編集
+          </Link>
         </div>
       }
       description={
@@ -100,8 +114,8 @@ export default function AdminWordbookDetailPage() {
             onChange={(e) => setPart(e.target.value)}
           />
 
-          <Button type="submit" disabled={creating}>
-            {creating ? "作成中..." : "Partを作成"}
+          <Button type="submit" disabled={creatingChild}>
+            {creatingChild ? "作成中..." : "Partを作成"}
           </Button>
         </form>
       }
@@ -123,6 +137,15 @@ export default function AdminWordbookDetailPage() {
                   <Link href={`/admin/wordbooks/${parentId}/${child.uuid}`}>
                     {child.part}
                   </Link>
+
+                  <button
+                    type="button"
+                    className={styles.deleteButton}
+                    onClick={() => handleDeletePart(child.uuid)}
+                  >
+                    <LuTrash2 />
+                    削除する
+                  </button>
                 </li>
               ))}
             </ul>

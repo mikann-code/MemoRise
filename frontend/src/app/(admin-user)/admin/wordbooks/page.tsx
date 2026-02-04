@@ -14,7 +14,7 @@ import { Button } from "@/src/components/common/ui/Button";
 import { WordbookListLayout } from "@/src/components/layout/WordbookListLayout";
 
 export default function AdminWordbooksPage() {
-  const { wordbooks, loading, error, addWordbook, creating } =
+  const { wordbooks, loading, error, addParentWordbook, creatingParent } =
     useAdminWordbooks();
 
   const [title, setTitle] = useState("");
@@ -27,7 +27,7 @@ export default function AdminWordbooksPage() {
     return WORDBOOK_LABELS.map((labelDef) => ({
       ...labelDef,
       items: wordbooks.filter(
-        (wb) => wb.label === labelDef.value && !wb.parent_uuid
+        (wb) => wb.label === labelDef.value && !wb.parent_uuid,
       ),
     }));
   }, [wordbooks]);
@@ -41,13 +41,11 @@ export default function AdminWordbooksPage() {
     }
 
     try {
-      await addWordbook({
+      await addParentWordbook({
         title,
         description,
         label,
         level,
-        part: null,
-        parent_uuid: null, // 親として作成
       });
 
       setTitle("");
@@ -121,8 +119,8 @@ export default function AdminWordbooksPage() {
             ))}
           </select>
 
-          <Button type="submit" disabled={creating}>
-            {creating ? "登録中..." : "登録する"}
+          <Button type="submit" disabled={creatingParent}>
+            {creatingParent ? "登録中..." : "登録する"}
           </Button>
         </form>
       }

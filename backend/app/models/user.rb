@@ -17,6 +17,10 @@ class User < ApplicationRecord
   has_many :user_word_tags, dependent: :destroy
   has_many :tagged_words, through: :user_word_tags, source: :word
 
+  # ユーザー進捗
+  has_many :user_wordbook_progresses, dependent: :destroy
+  has_many :progress_wordbooks, through: :user_wordbook_progresses, source: :wordbook
+
   # wordbooksの初期状態を作成
   # Userが初めて作成されたときに実行
   after_create :create_default_wordbook
