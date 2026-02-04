@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_03_134249) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_04_140039) do
   create_table "admin_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
@@ -82,6 +82,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_134249) do
     t.string "label"
     t.datetime "last_studied"
     t.string "level"
+    t.integer "order_index", default: 0, null: false
     t.bigint "parent_id"
     t.string "part"
     t.string "title", null: false
@@ -90,6 +91,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_134249) do
     t.string "uuid", null: false
     t.integer "words_count", default: 0, null: false
     t.index ["deleted_at"], name: "index_wordbooks_on_deleted_at"
+    t.index ["parent_id", "order_index"], name: "index_wordbooks_on_parent_id_and_order_index", unique: true
     t.index ["parent_id", "part"], name: "index_wordbooks_on_parent_id_and_part", unique: true
     t.index ["parent_id"], name: "index_wordbooks_on_parent_id"
     t.index ["user_id"], name: "index_wordbooks_on_user_id"

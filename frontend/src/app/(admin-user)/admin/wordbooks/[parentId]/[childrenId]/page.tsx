@@ -36,6 +36,7 @@ export default function AdminWordbookChildPage() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [csvFile, setCsvFile] = useState<File | null>(null);
+  const [isCsvSubmitting, setIsCsvSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,6 +52,7 @@ export default function AdminWordbookChildPage() {
 
   const handleCsvUpload = async (file: File | null) => {
     if (!file) return;
+    setIsCsvSubmitting(true);
 
     const text = await file.text();
     const lines = text.split("\n");
@@ -67,6 +69,9 @@ export default function AdminWordbookChildPage() {
         answer: a.trim(),
       });
     }
+    
+    setIsCsvSubmitting(false);
+    setCsvFile(null);
   };
 
   if (childrenLoading) return <p>読み込み中...</p>;
@@ -85,10 +90,12 @@ export default function AdminWordbookChildPage() {
           title={`${childWordbook.title} ${childWordbook.part}`}
         />
       }
-      description={<div>
-        <p>{childWordbook.description}</p>
-        <p>登録単語数：{words.length}語</p>
-      </div>}
+      description={
+        <div>
+          <p>{childWordbook.description}</p>
+          <p>登録単語数：{words.length}語</p>
+        </div>
+      }
       form={
         <form onSubmit={handleSubmit}>
           <FloatingInput
@@ -136,9 +143,9 @@ export default function AdminWordbookChildPage() {
               <ButtonSecondary
                 type="button"
                 onClick={() => handleCsvUpload(csvFile)}
-                disabled={!csvFile}
+                disabled={!csvFile || isCsvSubmitting}
               >
-                CSVを登録
+                {isCsvSubmitting ? "登録中..." : "CSVを登録"}
               </ButtonSecondary>
             </div>
           </div>

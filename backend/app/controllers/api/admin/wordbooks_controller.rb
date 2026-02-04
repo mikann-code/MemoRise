@@ -21,7 +21,7 @@ class Api::Admin::WordbooksController < Api::Admin::BaseController
       .where(user_id: nil, parent_id: nil)
       .find_by!(uuid: params[:uuid])
 
-    render json: parent.children.order(:part)
+    render json: parent.children.order(:order_index)
   end
 
   def show
@@ -45,6 +45,10 @@ class Api::Admin::WordbooksController < Api::Admin::BaseController
       # 子だけの値
       wordbook.parent_id = parent.id
       wordbook.part = params[:wordbook][:part]
+
+      # order_index を「同じ親の最大値 + 1」にする and 最初の子供単語帳作成時の初期値は1になる
+      max_order = Wordbook.where(parent_id: parent.id).maximum(:order_index) || 0
+      wordbook.order_index = max_order + 1
 
       ok = wordbook.save
     else
@@ -141,8 +145,6 @@ class Api::Admin::WordbooksController < Api::Admin::BaseController
 
   # 子単語帳用
   def child_wordbook_params
-    params.require(:wordbook).permit(
-      :part
-    )
+    params.require(:wordbook).permit(:part, :order_index)
   end
 end
