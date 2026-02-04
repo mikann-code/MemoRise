@@ -27,6 +27,7 @@
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
+  pointer-events: none;
 }
 
 .button:disabled:hover {

@@ -6,12 +6,14 @@ import {
   createParentWordbook,
   createChildWordbook,
   deleteParentWordbook,
-  deleteChildWordbook, // ★追加
+  deleteChildWordbook,
   updateParentWordbook,
+  updateChildWordbook,
   AdminWordbook,
   CreateParentWordbookParams,
   CreateChildWordbookParams,
   UpdateParentWordbookParams,
+  UpdateChildWordbookParams,
 } from "@/src/lib/adminWordbooks";
 
 export const useAdminWordbooks = () => {
@@ -60,6 +62,17 @@ export const useAdminWordbooks = () => {
     },
   });
 
+  // 子単語帳 更新
+  const updateChildMutation = useMutation({
+    mutationFn: (params: UpdateChildWordbookParams) =>
+      updateChildWordbook(params),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["adminWordbookChildren"],
+      });
+    },
+  });
+
   // 親単語帳 削除
   const deleteParentMutation = useMutation({
     mutationFn: (uuid: string) => deleteParentWordbook(uuid),
@@ -68,7 +81,7 @@ export const useAdminWordbooks = () => {
     },
   });
 
-  // 子単語帳 削除 ★追加
+  // 子単語帳 削除
   const deleteChildMutation = useMutation({
     mutationFn: (uuid: string) => deleteChildWordbook(uuid),
     onSuccess: (_, uuid) => {
@@ -97,7 +110,10 @@ export const useAdminWordbooks = () => {
     addChildWordbook: createChildMutation.mutateAsync,
     creatingChild: createChildMutation.isPending,
 
-    deleteChildWordbook: deleteChildMutation.mutateAsync, // ★追加
-    deletingChild: deleteChildMutation.isPending,         // ★追加
+    updateChildWordbook: updateChildMutation.mutateAsync,
+    updatingChild: updateChildMutation.isPending,
+
+    deleteChildWordbook: deleteChildMutation.mutateAsync,
+    deletingChild: deleteChildMutation.isPending,
   };
 };

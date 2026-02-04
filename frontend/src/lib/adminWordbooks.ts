@@ -9,6 +9,7 @@ export type AdminWordbook = {
   part: string | null;
   published: boolean;
   parent_uuid: string | null;
+  order_index: number;
 };
 
 /* =========================
@@ -113,6 +114,7 @@ export const createChildWordbook = async (
 export type UpdateChildWordbookParams = {
   uuid: string;
   part: string;
+  order_index: number; 
 };
 
 export const updateChildWordbook = async (
