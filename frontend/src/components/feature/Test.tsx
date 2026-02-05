@@ -34,27 +34,18 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
 
   const { taggedWords, addTaggedWord, removeTaggedWord } = useTaggedWords();
   const { mutate: postStudyRecord } = usePostStudyRecord();
-  const { mutate: completeWordbook } = useCompleteWordbook();
+  const { mutate: completeWordbook } = useCompleteWordbook(parentId);
   const hasPostedRef = useRef(false);
 
   const total = words.length;
-
-  // 表示用
   const currentNumber = currentIndex + 1;
-
-  // すでに答えた数
   const answeredCount = currentIndex;
-
-  // 正答率（答えた分だけ）
   const rate =
     answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
 
   const currentWord = words[currentIndex];
-
-  // この単語がタグ済みか？
   const isTagged = taggedWords.some((tw) => tw.word_uuid === currentWord?.uuid);
 
-  // タグボタン用
   const handleTagToggle = async () => {
     if (!currentWord) return;
 
@@ -80,11 +71,9 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
         children_id: childrenId,
       });
 
-      if (childrenId) {
-        completeWordbook(Number(childrenId));
-      }
+      completeWordbook(childrenId);
     }
-  }, [currentIndex, total, childrenId, postStudyRecord, rate]);
+  }, [currentIndex, total, childrenId, postStudyRecord, rate, completeWordbook]);
 
   const next = () => {
     if (currentIndex < total - 1) {
@@ -101,7 +90,6 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
   };
 
   const handleWrong = async () => {
-    // 不正解時：タグ登録（未登録なら）
     if (!isTagged) {
       await addTaggedWord(currentWord.uuid);
     }
@@ -114,7 +102,6 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
     setOpened((prev) => !prev);
   };
 
-  // ===== 終了画面 =====
   if (currentIndex >= total) {
     return (
       <>
@@ -142,7 +129,9 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
 
           <div className={styles.wrongList}>
             {wrongQuestions.map((w) => {
-              const tagged = taggedWords.some((tw) => tw.word_uuid === w.uuid);
+              const tagged = taggedWords.some(
+                (tw) => tw.word_uuid === w.uuid
+              );
 
               const handleResultTagToggle = async () => {
                 if (tagged) {
@@ -173,7 +162,6 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
     );
   }
 
-  // ===== テスト中画面 =====
   return (
     <>
       <SectionTitle

@@ -2,27 +2,31 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   fetchWordbookProgress,
   completeWordbook,
-  WordbookProgress,
+  WordbookPartProgress,
 } from "@/src/lib/progress";
 
-// 取得用
-export const useProgress = () => {
-  return useQuery<WordbookProgress[], Error>({
-    queryKey: ["wordbookProgress"],
-    queryFn: fetchWordbookProgress,
+// 取得用（親単語帳単位・uuid）
+export const useProgress = (parentUuid: string) => {
+  return useQuery<WordbookPartProgress[], Error>({
+    queryKey: ["wordbookProgress", parentUuid],
+    queryFn: () => fetchWordbookProgress(parentUuid),
     staleTime: 1000 * 60,
   });
 };
 
-// 完了用（POST / PATCH）
-export const useCompleteWordbook = () => {
+// 完了用（uuid）
+export const useCompleteWordbook = (parentUuid: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (wordbookId: number) => completeWordbook(wordbookId),
+    mutationFn: (wordbookUuid: string) =>
+      completeWordbook(wordbookUuid),
+
     onSuccess: () => {
-      // 進捗を再取得
-      queryClient.invalidateQueries({ queryKey: ["wordbookProgress"] });
+      // この親単語帳の進捗だけ再取得
+      queryClient.invalidateQueries({
+        queryKey: ["wordbookProgress", parentUuid],
+      });
     },
   });
 };
