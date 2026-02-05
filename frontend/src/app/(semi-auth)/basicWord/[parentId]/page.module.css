@@ -1,3 +1,8 @@
+.description {
+  color: #ccc;
+  margin: 10px 0;
+}
+
 .viewDescription {
   font-size: 18px;
   font-family: var(--font-primary);
@@ -24,18 +29,23 @@
   justify-content: flex-start;
   gap: 10px;
   text-decoration: none;
+  width: 100%;
 }
 
 /* 縦ライン */
 .viewOption + .viewOption::after {
   content: "";
   position: absolute;
-  top: -11px;
+  top: -10px;
   left: 20px;
   transform: translateX(-50%);
-  height: 12px;
+  height: 10px;
   width: 2px;
   background-color: var(--color-border);
+}
+
+.viewOption.lineActive + .viewOption::after {
+  background-color: var(--color-primary);
 }
 
 /* 共通：番号 */
@@ -45,6 +55,7 @@
   justify-content: center;
   width: 40px;
   height: 40px;
+  min-width: 40px;
   border-radius: 50%;
   font-weight: bold;
   background-color: #fff;
@@ -55,7 +66,6 @@
   color: var(--color-primary);
 }
 
-/* ★ 完了済み（completed === true） */
 .completedNum {
   background-color: var(--color-primary);
   border: 2px solid var(--color-primary);
@@ -64,8 +74,16 @@
 
 /* タイトル */
 .viewOptionTitle {
-  color: #aaa;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 20px;
+  color: #bbb;
+}
+
+.lockIcon {
+  font-size: 16px;
+  color: #bbb;
 }
 
 /* ★ 完了済みタイトルを少し強調 */
@@ -75,12 +93,13 @@
 }
 
 /* unlocked（リンク状態） */
-.viewOptionLink:hover .viewOptionNum {
-  border-color: var(--color-primary);
-}
-
 .viewOptionLink:hover .viewOptionTitle {
   color: var(--color-font-primary);
+  transition: all .2s ease;
+}
+
+.viewOptionLink.locked:hover  .viewOptionTitle{
+  color: #bbb;
 }
 
 /* ロック状態 */
@@ -88,14 +107,26 @@
   background-color: #f5f5f5;
   border-color: #ddd;
   color: #bbb;
-}
-
-.locked .viewOptionTitle {
-  color: #bbb;
+  opacity: 0.7;
 }
 
 /* 一覧アイコン */
 .viewListIcon {
   margin-left: auto;
   color: var(--color-primary);
+}
+
+.viewListIcon {
+  font-size: 18px;
+  transition: color 0.2s ease;
+}
+
+/* 完了済み */
+.listCompleted {
+  color: var(--color-primary);
+}
+
+/* ロック中 */
+.listLocked {
+  color: #ccc;
 }

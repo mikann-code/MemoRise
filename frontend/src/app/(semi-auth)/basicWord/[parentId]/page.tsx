@@ -8,7 +8,7 @@ import styles from "./page.module.css";
 import { HiOutlineClipboardCheck } from "react-icons/hi";
 import { FaListUl } from "react-icons/fa6";
 import { Button } from "@/src/components/common/ui/Button";
-
+import { HiLockClosed } from "react-icons/hi";
 import { usePublicWordbookChildren } from "@/src/hooks/usePublicWordbookChildren";
 import { useProgress } from "@/src/hooks/useProgress";
 
@@ -61,6 +61,11 @@ export default function BasicWordDetailPage() {
         subTitle="Words Overview"
         title="公式単語集"
       />
+      <p className={styles.description}>
+        各 Part の単語リストはいつでも確認できます。
+        <br />
+        テストを完了すると、次の Part が順番に解放されていきます。
+      </p>
 
       {firstUnlocked && (
         <Button href={`/basicWord/${parentId}/${firstUnlocked.uuid}/test`}>
@@ -70,7 +75,12 @@ export default function BasicWordDetailPage() {
 
       <div className={styles.viewLevelSelection}>
         {parts.map((part, index) => (
-          <div key={part.uuid} className={styles.viewOption}>
+          <div
+            key={part.uuid}
+            className={`${styles.viewOption} ${
+              part.completed ? styles.lineActive : ""
+            }`}
+          >
             {part.unlocked ? (
               <Link
                 href={`/basicWord/${parentId}/${part.uuid}/test`}
@@ -90,15 +100,26 @@ export default function BasicWordDetailPage() {
                 <h3 className={styles.viewOptionTitle}>{part.part}</h3>
               </Link>
             ) : (
-              <div className={styles.locked}>
+              <div className={`${styles.viewOptionLink} ${styles.locked}`}>
                 <span className={styles.viewOptionNum}>{index + 1}</span>
-                <h3 className={styles.viewOptionTitle}>🔒 {part.part}</h3>
+                <h3 className={styles.viewOptionTitle}>
+                  <HiLockClosed className={styles.lockIcon} />
+                  {part.part}
+                </h3>
               </div>
             )}
 
             {/* 一覧表示は常にOK */}
             <Link href={`/basicWord/${parentId}/${part.uuid}/list`}>
-              <FaListUl className={styles.viewListIcon} />
+              <FaListUl
+                className={`${styles.viewListIcon} ${
+                  part.completed
+                    ? styles.listCompleted
+                    : part.unlocked
+                      ? styles.listUnlocked
+                      : styles.listLocked
+                }`}
+              />
             </Link>
           </div>
         ))}
