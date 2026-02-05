@@ -12,7 +12,7 @@ class Api::V1::WordbooksController < ApplicationController
   def create
     # ユーザーに紐づく単語帳は5個まで（初期）
     if current_user.wordbooks.active.count >= 5
-    render json: { error: "単語帳は5個まで作成できます" }, status: :unprocessable_entity
+      render json: { error: "単語帳は5個まで作成できます" }, status: :unprocessable_entity
     return
     end
 

@@ -5,6 +5,7 @@ export type StudyDetail = {
   title: string;
   rate: number;
   count: number;
+  correct_count: number;  
   children_id: string;
 };
 
@@ -18,10 +19,9 @@ export type StudyRecord = {
 
 export type PostStudyRecordParams = {
   study_date: string;
-  total_count: number;
-  title: string;
   rate: number;
   count: number;
+  correct_count: number;  
   children_id: string;
 };
 
@@ -90,10 +90,9 @@ export async function postStudyRecord(params: PostStudyRecordParams) {
       },
       body: JSON.stringify({
         study_date: params.study_date,
-        total_count: params.total_count,
-        title: params.title,
         rate: params.rate,
         count: params.count,
+        correct_count: params.correct_count,
         children_id: params.children_id,
       }),
     }

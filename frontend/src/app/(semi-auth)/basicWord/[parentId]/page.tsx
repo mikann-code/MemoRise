@@ -54,6 +54,11 @@ export default function BasicWordDetailPage() {
 
   const firstUnlocked = parts.find((p) => p.unlocked);
 
+  const completedCount = parts.filter((p) => p.completed).length;
+  const totalCount = parts.length;
+  const progressRatio =
+    totalCount === 0 ? 0 : (completedCount / totalCount) * 100;
+
   return (
     <>
       <SectionTitle
@@ -72,6 +77,20 @@ export default function BasicWordDetailPage() {
           今すぐはじめる
         </Button>
       )}
+
+      <div className={styles.partProgress}>
+        <p className={styles.partProgressText}>
+          進捗：{completedCount} / {totalCount} Part 完了
+        </p>
+
+        <div className={styles.partProgressBar}>
+          <progress
+            className={styles.progressBar}
+            value={completedCount}
+            max={totalCount}
+          />
+        </div>
+      </div>
 
       <div className={styles.viewLevelSelection}>
         {parts.map((part, index) => (
@@ -107,7 +126,11 @@ export default function BasicWordDetailPage() {
                   </span>
                   <HiLockClosed className={styles.lockIcon} />
                 </div>
-                <h3 className={styles.viewOptionTitle}>{part.part}</h3>
+                <div className={styles.viewOptionTitle}>
+                  <p className={styles.viewOptionNonTitle}>
+                    このPartはまだ解放されていません
+                  </p>
+                </div>
               </div>
             )}
 

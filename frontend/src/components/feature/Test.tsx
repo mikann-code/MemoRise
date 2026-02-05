@@ -61,19 +61,27 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
       hasPostedRef.current = true;
 
       const today = new Date().toISOString().slice(0, 10);
+      const finalRate =
+        total > 0 ? Math.round((correctCount / total) * 100) : 0;
 
       postStudyRecord({
         study_date: today,
-        total_count: total,
-        title: `basicWord ${childrenId}`,
-        rate,
+        rate: finalRate,
         count: total,
+        correct_count: correctCount,
         children_id: childrenId,
       });
 
       completeWordbook(childrenId);
     }
-  }, [currentIndex, total, childrenId, postStudyRecord, rate, completeWordbook]);
+  }, [
+    currentIndex,
+    total,
+    correctCount,
+    childrenId,
+    postStudyRecord,
+    completeWordbook,
+  ]);
 
   const next = () => {
     if (currentIndex < total - 1) {
@@ -129,9 +137,7 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
 
           <div className={styles.wrongList}>
             {wrongQuestions.map((w) => {
-              const tagged = taggedWords.some(
-                (tw) => tw.word_uuid === w.uuid
-              );
+              const tagged = taggedWords.some((tw) => tw.word_uuid === w.uuid);
 
               const handleResultTagToggle = async () => {
                 if (tagged) {

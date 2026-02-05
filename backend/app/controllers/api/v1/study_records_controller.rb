@@ -65,8 +65,9 @@ class Api::V1::StudyRecordsController < ApplicationController
       # 学習記録の追加
       record.study_details.create!(
         title: full_title,                # 例: "英検2級 part1"
-        rate: params[:rate],              # 例: 100
-        count: params[:count],            # 例: 20
+        rate: params[:rate],            
+        count: params[:count],           
+        correct_count: params[:correct_count].to_i,
         children_id: params[:children_id]
       )
 

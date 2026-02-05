@@ -7,14 +7,93 @@
 }
 
 .card:hover {
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
 }
 
-.detailLine{
+.header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap:12px;
+  margin-bottom: 4px;
+  padding-left: 8px;
 }
 
+.dateBadge {
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 14px;
+  font-weight: 500;
+  color: #e5e7eb;
+  padding:2px 12px;
+  border-radius:12px;
+}
 
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-left: 8px;
+}
+
+.count {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.countNumber {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.countLabel {
+  font-size: 12px;
+  color: #999;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detailLine {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 12px;
+  border-left: 2px solid rgba(255, 165, 0, 0.6);
+}
+
+.detailTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e5e7eb;
+  line-height: 1.4;
+}
+
+.detailStats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.correct {
+  color: #9ca3af;
+}
+
+.rateGood {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.rateNormal {
+  color: #e5e7eb;
+}
+
+.memo {
+  font-size: 12px;
+  color: #9ca3af;
+  padding-left: 12px;
+  border-left: 2px solid rgba(255, 165, 0, 0.6);
+}
