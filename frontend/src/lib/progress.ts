@@ -1,38 +1,39 @@
 import { authFetch } from "@/src/lib/auth";
 
-export type WordbookProgress = {
-  wordbook_id: number;
+export type WordbookPartProgress = {
+  wordbook_uuid: string;
+  part: string;
+  unlocked: boolean;
   completed: boolean;
 };
 
 // GET
-export const fetchWordbookProgress = async (): Promise<WordbookProgress[]> => {
+export const fetchWordbookProgress = async (
+  parentId: string
+): Promise<WordbookPartProgress[]> => {
   const res = await authFetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user_wordbook_progresses`,
-    {
-      cache: "no-store",
-    }
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user_wordbook_progresses?parent_id=${encodeURIComponent(
+      parentId
+    )}`,
+    { cache: "no-store" }
   );
 
   if (!res.ok) {
     throw new Error("進捗の取得に失敗しました");
   }
 
-  const data = await res.json();
-  return data;
+  return res.json();
 };
 
-// post (completed == true)
-export const completeWordbook = async (wordbookId: string | number) => {
+// POST（完了）
+export const completeWordbook = async (wordbookUuid: string) => {
   const res = await authFetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user_wordbook_progresses/complete`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        wordbook_id: wordbookId,
+        wordbook_uuid: wordbookUuid,
       }),
     }
   );
@@ -41,6 +42,5 @@ export const completeWordbook = async (wordbookId: string | number) => {
     throw new Error("進捗の更新に失敗しました");
   }
 
-  const data = await res.json();
-  return data;
+  return res.json();
 };
