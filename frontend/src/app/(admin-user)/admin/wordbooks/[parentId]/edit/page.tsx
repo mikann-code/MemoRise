@@ -9,16 +9,13 @@ import { FormLayout } from "@/src/components/layout/FormLayout";
 import { LuBookMarked } from "react-icons/lu";
 import { useAdminWordbooks } from "@/src/hooks/useAdminWordbooks";
 import styles from "./page.module.css";
+import { WORDBOOK_LABELS } from "@/src/constants/wordbookLabels";
 
 export default function AdminWordbookEditPage() {
   const { parentId } = useParams<{ parentId: string }>();
   const router = useRouter();
 
-  const {
-    wordbooks,
-    loading,
-    error,
-  } = useAdminWordbooks();
+  const { wordbooks, loading, error } = useAdminWordbooks();
 
   const wordbook = wordbooks.find((wb) => wb.uuid === parentId);
 
@@ -45,11 +42,8 @@ type Props = {
 
 function EditForm({ wordbook }: Props) {
   const router = useRouter();
-  const {
-    updateParentWordbook,
-    updatingParent,
-    deleteParentWordbook,
-  } = useAdminWordbooks();
+  const { updateParentWordbook, updatingParent, deleteParentWordbook } =
+    useAdminWordbooks();
 
   const [title, setTitle] = useState(wordbook.title);
   const [description, setDescription] = useState(wordbook.description ?? "");
@@ -75,7 +69,9 @@ function EditForm({ wordbook }: Props) {
   };
 
   const handleDelete = async () => {
-    const ok = confirm("この親単語帳と子単語帳をすべて削除します。よろしいですか？");
+    const ok = confirm(
+      "この親単語帳と子単語帳をすべて削除します。よろしいですか？",
+    );
     if (!ok) return;
 
     try {
@@ -113,18 +109,34 @@ function EditForm({ wordbook }: Props) {
           />
 
           <FloatingInput
-            id="label"
-            label="ラベル"
-            value={label}
-            onChange={(e) => setLabel(e.target.value)}
-          />
-
-          <FloatingInput
             id="level"
             label="レベル"
             value={level}
             onChange={(e) => setLevel(e.target.value)}
           />
+
+          <label
+            id="wordbook-label-label"
+            htmlFor="wordbook-label"
+            className={styles.selectLabel}
+          >
+            ラベルを選択してください
+          </label>
+
+          <select
+            id="wordbook-label"
+            aria-labelledby="wordbook-label-label"
+            value={label}
+            onChange={(e) => setLabel(e.target.value)}
+            className={styles.select}
+          >
+            <option value="">ラベルを選択</option>
+            {WORDBOOK_LABELS.map((l) => (
+              <option key={l.value} value={l.value}>
+                {l.label}
+              </option>
+            ))}
+          </select>
 
           <Button type="submit" disabled={updatingParent}>
             {updatingParent ? "更新中..." : "更新する"}

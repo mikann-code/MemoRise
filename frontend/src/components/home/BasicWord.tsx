@@ -24,8 +24,8 @@ export const BasicWord = () => {
           subTitle="Vocabulary & Practice"
           title="公式単語帳"
         />
-        <Link href="/wordbooks/review" className={styles.archiveButton}>
-           <FaListUl /> 一覧を見る
+        <Link href="/basicWordList" className={styles.archiveButton}>
+          <FaListUl /> 一覧を見る
         </Link>
       </div>
 
@@ -39,6 +39,7 @@ export const BasicWord = () => {
             <AiOutlineBook className={styles.basicWordsBox} />
 
             <p className={styles.basicWordsBoxLabel}>{item.title}</p>
+            <p className={styles.basicWordsBoxLevel}>{item.level}</p>
           </Link>
         ))}
       </div>
