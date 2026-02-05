@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_04_140039) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_05_123553) do
   create_table "admin_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
@@ -20,6 +20,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_04_140039) do
 
   create_table "study_details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "children_id"
+    t.integer "correct_count", default: 0, null: false
     t.integer "count"
     t.datetime "created_at", null: false
     t.integer "rate"

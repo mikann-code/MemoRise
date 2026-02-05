@@ -10,28 +10,55 @@ export const DailyRecordCard = ({ record }: { record: StudyRecord }) => {
 
   return (
     <div className={styles.card}>
+      {/* header */}
       <div className={styles.header}>
-        <span className={styles.date}>
-          {month}/{day}
-        </span>
+        <div className={styles.dateBadge}>
+          <span className={styles.month}>{month}月</span>
+          <span className={styles.day}>{day}日</span>
+        </div>
       </div>
 
       <div className={styles.body}>
-        <p className={styles.count}>学習単語数：{record.study_count}</p>
+        {/* 学習量（主役） */}
+        <div className={styles.count}>
+          <span className={styles.countNumber}>{record.study_count}</span>
+          <span className={styles.countLabel}>words</span>
+        </div>
 
-        {/* ★ detail 表示 */}
-        {record.study_details && record.study_details.length > 0 && (
+        {/* 詳細ログ */}
+        {record.study_details.length > 0 && (
           <div className={styles.details}>
             {record.study_details.map((detail) => (
               <div key={detail.id} className={styles.detailLine}>
-                <p>{detail.title} </p>
-                <p>{detail.rate}%</p>
+                {/* 問題集名（主役級） */}
+                <div className={styles.detailTitle}>
+                  {detail.title}
+                </div>
+
+                {/* 成績 */}
+                <div className={styles.detailStats}>
+                  <span className={styles.correct}>
+                    {detail.correct_count}/{detail.count}
+                  </span>
+
+                  <span
+                    className={
+                      detail.rate >= 80
+                        ? styles.rateGood
+                        : styles.rateNormal
+                    }
+                  >
+                    {detail.rate}%
+                  </span>
+                </div>
               </div>
             ))}
           </div>
         )}
 
-        {record.memo && <p className={styles.memo}>{record.memo}</p>}
+        {record.memo && (
+          <p className={styles.memo}>{record.memo}</p>
+        )}
       </div>
     </div>
   );
