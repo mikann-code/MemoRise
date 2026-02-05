@@ -24,7 +24,7 @@ export const BasicWord = () => {
           subTitle="Vocabulary & Practice"
           title="公式単語帳"
         />
-        <Link href="/wordbooks/review" className={styles.archiveButton}>
+        <Link href="/basicWordList" className={styles.archiveButton}>
           <FaListUl /> 一覧を見る
         </Link>
       </div>

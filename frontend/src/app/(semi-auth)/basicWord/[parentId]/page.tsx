@@ -101,26 +101,30 @@ export default function BasicWordDetailPage() {
               </Link>
             ) : (
               <div className={`${styles.viewOptionLink} ${styles.locked}`}>
-                <span className={styles.viewOptionNum}>{index + 1}</span>
-                <h3 className={styles.viewOptionTitle}>
+                <div className={styles.viewOptionNum}>
+                  <span className={styles.viewOptionLockedNum}>
+                    {index + 1}
+                  </span>
                   <HiLockClosed className={styles.lockIcon} />
-                  {part.part}
-                </h3>
+                </div>
+                <h3 className={styles.viewOptionTitle}>{part.part}</h3>
               </div>
             )}
 
             {/* 一覧表示は常にOK */}
-            <Link href={`/basicWord/${parentId}/${part.uuid}/list`}>
-              <FaListUl
-                className={`${styles.viewListIcon} ${
-                  part.completed
-                    ? styles.listCompleted
-                    : part.unlocked
-                      ? styles.listUnlocked
-                      : styles.listLocked
-                }`}
-              />
-            </Link>
+            {part.unlocked || part.completed ? (
+              <Link href={`/basicWord/${parentId}/${part.uuid}/list`}>
+                <FaListUl
+                  className={`${styles.viewListIcon} ${
+                    part.completed ? styles.listCompleted : styles.listUnlocked
+                  }`}
+                />
+              </Link>
+            ) : (
+              <span className={`${styles.viewListIcon} ${styles.listLocked}`}>
+                <FaListUl />
+              </span>
+            )}
           </div>
         ))}
       </div>
