@@ -10,6 +10,7 @@ export const signup = async (params: SignupParams) => {
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`,
     {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ user: params }),
     }

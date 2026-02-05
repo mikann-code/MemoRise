@@ -16,6 +16,7 @@ export const authFetch = async (
 
   const res = await fetch(input, {
     ...init,
+    credentials: "include",
     headers: {
       ...(init.headers || {}),
       Authorization: `Bearer ${token}`,
@@ -43,6 +44,7 @@ export const adminAuthFetch = async (
 
   const res = await fetch(input, {
     ...init,
+    credentials: "include",
     headers: {
       ...(init.headers || {}),
       Authorization: `Bearer ${token}`,

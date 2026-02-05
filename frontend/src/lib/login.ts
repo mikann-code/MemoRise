@@ -13,6 +13,7 @@ export const login = async (
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/login`,
     {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
