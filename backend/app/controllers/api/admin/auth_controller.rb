@@ -2,7 +2,7 @@ class Api::Admin::AuthController < ApplicationController
   # admin/me 用
   before_action :authenticate_admin!, only: [:me]
 
-  # AdminUser をログインさせる
+  # AdminUser のログイン
   def login
     admin = AdminUser.find_by(email: params[:email])
 
