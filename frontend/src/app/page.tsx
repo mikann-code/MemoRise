@@ -6,6 +6,8 @@ import { CraftWord } from "../components/home/CraftWord";
 import { StreakCard } from "../components/common/card/WeeklyStreakCard";
 
 export default function Home() {
+  console.log("apiのURL");
+  console.log(process.env.NEXT_PUBLIC_API_URL);
   return (
     <>
       <DailyWord />
