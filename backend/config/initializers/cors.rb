@@ -1,9 +1,11 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-     origins(
+    allowed_origins = [
       ENV["FRONTEND_URL"],
       ENV["LOCAL_FRONTEND_URL"]
-    ).compact
+    ].compact
+    origins(*allowed_origins)
+    
     resource "*",
       headers: :any,
       methods: [ :get, :post, :put, :patch, :delete, :options, :head ],
