@@ -10,9 +10,8 @@ import { IoPerson } from "react-icons/io5";
 import { FormLayout } from "@/src/components/layout/FormLayout";
 import styles from "./page.module.css";
 import { useSignup } from "@/src/hooks/useSignup";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 
-/* ===== 型 ===== */
 type ApiErrorResponse = {
   errors: {
     name?: string[];
@@ -22,7 +21,6 @@ type ApiErrorResponse = {
   };
 };
 
-/* ===== 定数 ===== */
 const attributeLabels: Record<string, string> = {
   name: "名前",
   email: "メールアドレス",
@@ -36,7 +34,6 @@ const formatError = (field: string, msg?: string) => {
   return `${label}${msg}`;
 };
 
-/* ===== anyなし型ガード ===== */
 const isApiErrorResponse = (err: unknown): err is ApiErrorResponse => {
   if (typeof err !== "object" || err === null) return false;
 
@@ -51,7 +48,7 @@ const isApiErrorResponse = (err: unknown): err is ApiErrorResponse => {
 
 export default function SignupPage() {
   const signupMutation = useSignup();
-
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -86,6 +83,7 @@ export default function SignupPage() {
       {
         onSuccess: () => {
           setMessage("会員登録が成功しました！");
+          router.push("/login");
         },
         onError: (err: unknown) => {
           if (isApiErrorResponse(err)) {
