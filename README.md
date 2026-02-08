@@ -70,6 +70,11 @@
 ---
 
 ### 管理者用機能 
+※ 動作確認にはadminアカウントでのログインが必要です。
+email : sound_of_life1120@icloud.com
+password : password1231
+URL : https://memorise-opal.vercel.app/admin-login
+
 - 公式単語帳の作成・管理
 - ユーザー一覧の閲覧
 
