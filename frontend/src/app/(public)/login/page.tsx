@@ -17,9 +17,50 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login.mutate({ email, password });
+
+    setErrors({
+      email: "",
+      password: "",
+    });
+
+    let hasError = false;
+
+    if (!email) {
+      setErrors((prev) => ({
+        ...prev,
+        email: "メールアドレスを入力してください",
+      }));
+      hasError = true;
+    }
+
+    if (!password) {
+      setErrors((prev) => ({
+        ...prev,
+        password: "パスワードを入力してください",
+      }));
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    login.mutate(
+      { email, password },
+      {
+        onError: (err: Error) => {
+          setErrors({
+            email: "",
+            password: err.message,
+          });
+        },
+      }
+    );
   };
 
   return (
@@ -38,12 +79,6 @@ export default function LoginPage() {
       }
       form={
         <>
-          {login.isError && (
-            <div className={styles.errorMessage}>
-              {(login.error as Error).message}
-            </div>
-          )}
-
           <form onSubmit={handleSubmit} autoComplete="off">
             <FloatingInput
               id="email"
@@ -52,6 +87,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               icon={<MdMailOutline />}
+              error={errors.email}
             />
 
             <FloatingInput
@@ -61,6 +97,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               icon={<MdLockOutline />}
+              error={errors.password}
             />
 
             <Button type="submit" disabled={login.isPending}>
@@ -68,7 +105,7 @@ export default function LoginPage() {
             </Button>
           </form>
 
-           <div className={styles.signupLinkWrapper}>
+          <div className={styles.signupLinkWrapper}>
             <Link href="/signup" className={styles.signupLink}>
               新規登録はこちら
             </Link>

@@ -162,7 +162,9 @@ export default function TestBody({ parentId, childrenId, words }: Props) {
             })}
           </div>
 
-          <Button href="./list">一覧に戻る</Button>
+          <div className={styles.buttonWrapper}>
+            <Button href="./list">一覧に戻る</Button>
+          </div>
         </div>
       </>
     );

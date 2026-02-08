@@ -28,8 +28,11 @@ export default function EditWordbookPage({ params }: Props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [label, setLabel] = useState("");
-  const [formError, setFormError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
+
+  const [errors, setErrors] = useState({
+    title: "",
+  });
 
   useEffect(() => {
     if (wordbook) {
@@ -44,10 +47,11 @@ export default function EditWordbookPage({ params }: Props) {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormError(null);
+
+    setErrors({ title: "" });
 
     if (!title.trim()) {
-      setFormError("タイトルを入力してください");
+      setErrors({ title: "タイトルを入力してください" });
       return;
     }
 
@@ -64,7 +68,9 @@ export default function EditWordbookPage({ params }: Props) {
       alert("更新しました");
       router.push(`/wordbooks/${wordbookUuid}/list`);
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : "更新に失敗しました");
+      const message =
+        err instanceof Error ? err.message : "更新に失敗しました";
+      setErrors({ title: message });
     } finally {
       setIsPending(false);
     }
@@ -72,7 +78,7 @@ export default function EditWordbookPage({ params }: Props) {
 
   const handleDelete = async () => {
     const ok = confirm(
-      "この単語帳を削除しますか？\n中の単語もすべて削除されます。",
+      "この単語帳を削除しますか？\n中の単語もすべて削除されます。"
     );
     if (!ok) return;
 
@@ -93,10 +99,6 @@ export default function EditWordbookPage({ params }: Props) {
         description="タイトル・説明・ラベルを変更できます"
         form={
           <form onSubmit={onSubmit}>
-            {formError && (
-              <p style={{ color: "#ff6b6b", fontSize: 12 }}>{formError}</p>
-            )}
-
             <FloatingInput
               id="title"
               type="text"
@@ -105,6 +107,7 @@ export default function EditWordbookPage({ params }: Props) {
               onChange={(e) => setTitle(e.target.value)}
               disabled={isPending}
               icon={<TbBook2 />}
+              error={errors.title}
             />
 
             <FloatingInput
@@ -126,6 +129,7 @@ export default function EditWordbookPage({ params }: Props) {
               disabled={isPending}
               icon={<TbTag />}
             />
+
             <Button type="submit" disabled={isPending}>
               {isPending ? "更新中..." : "保存"}
             </Button>

@@ -6,7 +6,6 @@ import { fetchWords, createWord, deleteWord ,Word } from "@/src/lib/words";
 export const useWords = (wordbookUuid: string) => {
   const queryClient = useQueryClient();
 
-  // 🔽 単語一覧取得
   const {
     data: words = [],
     isLoading,
@@ -17,7 +16,6 @@ export const useWords = (wordbookUuid: string) => {
     enabled: !!wordbookUuid,
   });
 
-  // 🔽 単語登録（pos なし）
   const createWordMutation = useMutation({
     mutationFn: (params: {
       question: string;
@@ -25,7 +23,6 @@ export const useWords = (wordbookUuid: string) => {
     }) => createWord(wordbookUuid, params),
 
     onSuccess: () => {
-      // 一覧を再取得
       queryClient.invalidateQueries({
         queryKey: ["words", wordbookUuid],
       });

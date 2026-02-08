@@ -30,38 +30,56 @@
   box-shadow: 0 1px 0 color-mix(in srgb, #3b82f6 60%, black);
 }
 
-.reviewButton svg{
-  margin-right:6px;
+.reviewButton svg {
+  margin-right: 6px;
 }
 
-.dairyWordContainer{
+.dairyWordContainer {
   position: relative;
-  border:2px solid var(--color-border);
-  border-radius:12px;
-  padding:30px 20px;
-  margin-top:20px;
-}
-
-.dairyWord{
-  font-size:30px;
-  text-align: center;
-}
-
-.dairyPronunciation{
-  position:absolute;
-  display:flex;
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  margin-top: 20px;
+  display: flex;
   align-items: center;
-  gap:8px;
-  bottom:4px;
-  right:4px;
 }
 
-.dairyPronunciationIcon{
-  width:28px;
-  height:28px;
+.dairyWord,
+.dairyAnswer {
+  font-weight: 500;
+  font-family: var(--font-primary);
+  padding: 20px 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.dairyPronunciationIcon:hover{
-  color:var(--color-primary);
+.dairyWord {
+  font-size: 30px;
+  text-align: center;
+  flex: 1;
 }
 
+.dairyAnswer {
+  flex: 1;
+  font-size: 20px;
+  border-left: 1px dashed var(--color-border);
+}
+
+.dairyPronunciation {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  bottom: 4px;
+  right: 4px;
+}
+
+.dairyPronunciationIcon {
+  width: 28px;
+  height: 28px;
+}
+
+.dairyPronunciationIcon:hover {
+  color: var(--color-primary);
+}

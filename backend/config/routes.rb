@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      get "today_word", to: "today_words#show"
       # ユーザー追加
       resources :users, only: [ :create ]
 

@@ -93,5 +93,11 @@
   border-collapse: collapse;
 }
 
+.calendar :global(.fc-toolbar-title) {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+
 
 
