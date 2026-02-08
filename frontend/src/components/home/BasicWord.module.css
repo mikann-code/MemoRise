@@ -62,7 +62,7 @@
   flex-direction: column;
   gap: 4px;
 
-  flex-shrink: 0; 
+  flex-shrink: 0;
 }
 
 .archiveButton {
@@ -90,8 +90,8 @@
   box-shadow: 0 1px 0 color-mix(in srgb, var(--color-primary) 60%, black);
 }
 
-.archiveButton svg{
-  margin-right:6px;
+.archiveButton svg {
+  margin-right: 6px;
 }
 
 .basicHeaderRow {
@@ -105,8 +105,35 @@
   font-size: 12px;
   color: #ffffff;
   background-color: var(--color-bg-secondary);
-  border-radius:999px;
-  padding:4px 12px;
-  width:70%;
+  border-radius: 999px;
+  padding: 4px 12px;
+  width: 70%;
   text-align: center;
 }
+
+.errorMessage{
+  width: 100%;
+  border: 2px solid var(--color-border);
+  margin-top: 20px;
+  border-radius: 12px;
+}
+
+.loginMessage {
+  color: #ccc;
+  text-align: center;
+  padding: 20px;
+}
+
+.actionsWrapper{
+  width:500px;
+  display: flex;
+  gap:10px;
+  margin:0 auto;
+  padding-bottom:40px;
+  @media(max-width:768px){
+    width:200px;
+    flex-direction: column;
+    gap:14px;
+  }
+}
+

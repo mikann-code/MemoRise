@@ -8,13 +8,43 @@ import { AiOutlineBook } from "react-icons/ai";
 import Link from "next/link";
 import { usePublicWordbooks } from "@/src/hooks/usePublicWordbooks";
 import { FaListUl } from "react-icons/fa";
+import { useMe } from "@/src/hooks/useMe";
+import { Button } from "@/src/components/common/ui/Button";
+import { ButtonSecondary } from "@/src/components/common/ui/ButtonSecondary";
 
 export const BasicWord = () => {
   const { wordbooks, loading, error } = usePublicWordbooks();
-
+  const { data: user, isLoading: userLoading } = useMe();
   if (loading) return <p>読み込み中...</p>;
   if (error) return <p>取得に失敗しました</p>;
   if (wordbooks.length === 0) return <p>単語帳がありません</p>;
+
+  if (userLoading) return null;
+
+  if (!user) {
+    return (
+      <section className={styles.basicSection}>
+        <div className={styles.basicHeaderRow}>
+          <SectionTitle
+            icon={HiOutlineClipboardList}
+            subTitle="Vocabulary & Practice"
+            title="公式単語帳"
+          />
+        </div>
+
+        <div className={styles.errorMessage}>
+          <p className={styles.loginMessage}>
+            公式単語帳を見るにはログインが必要です
+          </p>
+
+          <div className={styles.actionsWrapper}>
+            <Button href="/login">ログインする</Button>
+            <ButtonSecondary href="/signup">新規登録</ButtonSecondary>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className={styles.basicSection}>
