@@ -17,12 +17,26 @@ export default function NewWordbookPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [label, setLabel] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const [errors, setErrors] = useState({
+    title: "",
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
+
+    setErrors({ title: "" });
+
+    let hasError = false;
+
+    if (!title.trim()) {
+      setErrors({ title: "タイトルを入力してください" });
+      hasError = true;
+    }
+
+    if (hasError) return;
+
     setLoading(true);
 
     try {
@@ -32,8 +46,10 @@ export default function NewWordbookPage() {
         label,
       });
       router.push("/wordbooks");
-    } catch (err: unknown) {
-      setError((err as Error).message || "作成に失敗しました");
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "作成に失敗しました";
+      setErrors({ title: message });
     } finally {
       setLoading(false);
     }
@@ -58,6 +74,7 @@ export default function NewWordbookPage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             icon={<TbBook2 />}
+            error={errors.title}
           />
 
           <FloatingInput
@@ -77,8 +94,6 @@ export default function NewWordbookPage() {
             onChange={(e) => setLabel(e.target.value)}
             icon={<TbTag />}
           />
-
-          {error && <p style={{ color: "red" }}>{error}</p>}
 
           <Button type="submit" disabled={loading}>
             {loading ? "作成中..." : "作成"}

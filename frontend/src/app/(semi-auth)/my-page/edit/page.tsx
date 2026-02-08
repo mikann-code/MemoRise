@@ -9,16 +9,15 @@ import { MdLockOutline, MdPersonOutline } from "react-icons/md";
 import { FormLayout } from "@/src/components/layout/FormLayout";
 import { FloatingInput } from "@/src/components/common/ui/FloatingInput";
 import { Button } from "@/src/components/common/ui/Button";
+import { useRouter } from "next/navigation";
 
 export default function EditProfilePage() {
   const { data: user, isLoading, isError } = useMe();
-
   if (isLoading) return <p>読み込み中...</p>;
   if (isError || !user) return <p>ログインしてください</p>;
 
   return <EditProfileForm user={user} />;
 }
-
 
 type Props = {
   user: {
@@ -31,30 +30,47 @@ function EditProfileForm({ user }: Props) {
   const [name, setName] = useState(user.name ?? "");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const [errors, setErrors] = useState({
+    name: "",
+    password: "",
+    passwordConfirmation: "",
+  });
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
+
+    setErrors({
+      name: "",
+      password: "",
+      passwordConfirmation: "",
+    });
 
     const wantsPasswordChange =
       password.length > 0 || passwordConfirmation.length > 0;
 
+    let hasError = false;
+
     if (!name.trim()) {
-      setError("名前を入力してください");
-      return;
+      setErrors((prev) => ({
+        ...prev,
+        name: "名前を入力してください",
+      }));
+      hasError = true;
     }
 
     if (wantsPasswordChange) {
-      if (password.length < 8) {
-        setError("パスワードは8文字以上にしてください");
-        return;
-      }
       if (password !== passwordConfirmation) {
-        setError("パスワード（確認）が一致しません");
-        return;
+        setErrors((prev) => ({
+          ...prev,
+          passwordConfirmation: "パスワード（確認）が一致しません",
+        }));
+        hasError = true;
       }
     }
+
+    if (hasError) return;
 
     try {
       await mutateAsync({
@@ -66,8 +82,15 @@ function EditProfileForm({ user }: Props) {
       });
 
       alert("更新しました");
+      router.push("/my-page");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "更新に失敗しました");
+      const message =
+        err instanceof Error ? err.message : "更新に失敗しました";
+
+      setErrors((prev) => ({
+        ...prev,
+        name: message,
+      }));
     }
   };
 
@@ -83,8 +106,6 @@ function EditProfileForm({ user }: Props) {
       description="名前とパスワードを変更できます"
       form={
         <form onSubmit={onSubmit}>
-          {error && <p style={{ color: "#ff6b6b", fontSize: 12 }}>{error}</p>}
-
           <FloatingInput
             id="name"
             label="名前"
@@ -92,6 +113,7 @@ function EditProfileForm({ user }: Props) {
             onChange={(e) => setName(e.target.value)}
             disabled={isPending}
             icon={<MdPersonOutline />}
+            error={errors.name}
           />
 
           <FloatingInput
@@ -102,6 +124,7 @@ function EditProfileForm({ user }: Props) {
             onChange={(e) => setPassword(e.target.value)}
             disabled={isPending}
             icon={<MdLockOutline />}
+            error={errors.password}
           />
 
           <FloatingInput
@@ -114,6 +137,7 @@ function EditProfileForm({ user }: Props) {
             }
             disabled={isPending}
             icon={<MdLockOutline />}
+            error={errors.passwordConfirmation}
           />
 
           <Button type="submit" disabled={isPending}>
