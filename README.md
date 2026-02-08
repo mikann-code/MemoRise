@@ -10,14 +10,17 @@
 
 ---
 ## Demo
-- https://memorise-opal.vercel.app
+https://memorise-opal.vercel.app
 
-※ 動作確認にはユーザー登録が必要です。また、管理者ページの確認はadminアカウントでのログインが必要です。
+※ 一部機能の確認にはユーザー登録が必要です。
 
-adminアカウントに関して
-email : sound_of_life1120@icloud.com
-password : password1231
-URL : https://memorise-opal.vercel.app/admin-login
+### 管理者アカウント（評価用）
+
+- URL: https://memorise-opal.vercel.app/admin-login  
+- Email: sound_of_life1120@icloud.com  
+- Password: password1231  
+
+※ 本アカウントはポートフォリオ評価用の一時的なデモアカウントです。
 
 ## Features
 
