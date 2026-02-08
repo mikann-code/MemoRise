@@ -13,6 +13,7 @@ type WordCardProps = {
   onTagToggle?: () => void;
   onDelete: () => void;
   deletable?: boolean;
+  showTag?: boolean;
 };
 
 export const WordCard = ({

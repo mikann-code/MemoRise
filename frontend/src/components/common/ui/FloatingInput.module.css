@@ -1,7 +1,7 @@
 .floatingGroup {
   position: relative;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 32px;
 }
 
 .floatingInput {
@@ -57,7 +57,7 @@
 
 .floatingInputErrorMessage {
   color: var(--color-error);
-  font-size: 14px;
+  font-size: 12px;
   position: absolute;
   top: 45px;
 }
