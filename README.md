@@ -12,7 +12,12 @@
 ## Demo
 - https://memorise-opal.vercel.app
 
-※ 動作確認にはユーザー登録が必要です。
+※ 動作確認にはユーザー登録が必要です。また、管理者ページの確認はadminアカウントでのログインが必要です。
+
+adminアカウントに関して
+email : sound_of_life1120@icloud.com
+password : password1231
+URL : https://memorise-opal.vercel.app/admin-login
 
 ## Features
 
@@ -70,6 +75,11 @@
 ---
 
 ### 管理者用機能 
+※ 動作確認にはadminアカウントでのログインが必要です。
+email : sound_of_life1120@icloud.com
+password : password1231
+URL : https://memorise-opal.vercel.app/admin-login
+
 - 公式単語帳の作成・管理
 - ユーザー一覧の閲覧
 
